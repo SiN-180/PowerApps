@@ -142,7 +142,7 @@ hr {{ border: none; }}
 
 {sections_html}
 
-  <p class="footer-note">Generated from <code>reference/*.md</code> in <a href="https://github.com/Phaderon/PowerApps">Phaderon/PowerApps</a>. Source markdown files remain the editable originals — this page is a build artifact, not hand-maintained.</p>
+  <p class="footer-note">Generated from <code>reference/*.md</code> in <a href="https://github.com/SiN-180/PowerApps">SiN-180/PowerApps</a>. Source markdown files remain the editable originals — this page is a build artifact, not hand-maintained.</p>
 </main>
 </body>
 </html>

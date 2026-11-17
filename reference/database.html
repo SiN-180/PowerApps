@@ -8275,7 +8275,7 @@ If(
 </code></pre>
 <hr />
 <h2 id="phase-8-publishing-workflow">Phase 8 — Publishing Workflow</h2>
-<p>For a new app, always use the per-project repo system — do NOT push screen YAML into the <code>Phaderon/PowerApps</code> guide library repo.</p>
+<p>For a new app, always use the per-project repo system — do NOT push screen YAML into the <code>SiN-180/PowerApps</code> guide library repo.</p>
 <p>See <code>output-format.md</code> for the exact delivery sequence and <code>project-repo-workflow.md</code> for the full GitHub repo setup procedure.</p>
 <p><strong>Summary for a new app:</strong></p>
 <ol>
@@ -8357,7 +8357,7 @@ Navigate(scrDetail, ScreenTransition.Cover)
 <h1>Project Repo Workflow</h1>
 <h1 id="per-project-github-repo-workflow">Per-Project GitHub Repo Workflow</h1>
 <p>Last checked: 2026-08-15</p>
-<p>When a new app is agreed upon, create a dedicated GitHub repository under the <code>PhadeDev</code> organisation. This gives the project its own issues tracker and keeps it cleanly separate from the guide library at <code>Phaderon/PowerApps</code>. <strong>Hosting for the screen YAML copy pages is Cloudflare Pages, not GitHub Pages</strong> — see the "Hosting" section at the top of <code>AGENTS.md</code> for why (GitHub Pages' legacy builder kept failing) and the exact deploy command. The <code>docs/</code> folder in the repo is still the source of truth and gets committed to git as normal; it's just served from Cloudflare instead of GitHub.</p>
+<p>When a new app is agreed upon, create a dedicated GitHub repository under the <code>PhadeDev</code> organisation. This gives the project its own issues tracker and keeps it cleanly separate from the guide library at <code>SiN-180/PowerApps</code>. <strong>Hosting for the screen YAML copy pages is Cloudflare Pages, not GitHub Pages</strong> — see the "Hosting" section at the top of <code>AGENTS.md</code> for why (GitHub Pages' legacy builder kept failing) and the exact deploy command. The <code>docs/</code> folder in the repo is still the source of truth and gets committed to git as normal; it's just served from Cloudflare instead of GitHub.</p>
 <hr />
 <h2 id="step-1-agree-on-app-name">Step 1 — Agree on App Name</h2>
 <p>Confirm the app name with the user before creating the repo. The name should be:
@@ -8633,7 +8633,7 @@ git push origin main
 <tbody>
 <tr>
 <td>Guide library repo</td>
-<td><code>Phaderon/PowerApps</code> at <code>/var/home/Phaderon/PowerApps/</code></td>
+<td><code>SiN-180/PowerApps</code> at <code>/var/home/Phaderon/PowerApps/</code></td>
 </tr>
 <tr>
 <td>Guide library Pages</td>
@@ -8935,7 +8935,7 @@ SortByColumns(
 <li>[ ] Each screen YAML has a copy-button page on the project's Cloudflare Pages site, and it's actually been deployed with <code>wrangler pages deploy</code> (not just committed to git)</li>
 <li>[ ] Cloudflare Pages index shows all screens in paste order</li>
 <li>[ ] Issues tracker URL reported</li>
-<li>[ ] Library card added to <code>Phaderon/PowerApps</code> index.html (or confirm with user first)</li>
+<li>[ ] Library card added to <code>SiN-180/PowerApps</code> index.html (or confirm with user first)</li>
 </ul>
 </section>
 <hr/>
@@ -9101,7 +9101,7 @@ python3 tools/index-msdocs.py &quot;Combo box ItemDisplayText&quot;
 <p>The mirror lives in <code>.sources/</code> and the SQLite index lives in <code>.cache/</code>; both are intentionally gitignored and not published.</p>
 </section>
 
-  <p class="footer-note">Generated from <code>reference/*.md</code> in <a href="https://github.com/Phaderon/PowerApps">Phaderon/PowerApps</a>. Source markdown files remain the editable originals — this page is a build artifact, not hand-maintained.</p>
+  <p class="footer-note">Generated from <code>reference/*.md</code> in <a href="https://github.com/SiN-180/PowerApps">SiN-180/PowerApps</a>. Source markdown files remain the editable originals — this page is a build artifact, not hand-maintained.</p>
 </main>
 </body>
 </html>
