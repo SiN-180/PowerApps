@@ -278,6 +278,10 @@
       main { padding: 18px; }
       table { display: block; overflow-x: auto; }
     }
+      .code-meta { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+    .code-stamp { color: #7c8aa0; font-size: .72rem; font-weight: 500; }
+    .update-pill { display: inline-flex; align-items: center; gap: 4px; margin-left: 8px; padding: 2px 8px; border-radius: 999px; background: var(--callout-ok-bg, #edf8f2); color: var(--green, #1f7a4d); font-size: .72rem; font-weight: 800; white-space: nowrap; }
+    .update-pill::before { content: "\25CF"; font-size: .6rem; }
   </style>
 </head>
 <body>
@@ -310,11 +314,11 @@
 
     <main>
       <div class="topline">
-        <span class="pill">Current step: v2.46 - Thursday Batch overview + GAL-add JMC/County fix</span>
-        <span class="pill">Updated 11 Sep 2026</span>
+        <span class="pill">Current step: v2.47 - speed pass and Quick Contacts redesign</span>
+        <span class="pill">Updated 18 Nov 2026</span>
       </div>
       <h1>Branch Contact Groups - Current Task</h1>
-      <p class="lead"><strong>v2.46 adds a Thursday Batch overview and fixes GAL-added members skipping JMC/County.</strong> Manage Groups now has a <strong>Thursday Batches</strong> header button opening a read-only, two-column view of every group in Batch&nbsp;1 and Batch&nbsp;2 with live member counts, plus a count of groups with no batch set &mdash; previously the only way to check a group's batch was opening its Edit panel one group at a time. Separately, picking someone from GAL search in Manage Members used to add them immediately with blank JMC/County, needing a second trip through Edit &rarr; pencil afterwards; the GAL pick now stages into the existing "Add manually" panel right next to it (prefilled name/email), so JMC/County get entered in the same step as the add. <strong>Only <code>scrManageGroups</code> changed this round</strong> &mdash; Quick Contacts, Send Email, Manage People, and App.OnStart are untouched.</p>
+      <p class="lead"><strong>v2.47 is a speed pass plus a fresh look for Quick Contacts.</strong> The app was slow because it quietly ran 15 fake Office 365 Users (GAL) lookups just to make empty tables, re-queried SharePoint for group history whenever anything changed, and re-scanned every membership on each keystroke in places. Those are fixed, start-up now runs behind a loading screen using a new <code>LoadCache()</code> function, and Quick Contacts is rebuilt as single-column rounded rows. It also includes the v2.46 features (Thursday Batches overview, GAL pick captures JMC/County). <strong>All four screens, App.Formulas and App.OnStart change this round.</strong> I could not time it on your tenant, so please tell me how it feels.</p>
       <div class="callout warn" style="margin-bottom: 18px;">
         <strong>Still open, not yet diagnosed:</strong> a popup/lightbox (e.g. Manage Members) disappearing while scrolling. Need more detail before this can be fixed properly &mdash; which screen, and whether it happens scrolling the page behind the popup or a list inside the popup itself.
       </div>
@@ -322,55 +326,89 @@
       <section id="do-now">
         <h2>Do Now</h2>
         <div class="callout warn">
-          <strong>One screen this round.</strong> <code>scrManageGroups</code> changed &mdash; delete and re-paste it. Quick Contacts, Send Email, Manage People, and App &rarr; OnStart are untouched (kept below for reference only).
+          <strong>Delete all four screens, then paste fresh.</strong> Studio's paste is additive, so pasting over the old screens leaves renamed duplicates. Paste <strong>App &rarr; Formulas</strong> first, then <strong>App &rarr; OnStart</strong>, then the four screens, then set <strong>App &rarr; StartScreen</strong> to <code>scrQuickContacts</code>.
         </div>
         <ol style="padding-left:22px;line-height:1.9;color:var(--muted);">
-          <li>Delete <strong>scrManageGroups</strong> and re-paste it from Copy Screen below.</li>
-          <li>Preview the app and check the priority rows in the Test checklist below.</li>
+          <li>Paste the App.Formulas block below into <strong>App &rarr; Formulas</strong>. If Studio underlines <code>Concurrent</code>, tell me (the fallback is to run those lines one after another).</li>
+          <li>Paste the App.OnStart block below into <strong>App &rarr; OnStart</strong>.</li>
+          <li>Delete the four old screens, create four blank ones with the exact names, and paste each from Copy Screen below.</li>
+          <li>Set <strong>App &rarr; StartScreen</strong> to <code>scrQuickContacts</code>, then save the new screens back into the Screen YAML Vault so I can check them.</li>
         </ol>
         <div class="code-card">
-          <div class="code-toolbar"><span>App.OnStart (unchanged &mdash; reference only)</span><button type="button" data-copy="onStartBlock">Copy</button></div>
+          <div class="code-toolbar"><div class="code-meta"><span>App.Formulas (new)</span><span class="code-stamp" data-updated="2026-11-18T09:01:07Z">v2.47 &middot; 18/11/2026 09:01 GMT &mdash; new</span></div><button type="button" data-copy="formulasBlock">Copy</button></div>
+          <pre id="formulasBlock">LoadCache(): Boolean = {
+    Set(varLoading, true);
+    Set(varCacheReady, false);
+    IfError(
+        Concurrent(
+            ClearCollect(colMaintainers, 'BM Maintainers'),
+            ClearCollect(colGroups, AddColumns(Sort('BM Groups', SortOrder, SortOrder.Ascending), Ticked, false)),
+            ClearCollect(colMemberships, Filter('BM Memberships', false)),
+            ClearCollect(colHistoryView, Filter('BM History', false))
+        );
+        Concurrent(
+            ForAll(Filter(colGroups, Mod(ID, 4) = 0) As g, Collect(colMemberships, Filter('BM Memberships', GroupName = g.Title))),
+            ForAll(Filter(colGroups, Mod(ID, 4) = 1) As g, Collect(colMemberships, Filter('BM Memberships', GroupName = g.Title))),
+            ForAll(Filter(colGroups, Mod(ID, 4) = 2) As g, Collect(colMemberships, Filter('BM Memberships', GroupName = g.Title))),
+            ForAll(Filter(colGroups, Mod(ID, 4) = 3) As g, Collect(colMemberships, Filter('BM Memberships', GroupName = g.Title)))
+        );
+        Set(varIsMaintainer, CountRows(Filter(colMaintainers, Lower(Email) = varMyEmail)) &gt; 0);
+        Set(varLastMembershipRefresh, Now());
+        Set(varCacheReady, true);
+        Set(varLoading, false);
+        true,
+        Notify("Could not finish loading Branch Contact Groups data. Check your connection, then press Refresh.", NotificationType.Error);
+        Set(varCacheReady, true);
+        Set(varLoading, false);
+        false
+    )
+};</pre>
+        </div>
+        <div class="code-card">
+          <div class="code-toolbar"><div class="code-meta"><span>App.OnStart (changed)</span><span class="code-stamp" data-updated="2026-11-18T09:01:07Z">v2.47 &middot; 18/11/2026 09:01 GMT &mdash; changed</span></div><button type="button" data-copy="onStartBlock">Copy</button></div>
           <pre id="onStartBlock">Set(varModDomain, "mod.gov.uk");
 Set(varMyEmail, Lower(User().Email));
-ClearCollect(colMaintainers, 'BM Maintainers');
-Set(varIsMaintainer, CountRows(Filter(colMaintainers, Lower(Email) = varMyEmail)) > 0);
-ClearCollect(colGroups, AddColumns(Sort('BM Groups', SortOrder, SortOrder.Ascending), Ticked, false));
-ClearCollect(colMemberships, Filter('BM Memberships', false)); ForAll(colGroups As grp, Collect(colMemberships, Filter('BM Memberships', GroupName = grp.Title)));
+Set(varIsMaintainer, false);
+Set(varCacheReady, false);
+Set(varLoading, false);
+Set(varLastMembershipRefresh, Now());
 ClearCollect(colThursdayBatchOptions, ["None", "Batch 1", "Batch 2"]);
+ClearCollect(colGalSearchResults, Filter(Table({DisplayName: "", Mail: ""}), false));
+ClearCollect(colMaintainerGalSearchResults, Filter(Table({DisplayName: "", Mail: ""}), false));
+ClearCollect(colAddPersonGalResults, Filter(Table({DisplayName: "", Mail: ""}), false));
 Set(varRecipientField, "bcc");
 Set(varBccForcedByBatch, false);
 Set(varBccForced, false);
 Set(varPreviewGroupID, 0);
 Set(varShowLightbox, false);
 Set(varLightboxMode, "");
-Set(varLightboxGroupID, 0);
-Set(varLastMembershipRefresh, Now())</pre>
+Set(varLightboxGroupID, 0)</pre>
         </div>
       </section>
 
       <section id="copy">
         <h2>Copy Screen</h2>
-        <p><strong>scrManageGroups</strong> changed this round &mdash; the other three are unchanged from what you already have live, kept here for reference.</p>
+        <p>All four screens changed this round. Delete the old ones first, then paste each of these into a new blank screen.</p>
         <div class="links">
           <div class="link-card">
-            <a href="screens/scrQuickContacts.html?v=2.43"><strong>scrQuickContacts <span class="pill" style="font-size:.7rem;padding:2px 8px;min-height:auto;">v2.43</span></strong><span>Off-white background so cards read as elevated. "Last modified" respects a manually-overridden date.</span></a>
-            <div class="last-updated" data-updated="2026-08-28T02:34:43Z">Updated &hellip;</div>
-            <div class="card-actions"><a href="screens/scrQuickContacts.html?v=2.43">Open</a><button type="button" data-yaml-url="screens/scrQuickContacts.html?v=2.43">Copy YAML</button></div>
+            <a href="screens/scrQuickContacts.html?v=2.47"><strong>scrQuickContacts <span class="pill" style="font-size:.7rem;padding:2px 8px;min-height:auto;">v2.47</span></strong><span>Start screen. Loading overlay, then single-column rounded rows with initials tiles, filter pills and Copy addresses.</span></a>
+            <div class="last-updated newest" data-updated="2026-11-18T08:56:00Z">Updated &hellip;</div>
+            <div class="card-actions"><a href="screens/scrQuickContacts.html?v=2.47">Open</a><button type="button" data-yaml-url="screens/scrQuickContacts.html?v=2.47">Copy YAML</button></div>
           </div>
           <div class="link-card">
-            <a href="screens/scrSendEmail.html?v=2.43"><strong>scrSendEmail <span class="pill" style="font-size:.7rem;padding:2px 8px;min-height:auto;">v2.43</span></strong><span>To/CC/BCC and Batch selectors fixed and unified. Icon-chips on View/History. Back button for non-maintainers.</span></a>
-            <div class="last-updated" data-updated="2026-08-28T02:34:43Z">Updated &hellip;</div>
-            <div class="card-actions"><a href="screens/scrSendEmail.html?v=2.43">Open</a><button type="button" data-yaml-url="screens/scrSendEmail.html?v=2.43">Copy YAML</button></div>
+            <a href="screens/scrSendEmail.html?v=2.47"><strong>scrSendEmail <span class="pill" style="font-size:.7rem;padding:2px 8px;min-height:auto;">v2.47</span></strong><span>History loads on demand, single-pass recipient count, Refresh uses LoadCache().</span></a>
+            <div class="last-updated newest" data-updated="2026-11-18T08:56:00Z">Updated &hellip;</div>
+            <div class="card-actions"><a href="screens/scrSendEmail.html?v=2.47">Open</a><button type="button" data-yaml-url="screens/scrSendEmail.html?v=2.47">Copy YAML</button></div>
           </div>
           <div class="link-card">
-            <a href="screens/scrManageGroups.html?v=2.46"><strong>scrManageGroups <span class="pill" style="font-size:.7rem;padding:2px 8px;min-height:auto;">v2.46</span></strong><span>Thursday Batches overview (Batch 1/2 groups with live counts). GAL search picks now stage into the Add-manually panel so JMC/County are captured in the same step, instead of adding blank then needing a second edit.</span></a>
-            <div class="last-updated newest" data-updated="2026-09-11T08:44:00Z">Updated &hellip;</div>
-            <div class="card-actions"><a href="screens/scrManageGroups.html?v=2.46">Open</a><button type="button" data-yaml-url="screens/scrManageGroups.html?v=2.46">Copy YAML</button></div>
+            <a href="screens/scrManageGroups.html?v=2.47"><strong>scrManageGroups <span class="pill" style="font-size:.7rem;padding:2px 8px;min-height:auto;">v2.47</span></strong><span>No hidden GAL lookups, history on demand, faster Add existing, Thursday Batches overview, GAL pick captures JMC/County.</span></a>
+            <div class="last-updated newest" data-updated="2026-11-18T08:56:00Z">Updated &hellip;</div>
+            <div class="card-actions"><a href="screens/scrManageGroups.html?v=2.47">Open</a><button type="button" data-yaml-url="screens/scrManageGroups.html?v=2.47">Copy YAML</button></div>
           </div>
           <div class="link-card">
-            <a href="screens/scrManagePeople.html?v=2.45"><strong>scrManagePeople <span class="pill" style="font-size:.7rem;padding:2px 8px;min-height:auto;">v2.45</span></strong><span>Unchanged this round. Add Person, Save changes, Remove Leaver update the local list directly instead of re-fetching everything.</span></a>
-            <div class="last-updated" data-updated="2026-08-28T22:58:00Z">Updated &hellip;</div>
-            <div class="card-actions"><a href="screens/scrManagePeople.html?v=2.45">Open</a><button type="button" data-yaml-url="screens/scrManagePeople.html?v=2.45">Copy YAML</button></div>
+            <a href="screens/scrManagePeople.html?v=2.47"><strong>scrManagePeople <span class="pill" style="font-size:.7rem;padding:2px 8px;min-height:auto;">v2.47</span></strong><span>No hidden GAL lookups, Refresh uses LoadCache(). Version label updated.</span></a>
+            <div class="last-updated newest" data-updated="2026-11-18T08:56:00Z">Updated &hellip;</div>
+            <div class="card-actions"><a href="screens/scrManagePeople.html?v=2.47">Open</a><button type="button" data-yaml-url="screens/scrManagePeople.html?v=2.47">Copy YAML</button></div>
           </div>
         </div>
       </section>
@@ -380,11 +418,15 @@ Set(varLastMembershipRefresh, Now())</pre>
         <table>
           <thead><tr><th>Check</th><th>Expected result</th></tr></thead>
           <tbody>
-            <tr><td><strong>Manage Groups &rarr; click "Thursday Batches" on the header</strong> (priority)</td><td>Opens a read-only popup with two columns, Batch 1 and Batch 2, each listing groups with a live member count, plus a line counting groups with no batch set. Set a couple of groups' batches from Edit first if none are set yet, to check the counts actually update.</td></tr>
-            <tr><td><strong>Manage Groups &rarr; Manage Members &rarr; Add from GAL, pick someone not already in the group</strong> (priority)</td><td>They are NOT added immediately. Instead the "Add manually" panel on the right fills in with their name and email, heading changes to "Confirm details for &lt;name&gt;". Fill in JMC/County and hit Add &mdash; they're added with that data already attached, no second edit trip needed.</td></tr>
-            <tr><td>Same GAL flow, but pick someone already a member of that group</td><td>Warning toast, nothing staged, nothing added twice.</td></tr>
-            <tr><td>Manage Groups &rarr; Manage Members &rarr; click the pencil on an existing member right after doing a GAL pick above (without saving it)</td><td>The edit popup shows that member's real name/email/JMC/County &mdash; not the leftover GAL pick from before.</td></tr>
-            <tr><td>General click-around on Manage Groups</td><td>Everything else &mdash; create/edit/delete group, add existing people, add manually, paste-replace roster, maintainers, health check &mdash; still works as before.</td></tr>
+            <tr><td><strong>Open the app (priority)</strong></td><td>A loading screen appears on Quick Contacts, then the list shows. Tell me roughly how many seconds that takes.</td></tr>
+            <tr><td><strong>Quick Contacts: type in the search box (priority)</strong></td><td>Typing is smooth, no waiting; filter pills and Copy addresses work.</td></tr>
+            <tr><td><strong>Manage Groups: open Manage Members on a group (priority)</strong></td><td>The popup opens straight away (it used to wait on a hidden GAL lookup).</td></tr>
+            <tr><td><strong>Manage Groups: Add from GAL, search a surname, pick someone</strong></td><td>They are not added yet. The Add manually panel fills with their name and email. Add JMC/County and press Add.</td></tr>
+            <tr><td><strong>Manage Groups: Thursday Batches button</strong></td><td>Two columns, Batch 1 and Batch 2, with member counts.</td></tr>
+            <tr><td><strong>History icon on Send Email and Manage Groups</strong></td><td>Opens, then the entries appear after a short load, newest first.</td></tr>
+            <tr><td><strong>Manage Members: Add existing, type a name</strong></td><td>Typing stays responsive.</td></tr>
+            <tr><td><strong>Send Email: tick and untick several groups</strong></td><td>No constant loading dots; the recipient count updates quickly.</td></tr>
+            <tr><td><strong>Refresh button on each screen</strong></td><td>Shows Refreshing..., then the success message.</td></tr>
           </tbody>
         </table>
       </section>
@@ -517,6 +559,19 @@ Set(varLastMembershipRefresh, Now())</pre>
       } catch (err) { status.textContent = 'Save failed'; }
     });
   })();
+  </script>
+  <script>
+    (function () {
+      var WINDOW_MS = 48 * 60 * 60 * 1000;
+      var now = Date.now();
+      function age(ms) { var m = Math.round(ms / 60000); if (m < 1) return 'just now'; if (m < 60) return m + 'm ago'; var h = Math.round(m / 60); if (h < 24) return h + 'h ago'; return Math.round(h / 24) + 'd ago'; }
+      document.querySelectorAll('.code-stamp[data-updated]').forEach(function (el) {
+        var t = new Date(el.getAttribute('data-updated')).getTime();
+        if (isNaN(t)) return;
+        var a = now - t;
+        if (a >= 0 && a < WINDOW_MS) { var pill = document.createElement('span'); pill.className = 'update-pill'; pill.textContent = 'Updated ' + age(a); el.after(pill); }
+      });
+    })();
   </script>
 </body>
 </html>
