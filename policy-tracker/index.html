@@ -260,14 +260,15 @@
         <a href="#long-document-link-save-error">Fix 7 - Long Document Links Fail To Save ("Invalid URL value")</a>
         <a href="#main-refresh-button">Fix 8 - Refresh Button On Main (No More Browser Reloads)</a>
         <a href="#batch-needs-release-link">Fix 9 - Thursday Batch Buttons Locked Until A Release Link Is Pasted</a>
+        <a href="#newsletter-fields-required">Fix 10 - Newsletter Title And Audience Required Before Saving</a>
       </nav>
     </aside>
 
     <main>
       <div class="topline">
-        <span class="pill">Updated 29 Oct 2026</span>
+        <span class="pill">Updated 18 Nov 2026</span>
         <span class="pill">Policy Tracker only</span>
-        <span class="pill">9 fixes</span>
+        <span class="pill">10 fixes</span>
       </div>
       <h1>Policy Tracker Fix Guide</h1>
       <p class="lead">One page, every confirmed fix kept in it, oldest first. Each entry has the exact control/property, the replacement formula, and a test to confirm it worked. Superseded by nothing &mdash; this page keeps growing instead of being replaced fix-by-fix.</p>
@@ -2160,6 +2161,157 @@ Notify("Refreshed.", NotificationType.Success, 1500)</pre>
         </div>
         <div class="callout ok">
           <strong>Test:</strong> Preview close/reopen. With the link field empty, both buttons should be grey and read "Paste release link first". Paste a link starting with https and both should turn blue and read "Thursday Batch 1 Email" / "Thursday Batch 2 Email". Delete the link and they lock again. Click one with a link in place and confirm the Outlook draft is created as before.
+        </div>
+      </section>
+
+      <section id="newsletter-fields-required">
+        <h2>Fix 10 - Newsletter Title And Audience Required Before Saving</h2>
+        <p class="meta-line">ViewItem &middot; 3 save buttons + 1 new banner &middot; independent of other fixes</p>
+        <div class="fix-controls">
+          <label class="fix-check"><input type="checkbox" class="fix-done-checkbox"><span>Mark complete</span></label>
+          <button type="button" class="fix-view-toggle" aria-label="Expand or collapse this fix">&#9660;</button>
+        </div>
+        <p>Added 18/11/2026. Stops anyone saving an item until <strong>Newsletter Title</strong> and <strong>Audience</strong> are filled in. While either is empty, <strong>Save</strong>, <strong>Save &amp; Close</strong> and the <strong>Add Document Link</strong> button (which also saves a new item) are greyed out, and an amber banner appears at the top of the form saying exactly which field is missing, for example <em>"To save, fill in Newsletter Title and Audience in the Newsletter Details box below (needed for the weekly newsletter)."</em> The banner updates as they type and disappears once both are filled. Summary is deliberately not required.</p>
+        <div class="callout">
+          <strong>Two exemptions, on purpose:</strong> items ticked <em>External consultation required</em> (they are never in the newsletter, the screen already says "CONSULTATION ONLY - NOT FOR RELEASE") and items ticked <em>Published</em> (already gone out). Without these, old or consultation items could not be saved at all. It also means an old unpublished item that never had these fields must have them filled in before it can be saved again.
+        </div>
+        <div class="callout warn">
+          <strong>Every formula block is the COMPLETE property</strong> - select all, delete, paste. Built from your Screen YAML Vault export of ViewItem saved 09/10/2026 09:21 BST; the Fix 7 changes since then only touched the link form, not these buttons. Only the three save buttons on this screen are locked. Main's Publish All and the Duplicate dialog do not check these fields.
+        </div>
+        <ol start="1">
+          <li>Open <strong>ViewItem</strong>. Select <strong>btnSave1</strong> (the Save button in the top bar). Set <code>DisplayMode</code> to:</li>
+        </ol>
+        <div class="code-card">
+          <div class="code-toolbar">
+            <div class="code-meta">
+              <span>btnSave1.DisplayMode - complete property</span>
+              <span class="code-stamp" data-updated="2026-11-18T09:02:40Z">v1 &middot; 18/11/2026 09:02 GMT</span>
+            </div>
+            <button data-copy="newsreq-save" type="button">Copy</button>
+          </div>
+<pre id="newsreq-save">If(
+    varSaving ||
+    (
+        !ckbExtConsult1.Value &amp;&amp;
+        !ckbPublished1.Value &amp;&amp;
+        (IsBlank(Trim(txtNewsletterTitle1.Text)) || IsBlank(Trim(txtAudience1.Text)))
+    ),
+    DisplayMode.Disabled,
+    DisplayMode.Edit
+)</pre>
+        </div>
+        <ol start="2">
+          <li>Select <strong>btnSaveClose1</strong> (Save &amp; Close). Set <code>DisplayMode</code> to the same:</li>
+        </ol>
+        <div class="code-card">
+          <div class="code-toolbar">
+            <div class="code-meta">
+              <span>btnSaveClose1.DisplayMode - complete property</span>
+              <span class="code-stamp" data-updated="2026-11-18T09:02:40Z">v1 &middot; 18/11/2026 09:02 GMT</span>
+            </div>
+            <button data-copy="newsreq-saveclose" type="button">Copy</button>
+          </div>
+<pre id="newsreq-saveclose">If(
+    varSaving ||
+    (
+        !ckbExtConsult1.Value &amp;&amp;
+        !ckbPublished1.Value &amp;&amp;
+        (IsBlank(Trim(txtNewsletterTitle1.Text)) || IsBlank(Trim(txtAudience1.Text)))
+    ),
+    DisplayMode.Disabled,
+    DisplayMode.Edit
+)</pre>
+        </div>
+        <ol start="3">
+          <li>Select <strong>btnAddLinkEmpty1</strong> (the Add Document Link button shown when an item has no links yet). Set <code>DisplayMode</code> to the same:</li>
+        </ol>
+        <div class="code-card">
+          <div class="code-toolbar">
+            <div class="code-meta">
+              <span>btnAddLinkEmpty1.DisplayMode - complete property</span>
+              <span class="code-stamp" data-updated="2026-11-18T09:02:40Z">v1 &middot; 18/11/2026 09:02 GMT</span>
+            </div>
+            <button data-copy="newsreq-addlink" type="button">Copy</button>
+          </div>
+<pre id="newsreq-addlink">If(
+    varSaving ||
+    (
+        !ckbExtConsult1.Value &amp;&amp;
+        !ckbPublished1.Value &amp;&amp;
+        (IsBlank(Trim(txtNewsletterTitle1.Text)) || IsBlank(Trim(txtAudience1.Text)))
+    ),
+    DisplayMode.Disabled,
+    DisplayMode.Edit
+)</pre>
+        </div>
+        <ol start="4">
+          <li>In the tree view, select <strong>conConsultationBanner1</strong> (the purple "consultation only" strip, directly under the stepper). Press Ctrl+C then Ctrl+V; the copy appears right below it. Rename the copy <strong>conNewsletterBanner1</strong>. Set its <code>Visible</code> to:</li>
+        </ol>
+        <div class="code-card">
+          <div class="code-toolbar">
+            <div class="code-meta">
+              <span>conNewsletterBanner1.Visible - complete property</span>
+              <span class="code-stamp" data-updated="2026-11-18T09:02:40Z">v1 &middot; 18/11/2026 09:02 GMT</span>
+            </div>
+            <button data-copy="newsreq-banner-visible" type="button">Copy</button>
+          </div>
+<pre id="newsreq-banner-visible">!ckbExtConsult1.Value &amp;&amp;
+!ckbPublished1.Value &amp;&amp;
+(IsBlank(Trim(txtNewsletterTitle1.Text)) || IsBlank(Trim(txtAudience1.Text)))</pre>
+        </div>
+        <ol start="5">
+          <li>Same container, set <code>Fill</code> to:</li>
+        </ol>
+        <div class="code-card">
+          <div class="code-toolbar">
+            <div class="code-meta">
+              <span>conNewsletterBanner1.Fill - complete property</span>
+              <span class="code-stamp" data-updated="2026-11-18T09:02:40Z">v1 &middot; 18/11/2026 09:02 GMT</span>
+            </div>
+            <button data-copy="newsreq-banner-fill" type="button">Copy</button>
+          </div>
+<pre id="newsreq-banner-fill">RGBA(255, 248, 225, 1)</pre>
+        </div>
+        <ol start="6">
+          <li>Select the label inside the copy (it will be named like <strong>lblConsultationBanner1_1</strong>) and rename it <strong>lblNewsletterBanner1</strong>. Set its <code>Text</code> to:</li>
+        </ol>
+        <div class="code-card">
+          <div class="code-toolbar">
+            <div class="code-meta">
+              <span>lblNewsletterBanner1.Text - complete property</span>
+              <span class="code-stamp" data-updated="2026-11-18T09:02:40Z">v1 &middot; 18/11/2026 09:02 GMT</span>
+            </div>
+            <button data-copy="newsreq-label-text" type="button">Copy</button>
+          </div>
+<pre id="newsreq-label-text">"To save, fill in " &amp;
+Concat(
+    Filter(
+        Table(
+            {n: "Newsletter Title", missing: IsBlank(Trim(txtNewsletterTitle1.Text))},
+            {n: "Audience", missing: IsBlank(Trim(txtAudience1.Text))}
+        ),
+        missing
+    ),
+    n,
+    " and "
+) &amp;
+" in the Newsletter Details box below (needed for the weekly newsletter)."</pre>
+        </div>
+        <ol start="7">
+          <li>Same label, set <code>Color</code> to:</li>
+        </ol>
+        <div class="code-card">
+          <div class="code-toolbar">
+            <div class="code-meta">
+              <span>lblNewsletterBanner1.Color - complete property</span>
+              <span class="code-stamp" data-updated="2026-11-18T09:02:40Z">v1 &middot; 18/11/2026 09:02 GMT</span>
+            </div>
+            <button data-copy="newsreq-label-color" type="button">Copy</button>
+          </div>
+<pre id="newsreq-label-color">RGBA(130, 80, 0, 1)</pre>
+        </div>
+        <div class="callout ok">
+          <strong>Test:</strong> Preview. Open a new item: the amber banner shows under the top bar, and Save, Save &amp; Close and Add Document Link are all grey. Type only a Newsletter Title and the banner should now say just Audience. Fill both and the banner disappears and the buttons turn on. Clear one again and it locks again. Tick External consultation required and the banner and lock both go away.
         </div>
       </section>
     </main>
