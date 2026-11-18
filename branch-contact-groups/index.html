@@ -329,13 +329,13 @@
           <strong>Delete all four screens, then paste fresh.</strong> Studio's paste is additive, so pasting over the old screens leaves renamed duplicates. Paste <strong>App &rarr; Formulas</strong> first, then <strong>App &rarr; OnStart</strong>, then the four screens, then set <strong>App &rarr; StartScreen</strong> to <code>scrQuickContacts</code>.
         </div>
         <ol style="padding-left:22px;line-height:1.9;color:var(--muted);">
-          <li>Paste the App.Formulas block below into <strong>App &rarr; Formulas</strong>. If Studio underlines <code>Concurrent</code>, tell me (the fallback is to run those lines one after another).</li>
+          <li>Paste the App.Formulas block below into <strong>App &rarr; Formulas</strong>. If Studio still underlines anything in it, tell me which line (the four parallel streams now write to separate collections, then merge).</li>
           <li>Paste the App.OnStart block below into <strong>App &rarr; OnStart</strong>.</li>
           <li>Delete the four old screens, create four blank ones with the exact names, and paste each from Copy Screen below.</li>
           <li>Set <strong>App &rarr; StartScreen</strong> to <code>scrQuickContacts</code>, then save the new screens back into the Screen YAML Vault so I can check them.</li>
         </ol>
         <div class="code-card">
-          <div class="code-toolbar"><div class="code-meta"><span>App.Formulas (new)</span><span class="code-stamp" data-updated="2026-11-18T09:01:07Z">v2.47 &middot; 18/11/2026 09:01 GMT &mdash; new</span></div><button type="button" data-copy="formulasBlock">Copy</button></div>
+          <div class="code-toolbar"><div class="code-meta"><span>App.Formulas (new)</span><span class="code-stamp" data-updated="2026-11-18T11:52:14Z">v2.47 &middot; 18/11/2026 11:52 GMT &mdash; fixed</span></div><button type="button" data-copy="formulasBlock">Copy</button></div>
           <pre id="formulasBlock">LoadCache(): Boolean = {
     Set(varLoading, true);
     Set(varCacheReady, false);
@@ -343,15 +343,19 @@
         Concurrent(
             ClearCollect(colMaintainers, 'BM Maintainers'),
             ClearCollect(colGroups, AddColumns(Sort('BM Groups', SortOrder, SortOrder.Ascending), Ticked, false)),
-            ClearCollect(colMemberships, Filter('BM Memberships', false)),
-            ClearCollect(colHistoryView, Filter('BM History', false))
+            ClearCollect(colHistoryView, Filter('BM History', false)),
+            ClearCollect(colMemPart0, Filter('BM Memberships', false)),
+            ClearCollect(colMemPart1, Filter('BM Memberships', false)),
+            ClearCollect(colMemPart2, Filter('BM Memberships', false)),
+            ClearCollect(colMemPart3, Filter('BM Memberships', false))
         );
         Concurrent(
-            ForAll(Filter(colGroups, Mod(ID, 4) = 0) As g, Collect(colMemberships, Filter('BM Memberships', GroupName = g.Title))),
-            ForAll(Filter(colGroups, Mod(ID, 4) = 1) As g, Collect(colMemberships, Filter('BM Memberships', GroupName = g.Title))),
-            ForAll(Filter(colGroups, Mod(ID, 4) = 2) As g, Collect(colMemberships, Filter('BM Memberships', GroupName = g.Title))),
-            ForAll(Filter(colGroups, Mod(ID, 4) = 3) As g, Collect(colMemberships, Filter('BM Memberships', GroupName = g.Title)))
+            ForAll(Filter(colGroups, Mod(ID, 4) = 0) As g, Collect(colMemPart0, Filter('BM Memberships', GroupName = g.Title))),
+            ForAll(Filter(colGroups, Mod(ID, 4) = 1) As g, Collect(colMemPart1, Filter('BM Memberships', GroupName = g.Title))),
+            ForAll(Filter(colGroups, Mod(ID, 4) = 2) As g, Collect(colMemPart2, Filter('BM Memberships', GroupName = g.Title))),
+            ForAll(Filter(colGroups, Mod(ID, 4) = 3) As g, Collect(colMemPart3, Filter('BM Memberships', GroupName = g.Title)))
         );
+        ClearCollect(colMemberships, colMemPart0, colMemPart1, colMemPart2, colMemPart3);
         Set(varIsMaintainer, CountRows(Filter(colMaintainers, Lower(Email) = varMyEmail)) &gt; 0);
         Set(varLastMembershipRefresh, Now());
         Set(varCacheReady, true);
