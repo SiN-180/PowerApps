@@ -314,11 +314,11 @@
 
     <main>
       <div class="topline">
-        <span class="pill">Current step: v2.47 - speed pass and Quick Contacts redesign</span>
+        <span class="pill">Current step: v2.48 - members preview on Quick Contacts, version labels removed</span>
         <span class="pill">Updated 18 Nov 2026</span>
       </div>
       <h1>Branch Contact Groups - Current Task</h1>
-      <p class="lead"><strong>v2.47 is a speed pass plus a fresh look for Quick Contacts.</strong> The app was slow because it quietly ran 15 fake Office 365 Users (GAL) lookups just to make empty tables, re-queried SharePoint for group history whenever anything changed, and re-scanned every membership on each keystroke in places. Those are fixed, start-up now runs behind a loading screen using a new <code>LoadCache()</code> function, and Quick Contacts is rebuilt as single-column rounded rows. It also includes the v2.46 features (Thursday Batches overview, GAL pick captures JMC/County). <strong>All four screens, App.Formulas and App.OnStart change this round.</strong> I could not time it on your tenant, so please tell me how it feels.</p>
+      <p class="lead"><strong>v2.48 adds a "Who's in it" popup to every Quick Contacts row</strong> so you can check the members before copying the addresses, and removes the version labels from the top right of all four screens (none will be added again). <strong>Re-paste all four screens</strong> (delete the old ones first). App.Formulas was also fixed: its parallel streams now write to separate collections. Everything else from v2.47 is unchanged. I cannot time or click it in Studio, so please tell me how it feels.</p>
       <div class="callout warn" style="margin-bottom: 18px;">
         <strong>Still open, not yet diagnosed:</strong> a popup/lightbox (e.g. Manage Members) disappearing while scrolling. Need more detail before this can be fixed properly &mdash; which screen, and whether it happens scrolling the page behind the popup or a list inside the popup itself.
       </div>
@@ -395,24 +395,24 @@ Set(varLightboxGroupID, 0)</pre>
         <p>All four screens changed this round. Delete the old ones first, then paste each of these into a new blank screen.</p>
         <div class="links">
           <div class="link-card">
-            <a href="screens/scrQuickContacts.html?v=2.47"><strong>scrQuickContacts <span class="pill" style="font-size:.7rem;padding:2px 8px;min-height:auto;">v2.47</span></strong><span>Start screen. Loading overlay, then single-column rounded rows with initials tiles, filter pills and Copy addresses.</span></a>
-            <div class="last-updated newest" data-updated="2026-11-18T08:56:00Z">Updated &hellip;</div>
-            <div class="card-actions"><a href="screens/scrQuickContacts.html?v=2.47">Open</a><button type="button" data-yaml-url="screens/scrQuickContacts.html?v=2.47">Copy YAML</button></div>
+            <a href="screens/scrQuickContacts.html?v=2.48"><strong>scrQuickContacts <span class="pill" style="font-size:.7rem;padding:2px 8px;min-height:auto;">v2.48</span></strong><span>Start screen. Loading overlay, then single-column rounded rows with initials tiles, filter pills, a Who's in it popup and Copy addresses.</span></a>
+            <div class="last-updated newest" data-updated="2026-11-18T12:02:50Z">Updated &hellip;</div>
+            <div class="card-actions"><a href="screens/scrQuickContacts.html?v=2.48">Open</a><button type="button" data-yaml-url="screens/scrQuickContacts.html?v=2.48">Copy YAML</button></div>
           </div>
           <div class="link-card">
-            <a href="screens/scrSendEmail.html?v=2.47"><strong>scrSendEmail <span class="pill" style="font-size:.7rem;padding:2px 8px;min-height:auto;">v2.47</span></strong><span>History loads on demand, single-pass recipient count, Refresh uses LoadCache().</span></a>
-            <div class="last-updated newest" data-updated="2026-11-18T08:56:00Z">Updated &hellip;</div>
-            <div class="card-actions"><a href="screens/scrSendEmail.html?v=2.47">Open</a><button type="button" data-yaml-url="screens/scrSendEmail.html?v=2.47">Copy YAML</button></div>
+            <a href="screens/scrSendEmail.html?v=2.48"><strong>scrSendEmail <span class="pill" style="font-size:.7rem;padding:2px 8px;min-height:auto;">v2.48</span></strong><span>Version label removed. History loads on demand, single-pass recipient count, Refresh uses LoadCache().</span></a>
+            <div class="last-updated newest" data-updated="2026-11-18T12:02:50Z">Updated &hellip;</div>
+            <div class="card-actions"><a href="screens/scrSendEmail.html?v=2.48">Open</a><button type="button" data-yaml-url="screens/scrSendEmail.html?v=2.48">Copy YAML</button></div>
           </div>
           <div class="link-card">
-            <a href="screens/scrManageGroups.html?v=2.47"><strong>scrManageGroups <span class="pill" style="font-size:.7rem;padding:2px 8px;min-height:auto;">v2.47</span></strong><span>No hidden GAL lookups, history on demand, faster Add existing, Thursday Batches overview, GAL pick captures JMC/County.</span></a>
-            <div class="last-updated newest" data-updated="2026-11-18T08:56:00Z">Updated &hellip;</div>
-            <div class="card-actions"><a href="screens/scrManageGroups.html?v=2.47">Open</a><button type="button" data-yaml-url="screens/scrManageGroups.html?v=2.47">Copy YAML</button></div>
+            <a href="screens/scrManageGroups.html?v=2.48"><strong>scrManageGroups <span class="pill" style="font-size:.7rem;padding:2px 8px;min-height:auto;">v2.48</span></strong><span>Version label removed. No hidden GAL lookups, history on demand, faster Add existing, Thursday Batches overview, GAL pick captures JMC/County.</span></a>
+            <div class="last-updated newest" data-updated="2026-11-18T12:02:50Z">Updated &hellip;</div>
+            <div class="card-actions"><a href="screens/scrManageGroups.html?v=2.48">Open</a><button type="button" data-yaml-url="screens/scrManageGroups.html?v=2.48">Copy YAML</button></div>
           </div>
           <div class="link-card">
-            <a href="screens/scrManagePeople.html?v=2.47"><strong>scrManagePeople <span class="pill" style="font-size:.7rem;padding:2px 8px;min-height:auto;">v2.47</span></strong><span>No hidden GAL lookups, Refresh uses LoadCache(). Version label updated.</span></a>
-            <div class="last-updated newest" data-updated="2026-11-18T08:56:00Z">Updated &hellip;</div>
-            <div class="card-actions"><a href="screens/scrManagePeople.html?v=2.47">Open</a><button type="button" data-yaml-url="screens/scrManagePeople.html?v=2.47">Copy YAML</button></div>
+            <a href="screens/scrManagePeople.html?v=2.48"><strong>scrManagePeople <span class="pill" style="font-size:.7rem;padding:2px 8px;min-height:auto;">v2.48</span></strong><span>Version label removed. No hidden GAL lookups, Refresh uses LoadCache().</span></a>
+            <div class="last-updated newest" data-updated="2026-11-18T12:02:50Z">Updated &hellip;</div>
+            <div class="card-actions"><a href="screens/scrManagePeople.html?v=2.48">Open</a><button type="button" data-yaml-url="screens/scrManagePeople.html?v=2.48">Copy YAML</button></div>
           </div>
         </div>
       </section>
@@ -423,6 +423,7 @@ Set(varLightboxGroupID, 0)</pre>
           <thead><tr><th>Check</th><th>Expected result</th></tr></thead>
           <tbody>
             <tr><td><strong>Open the app (priority)</strong></td><td>A loading screen appears on Quick Contacts, then the list shows. Tell me roughly how many seconds that takes.</td></tr>
+            <tr><td><strong>Quick Contacts: press Who's in it on a row (priority)</strong></td><td>A popup lists each member's name and email, external addresses are marked, and Copy addresses and Close work. Tapping the row itself does the same.</td></tr>
             <tr><td><strong>Quick Contacts: type in the search box (priority)</strong></td><td>Typing is smooth, no waiting; filter pills and Copy addresses work.</td></tr>
             <tr><td><strong>Manage Groups: open Manage Members on a group (priority)</strong></td><td>The popup opens straight away (it used to wait on a hidden GAL lookup).</td></tr>
             <tr><td><strong>Manage Groups: Add from GAL, search a surname, pick someone</strong></td><td>They are not added yet. The Add manually panel fills with their name and email. Add JMC/County and press Add.</td></tr>
