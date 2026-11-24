@@ -314,11 +314,11 @@
 
     <main>
       <div class="topline">
-        <span class="pill">Current step: v2.49 - cadetnet addresses approved</span>
+        <span class="pill">Current step: v2.50 - Import from paste</span>
         <span class="pill">Updated 18 Nov 2026</span>
       </div>
       <h1>Branch Contact Groups - Current Task</h1>
-      <p class="lead"><strong>v2.49: cadetnet.mod.uk addresses are now treated as approved (accredited for OFFICIAL-SENSITIVE).</strong> They are no longer flagged as external, no longer force BCC on Send Email, and are not counted as "Other domains". The approved list is a new <code>IsApprovedAddress()</code> function at the top of App.Formulas. <strong>Re-paste App.Formulas, then scrQuickContacts and scrSendEmail</strong> (delete those two screens first). App.OnStart is optional. armymail.mod.uk and cadetmail.mod.uk are still flagged until you confirm them.</p>
+      <p class="lead"><strong>v2.50 adds an Import from paste screen.</strong> Paste an Outlook contact group or Excel list (lines like <code>NAL:</code> start a new list), name each list, choose Add only, Add + update by role or Replace, check the preview counts, then import. <strong>Paste scrManageGroups again and create the new scrImport screen.</strong> If you have not yet pasted v2.49 (cadetnet approved domains), do App.Formulas, scrQuickContacts and scrSendEmail first. I cannot run it in Studio, so please test with a small paste before the real lists.</p>
       <div class="callout warn" style="margin-bottom: 18px;">
         <strong>Still open, not yet diagnosed:</strong> a popup/lightbox (e.g. Manage Members) disappearing while scrolling. Need more detail before this can be fixed properly &mdash; which screen, and whether it happens scrolling the page behind the popup or a list inside the popup itself.
       </div>
@@ -409,14 +409,19 @@ Set(varLightboxGroupID, 0)</pre>
             <div class="card-actions"><a href="screens/scrSendEmail.html?v=2.49">Open</a><button type="button" data-yaml-url="screens/scrSendEmail.html?v=2.49">Copy YAML</button></div>
           </div>
           <div class="link-card">
-            <a href="screens/scrManageGroups.html?v=2.49"><strong>scrManageGroups <span class="pill" style="font-size:.7rem;padding:2px 8px;min-height:auto;">v2.49</span></strong><span>Version label removed. No hidden GAL lookups, history on demand, faster Add existing, Thursday Batches overview, GAL pick captures JMC/County.</span></a>
+            <a href="screens/scrManageGroups.html?v=2.50"><strong>scrManageGroups <span class="pill" style="font-size:.7rem;padding:2px 8px;min-height:auto;">v2.50</span></strong><span>New Import from paste button. Version label removed. No hidden GAL lookups, history on demand, faster Add existing, Thursday Batches overview, GAL pick captures JMC/County.</span></a>
             <div class="last-updated newest" data-updated="2026-11-18T12:02:50Z">Updated &hellip;</div>
-            <div class="card-actions"><a href="screens/scrManageGroups.html?v=2.49">Open</a><button type="button" data-yaml-url="screens/scrManageGroups.html?v=2.49">Copy YAML</button></div>
+            <div class="card-actions"><a href="screens/scrManageGroups.html?v=2.50">Open</a><button type="button" data-yaml-url="screens/scrManageGroups.html?v=2.50">Copy YAML</button></div>
           </div>
           <div class="link-card">
             <a href="screens/scrManagePeople.html?v=2.49"><strong>scrManagePeople <span class="pill" style="font-size:.7rem;padding:2px 8px;min-height:auto;">v2.49</span></strong><span>Version label removed. No hidden GAL lookups, Refresh uses LoadCache().</span></a>
             <div class="last-updated newest" data-updated="2026-11-18T12:02:50Z">Updated &hellip;</div>
             <div class="card-actions"><a href="screens/scrManagePeople.html?v=2.49">Open</a><button type="button" data-yaml-url="screens/scrManagePeople.html?v=2.49">Copy YAML</button></div>
+          </div>
+          <div class="link-card">
+            <a href="screens/scrImport.html?v=2.49"><strong>scrImport <span class="pill" style="font-size:.7rem;padding:2px 8px;min-height:auto;">v2.50</span></strong><span>New screen. Paste from Outlook or Excel, name each list, choose a mode, see the counts, then import.</span></a>
+            <div class="last-updated newest" data-updated="2026-11-24T12:26:21Z">Updated &hellip;</div>
+            <div class="card-actions"><a href="screens/scrImport.html?v=2.49">Open</a><button type="button" data-yaml-url="screens/scrImport.html?v=2.49">Copy YAML</button></div>
           </div>
         </div>
       </section>
@@ -427,6 +432,10 @@ Set(varLightboxGroupID, 0)</pre>
           <thead><tr><th>Check</th><th>Expected result</th></tr></thead>
           <tbody>
             <tr><td><strong>Open the app (priority)</strong></td><td>A loading screen appears on Quick Contacts, then the list shows. Tell me roughly how many seconds that takes.</td></tr>
+            <tr><td><strong>Manage Groups: Import from paste button (priority)</strong></td><td>Opens the Import screen. Back returns to Manage Groups.</td></tr>
+            <tr><td><strong>Import: paste a small test (3 or 4 entries) and press Check paste (priority)</strong></td><td>The summary shows how many addresses and lists were found. Each list gets a card with its tag, count and a group name box.</td></tr>
+            <tr><td><strong>Import: type a brand new group name, then Import now</strong></td><td>The group is created with the pasted people, and History shows Import via paste. Check the real lists only after this works.</td></tr>
+            <tr><td><strong>Import: type an existing group name</strong></td><td>The card says Existing group, with new / already there counts. In Replace mode it also shows how many will be removed, and Import asks you to tap twice.</td></tr>
             <tr><td><strong>Send Email: tick a group made up of cadetnet.mod.uk addresses (priority)</strong></td><td>BCC is not forced and the summary shows Other domains: 0. A group containing an armymail address still forces BCC for now. In Who's in it, cadetnet addresses are not marked.</td></tr>
             <tr><td><strong>Quick Contacts: press Who's in it on a row (priority)</strong></td><td>A popup lists each member's name and email, external addresses are marked, and Copy addresses and Close work. Tapping the row itself does the same.</td></tr>
             <tr><td><strong>Quick Contacts: type in the search box (priority)</strong></td><td>Typing is smooth, no waiting; filter pills and Copy addresses work.</td></tr>
