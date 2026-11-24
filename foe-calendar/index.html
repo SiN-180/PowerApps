@@ -267,8 +267,9 @@
         <a href="#stage5">Step 3 - Calendar</a>
         <a href="#admin">Step 4 - Admin</a>
         <a href="#home">Step 5 - Home</a>
-        <a href="#start">Step 6 - Start screen</a>
-        <a href="#lists">Step 7 - SharePoint lists</a>
+        <a href="#brig">Step 6 - Brigadier message</a>
+        <a href="#start">Step 7 - Start screen</a>
+        <a href="#lists">Step 8 - SharePoint lists</a>
       </nav>
     </aside>
 
@@ -277,10 +278,11 @@
       <div class="topline">
         <span class="pill">Forecast of Events</span>
         <span class="pill">Dummy data</span>
-        <span class="pill">v2 &middot; 24/11/2026 09:11 GMT</span>
+        <span class="pill">v2 &middot; 24/11/2026 23:08 GMT</span>
       </div>
       <h1>FOE Calendar</h1>
       <p class="lead">Steps and code for the FOE app. Dummy data only: nothing is saved and nothing is connected to a list yet.</p>
+      <div class="callout warn"><strong>Stage 6 (24/11/2026):</strong> every file changed, so redo Steps 2 to 6 in order. For each screen: paste the new code over the old screen (or delete the old screen first) and keep the same screen name.</div>
 
       <section id="app">
         <h2><span class="step">1</span>Create the app <label class="done"><input type="checkbox" data-step="app"> Done</label></h2>
@@ -298,11 +300,11 @@
           <div class="code-toolbar">
             <div class="code-meta">
               <span>App - OnStart</span>
-              <span class="code-stamp" data-updated="2026-11-24T09:11:45Z">v2 &middot; 24/11/2026 09:11 GMT</span>
+              <span class="code-stamp" data-updated="2026-11-24T23:08:41Z">v2 &middot; 24/11/2026 23:08 GMT</span>
             </div>
             <button data-copy="foe-onstart" type="button">Copy</button>
           </div>
-          <details class="code"><summary>Show the code (223 lines)</summary>
+          <details class="code"><summary>Show the code (234 lines)</summary>
 <pre id="foe-onstart">// FOE Calendar spike: DUMMY DATA ONLY. Nothing here is connected to a list.
 Set(varRole, "editor");
 Set(varProg, "all");
@@ -315,6 +317,17 @@ Set(varFormMode, "add");
 Set(varFormErr, "");
 Set(varListTitle, "");
 Set(varATab, "types");
+Set(varHomeMode, "weeks");
+Set(varMsgUpdated, Today());
+ClearCollect(
+    colMsg,
+    Table(
+        {Order: 1, Heading: "Train", Body: "BIA" &amp; Char(10) &amp; "RMQ" &amp; Char(10) &amp; "SCIC" &amp; Char(10) &amp; "Risk management"},
+        {Order: 2, Heading: "Deliver", Body: "Syllabus training" &amp; Char(10) &amp; "CADSAAM" &amp; Char(10) &amp; "Central camp"},
+        {Order: 3, Heading: "Assure", Body: "Governance and assurance" &amp; Char(10) &amp; "Safety management" &amp; Char(10) &amp; "Shooting and adventure training"},
+        {Order: 4, Heading: "Unit support", Body: "Weekly engagement" &amp; Char(10) &amp; "Training advice" &amp; Char(10) &amp; "Logistic support"}
+    )
+);
 Set(varLab, {Needs: "Needs organising", Ok: "In place", NoReq: "No requirement", Unset: "Not yet set"});
 Set(varResNames, {P: "People", M: "Money", E: "Equipment"});
 Set(varSelDate, Today());
@@ -534,12 +547,12 @@ ClearCollect(colList, Filter(colVisible, false))
 
       <section id="stage5">
         <h2><span class="step">3</span>Calendar <label class="done"><input type="checkbox" data-step="stage5"> Done</label></h2>
-        <p>Add a blank screen, paste, and delete any older <span class="kb">scrCalendar</span> or Screen1. It must end up named <span class="kb">scrCalendar</span>. Red errors on <span class="kb">Navigate</span> are expected until Steps 4 and 5 are done.</p>
+        <p>Add a blank screen, paste, and delete any older <span class="kb">scrCalendar</span> or Screen1. It must end up named <span class="kb">scrCalendar</span>. Red errors on <span class="kb">Navigate</span> are expected until Steps 4 to 6 are done.</p>
         <div class="code-card">
           <div class="code-toolbar">
             <div class="code-meta">
               <span>Screen - scrCalendar</span>
-              <span class="code-stamp" data-updated="2026-11-24T09:11:45Z">v2 &middot; 24/11/2026 09:11 GMT</span>
+              <span class="code-stamp" data-updated="2026-11-24T23:08:41Z">v2 &middot; 24/11/2026 23:08 GMT</span>
             </div>
             <button data-copy="foe-stage5" type="button">Copy</button>
           </div>
@@ -612,7 +625,7 @@ ClearCollect(colList, Filter(colVisible, false))
                         Height: =28
                         HoverColor: =RGBA(255, 255, 255, 1)
                         HoverFill: =RGBA(255, 255, 255, 0.28)
-                        OnSelect: =Set(varRole, Switch(varRole, "viewer", "editor", "editor", "admin", "viewer"))
+                        OnSelect: =Set(varRole, Switch(varRole, "viewer", "editor", "editor", "admin", "admin", "brigadier", "viewer"))
                         PressedColor: =RGBA(255, 255, 255, 1)
                         PressedFill: =RGBA(255, 255, 255, 0.28)
                         RadiusBottomLeft: =14
@@ -4425,11 +4438,11 @@ ClearCollect(colList, Filter(colVisible, false))
           <div class="code-toolbar">
             <div class="code-meta">
               <span>Screen - scrAdmin</span>
-              <span class="code-stamp" data-updated="2026-11-24T09:11:45Z">v2 &middot; 24/11/2026 09:11 GMT</span>
+              <span class="code-stamp" data-updated="2026-11-24T23:08:41Z">v2 &middot; 24/11/2026 23:08 GMT</span>
             </div>
             <button data-copy="foe-admin" type="button">Copy</button>
           </div>
-          <details class="code"><summary>Show the code (957 lines)</summary>
+          <details class="code"><summary>Show the code (970 lines)</summary>
 <pre id="foe-admin">Screens:
   scrAdmin:
     Properties:
@@ -5331,7 +5344,7 @@ ClearCollect(colList, Filter(colVisible, false))
                         PaddingBottom: =0
                         PaddingTop: =0
                         Size: =11
-                        Text: ="Three roles. In the real app, admins would manage who is in each role from here. In this spike, use the Viewing as button on the calendar to switch."
+                        Text: ="Four roles. In the real app, admins would manage who is in each role from here. In this spike, use the Viewing as button to switch."
                         Width: =Parent.Width - 40
                         X: =20
                         Y: =10
@@ -5374,6 +5387,19 @@ ClearCollect(colList, Filter(colVisible, false))
                         Width: =Parent.Width - 40
                         X: =20
                         Y: =124
+                  - lblAAcc5:
+                      Control: ModernText@1.0.0
+                      Properties:
+                        Color: =RGBA(30, 24, 34, 1)
+                        Fill: =RGBA(0, 0, 0, 0)
+                        Height: =24
+                        PaddingBottom: =0
+                        PaddingTop: =0
+                        Size: =12
+                        Text: '="Brigadier: can edit the Brigadier''s message on the Home page (admins can too). Otherwise the same as a viewer."'
+                        Width: =Parent.Width - 40
+                        X: =20
+                        Y: =154
                   - lblAAcc4:
                       Control: ModernText@1.0.0
                       Properties:
@@ -5386,7 +5412,7 @@ ClearCollect(colList, Filter(colVisible, false))
                         Text: ="The app role checks control what the buttons do. The lists behind a real app still need their own SharePoint permissions, set to match."
                         Width: =Parent.Width - 40
                         X: =20
-                        Y: =164
+                        Y: =194
 </pre>
           </details>
         </div>
@@ -5395,36 +5421,66 @@ ClearCollect(colList, Filter(colVisible, false))
 
       <section id="home">
         <h2><span class="step">5</span>Home <label class="done"><input type="checkbox" data-step="home"> Done</label></h2>
-        <p>Add a blank screen and paste. If a <span class="kb">Navigate</span> still shows red, click into the formula and press Enter.</p>
+        <p>Add a blank screen and paste. Red errors on <span class="kb">Navigate</span> are expected until Step 6 is done; click into the formula and press Enter.</p>
         <div class="code-card">
           <div class="code-toolbar">
             <div class="code-meta">
               <span>Screen - scrHome</span>
-              <span class="code-stamp" data-updated="2026-11-24T09:11:45Z">v2 &middot; 24/11/2026 09:11 GMT</span>
+              <span class="code-stamp" data-updated="2026-11-24T23:08:41Z">v2 &middot; 24/11/2026 23:08 GMT &mdash; Stage 6</span>
             </div>
             <button data-copy="foe-home" type="button">Copy</button>
           </div>
-          <details class="code"><summary>Show the code (1,654 lines)</summary>
+          <details class="code"><summary>Show the code (2,394 lines)</summary>
 <pre id="foe-home">Screens:
   scrHome:
     Properties:
       Fill: =RGBA(247, 244, 246, 1)
       OnVisible: |-
-        =ClearCollect(
-            colWeeks,
+        =Set(varDlg, "");
+        ClearCollect(
+            colHomeM,
             ForAll(
                 Sequence(8) As s,
                 With(
-                    {a: DateAdd(DateAdd(Today(), -(Weekday(Today(), StartOfWeek.Monday) - 1), "Days"), (s.Value - 1) * 7, "Days")},
+                    {a: If(varHomeMode = "weeks", DateAdd(DateAdd(Today(), -(Weekday(Today(), StartOfWeek.Monday) - 1), "Days"), (s.Value - 1) * 7, "Days"), DateAdd(Date(Year(Today()), Month(Today()), 1), s.Value - 1, "Months"))},
                     With(
-                        {f: Sort(Filter(colEvents, !Deleted &amp;&amp; StartDate &lt;= DateAdd(a, 6, "Days") &amp;&amp; EndDate &gt;= a), SortKey, SortOrder.Ascending)},
-                        {
-                            N: s.Value,
-                            WeekStart: a,
-                            Count: CountRows(f),
-                            L1: If(CountRows(f) &gt;= 1, Index(f, 1).Title, ""),
-                            L2: If(CountRows(f) &gt;= 2, Index(f, 2).Title, "")
-                        }
+                        {b: If(varHomeMode = "weeks", DateAdd(a, 6, "Days"), DateAdd(DateAdd(a, 1, "Months"), -1, "Days"))},
+                        With(
+                            {f: Sort(Filter(colEvents, !Deleted &amp;&amp; Kind &lt;&gt; "event" &amp;&amp; StartDate &lt;= b &amp;&amp; EndDate &gt;= If(s.Value = 1, Today(), a)), SortKey, SortOrder.Ascending)},
+                            {
+                                N: s.Value,
+                                Label: If(varHomeMode = "weeks", If(s.Value = 1, "This week", "w/c " &amp; Text(a, "dd/mm")), If(s.Value = 1, "This month", Text(a, "mmm yyyy"))),
+                                PStart: If(s.Value = 1, Today(), a),
+                                PEnd: b,
+                                Count: CountRows(f),
+                                L1: If(CountRows(f) &gt;= 1, Index(f, 1).Title, ""),
+                                L2: If(CountRows(f) &gt;= 2, Index(f, 2).Title, "")
+                            }
+                        )
+                    )
+                )
+            )
+        );
+        ClearCollect(
+            colHomeA,
+            ForAll(
+                Sequence(8) As s,
+                With(
+                    {a: If(varHomeMode = "weeks", DateAdd(DateAdd(Today(), -(Weekday(Today(), StartOfWeek.Monday) - 1), "Days"), (s.Value - 1) * 7, "Days"), DateAdd(Date(Year(Today()), Month(Today()), 1), s.Value - 1, "Months"))},
+                    With(
+                        {b: If(varHomeMode = "weeks", DateAdd(a, 6, "Days"), DateAdd(DateAdd(a, 1, "Months"), -1, "Days"))},
+                        With(
+                            {f: Sort(Filter(colEvents, !Deleted &amp;&amp; Kind = "event" &amp;&amp; StartDate &lt;= b &amp;&amp; EndDate &gt;= If(s.Value = 1, Today(), a)), SortKey, SortOrder.Ascending)},
+                            {
+                                N: s.Value,
+                                Label: If(varHomeMode = "weeks", If(s.Value = 1, "This week", "w/c " &amp; Text(a, "dd/mm")), If(s.Value = 1, "This month", Text(a, "mmm yyyy"))),
+                                PStart: If(s.Value = 1, Today(), a),
+                                PEnd: b,
+                                Count: CountRows(f),
+                                L1: If(CountRows(f) &gt;= 1, Index(f, 1).Title, ""),
+                                L2: If(CountRows(f) &gt;= 2, Index(f, 2).Title, "")
+                            }
+                        )
                     )
                 )
             )
@@ -5441,18 +5497,18 @@ ClearCollect(colList, Filter(colVisible, false))
             X: =0
             Y: =0
           Children:
-            - conHBand:
+            - conHmBand:
                 Control: GroupContainer@1.5.0
                 Variant: ManualLayout
                 Properties:
                   DropShadow: =DropShadow.None
                   Fill: =RGBA(83, 42, 69, 1)
-                  Height: =56
+                  Height: =90
                   Width: =Parent.Width
                   X: =0
                   Y: =0
                 Children:
-                  - lblHTitle:
+                  - lblHmTitle:
                       Control: ModernText@1.0.0
                       Properties:
                         Color: =RGBA(255, 255, 255, 1)
@@ -5466,7 +5522,7 @@ ClearCollect(colList, Filter(colVisible, false))
                         Width: =Parent.Width - 520
                         X: =24
                         Y: =6
-                  - lblHSub:
+                  - lblHmSub:
                       Control: ModernText@1.0.0
                       Properties:
                         Color: =RGBA(255, 255, 255, 0.85)
@@ -5475,11 +5531,11 @@ ClearCollect(colList, Filter(colVisible, false))
                         PaddingBottom: =0
                         PaddingTop: =0
                         Size: =11
-                        Text: '="Choose a programme, or use the key dates below. Dummy data only: nothing is saved."'
+                        Text: '="Spike: dummy data only. Nothing is connected to a list and nothing is saved."'
                         Width: =Parent.Width - 520
                         X: =24
                         Y: =34
-                  - btnHRole:
+                  - btnHmRole:
                       Control: Classic/Button@2.2.0
                       Properties:
                         BorderColor: =RGBA(255, 255, 255, 0.5)
@@ -5490,7 +5546,7 @@ ClearCollect(colList, Filter(colVisible, false))
                         Height: =28
                         HoverColor: =RGBA(255, 255, 255, 1)
                         HoverFill: =RGBA(255, 255, 255, 0.28)
-                        OnSelect: =Set(varRole, Switch(varRole, "viewer", "editor", "editor", "admin", "viewer"))
+                        OnSelect: =Set(varRole, Switch(varRole, "viewer", "editor", "editor", "admin", "admin", "brigadier", "viewer"))
                         PressedColor: =RGBA(255, 255, 255, 1)
                         PressedFill: =RGBA(255, 255, 255, 0.28)
                         RadiusBottomLeft: =14
@@ -5502,7 +5558,7 @@ ClearCollect(colList, Filter(colVisible, false))
                         Width: =226
                         X: =Parent.Width - 250
                         Y: =14
-                  - btnHAdmin:
+                  - btnHmAdmin:
                       Control: Classic/Button@2.2.0
                       Properties:
                         BorderColor: =RGBA(255, 255, 255, 0.5)
@@ -5526,129 +5582,127 @@ ClearCollect(colList, Filter(colVisible, false))
                         Width: =138
                         X: =Parent.Width - 400
                         Y: =14
-            - conHCards:
-                Control: GroupContainer@1.5.0
-                Variant: ManualLayout
-                Properties:
-                  DropShadow: =DropShadow.None
-                  Height: =150
-                  Width: =Parent.Width - 32
-                  X: =16
-                  Y: =72
-                Children:
-                  - recHCard0:
+                  - btnHmTabHome:
                       Control: Classic/Button@2.2.0
                       Properties:
-                        BorderColor: =RGBA(208, 196, 204, 1)
-                        BorderThickness: =1
-                        DisplayMode: =DisplayMode.View
-                        Fill: =RGBA(255, 255, 255, 1)
-                        Height: =150
-                        HoverFill: =RGBA(255, 255, 255, 1)
-                        PressedFill: =RGBA(255, 255, 255, 1)
-                        RadiusBottomLeft: =14
-                        RadiusBottomRight: =14
-                        RadiusTopLeft: =14
-                        RadiusTopRight: =14
-                        Text: =""
-                        Width: =(Parent.Width - 48) / 5
-                        X: =((Parent.Width - 48) / 5) * 0 + 12 * 0
-                        Y: =0
-                  - recHStrip0:
-                      Control: Classic/Button@2.2.0
-                      Properties:
-                        BorderColor: =RGBA(208, 196, 204, 1)
                         BorderThickness: =0
-                        DisplayMode: =DisplayMode.View
-                        Fill: =#532A45
-                        Height: =5
-                        HoverFill: =#532A45
-                        PressedFill: =#532A45
-                        RadiusBottomLeft: =3
-                        RadiusBottomRight: =3
-                        RadiusTopLeft: =3
-                        RadiusTopRight: =3
-                        Text: =""
-                        Width: =((Parent.Width - 48) / 5) - 28
-                        X: =((Parent.Width - 48) / 5) * 0 + 12 * 0 + 14
-                        Y: =0
-                  - lblHName0:
-                      Control: ModernText@1.0.0
-                      Properties:
-                        Color: =RGBA(30, 24, 34, 1)
-                        Fill: =RGBA(0, 0, 0, 0)
+                        Color: =If(true, RGBA(83, 42, 69, 1), RGBA(255, 255, 255, 1))
+                        Fill: =If(true, RGBA(247, 244, 246, 1), RGBA(255, 255, 255, 0.14))
                         FontWeight: =FontWeight.Semibold
-                        Height: =24
-                        PaddingBottom: =0
-                        PaddingTop: =0
-                        Size: =15
+                        Height: =34
+                        HoverColor: =If(true, RGBA(83, 42, 69, 1), RGBA(255, 255, 255, 1))
+                        HoverFill: =If(true, RGBA(247, 244, 246, 1), RGBA(255, 255, 255, 0.26))
+                        OnSelect: =Set(varDlg, "")
+                        PressedColor: =If(true, RGBA(83, 42, 69, 1), RGBA(255, 255, 255, 1))
+                        PressedFill: =If(true, RGBA(247, 244, 246, 1), RGBA(255, 255, 255, 0.34))
+                        RadiusBottomLeft: =0
+                        RadiusBottomRight: =0
+                        RadiusTopLeft: =10
+                        RadiusTopRight: =10
+                        Size: =11
+                        Text: ="Home"
+                        Width: =90
+                        X: =24
+                        Y: =54
+                  - btnHmTab_national:
+                      Control: Classic/Button@2.2.0
+                      Properties:
+                        BorderThickness: =0
+                        Color: =If(false, RGBA(83, 42, 69, 1), RGBA(255, 255, 255, 1))
+                        Fill: =If(false, RGBA(247, 244, 246, 1), RGBA(255, 255, 255, 0.14))
+                        FontWeight: =FontWeight.Semibold
+                        Height: =34
+                        HoverColor: =If(false, RGBA(83, 42, 69, 1), RGBA(255, 255, 255, 1))
+                        HoverFill: =If(false, RGBA(247, 244, 246, 1), RGBA(255, 255, 255, 0.26))
+                        OnSelect: |-
+                          =Set(varDlg, "");
+                          Set(varProg, "national");
+                          Set(varStatus, "All");
+                          Set(varSearch, "");
+                          ClearCollect(colSelTypes, ForAll(Filter(colTypes, Active), {TKey: ThisRecord.TKey}));
+                          ClearCollect(colScope, Filter(colEvents, !Deleted &amp;&amp; (varProg = "all" || (varProg = "national" &amp;&amp; Programme = "National Activity") || (varProg = "ctc" &amp;&amp; Programme = "CTC") || (varProg = "ctt" &amp;&amp; Programme = "CTTs") || (varProg = "overseas" &amp;&amp; Overseas) || (varProg = "meet" &amp;&amp; Kind &lt;&gt; "event"))));
+                          ClearCollect(
+                              colVisible,
+                              AddColumns(
+                                  SortByColumns(
+                                      Filter(
+                                          colScope,
+                                          (TypeKey in colSelTypes.TKey) &amp;&amp;
+                                          (varStatus = "All" || Status = varStatus) &amp;&amp;
+                                          (IsBlank(varSearch) || Lower(varSearch) in Lower(Title))
+                                      ),
+                                      "SortKey",
+                                      SortOrder.Ascending
+                                  ),
+                                  Concern,
+                                  !Deleted &amp;&amp; EndDate &gt;= Today() &amp;&amp; DateDiff(Today(), StartDate, "Days") &lt;= varThresh &amp;&amp; (PeopleState = "needs" || MoneyState = "needs" || EquipState = "needs"),
+                                  Hex,
+                                  With({k: TypeKey}, LookUp(colTypes, TKey = k).Hex)
+                              )
+                          );
+                          ClearCollect(
+                              colDays,
+                              ForAll(
+                                  Sequence(42) As s,
+                                  With(
+                                      {d: DateAdd(varGridStart, s.Value - 1, "Days")},
+                                      With(
+                                          {f: Filter(colVisible, StartDate &lt;= d &amp;&amp; EndDate &gt;= d)},
+                                          With(
+                                              {e1: If(CountRows(f) &gt;= 1, Index(f, 1)), e2: If(CountRows(f) &gt;= 2, Index(f, 2)), e3: If(CountRows(f) &gt;= 3, Index(f, 3))},
+                                              {
+                                                  Idx: s.Value,
+                                                  D: d,
+                                                  N: CountRows(f),
+                                                  T1: If(IsBlank(e1), "", If(e1.Concern, "! ", "") &amp; e1.Title),
+                                                  F1: If(IsBlank(e1), RGBA(0, 0, 0, 0), ColorFade(ColorValue(e1.Hex), 0.8)),
+                                                  B1: If(IsBlank(e1), RGBA(0, 0, 0, 0), If(e1.Concern, RGBA(142, 21, 55, 1), If(e1.Status = "To be confirmed", ColorValue(e1.Hex), RGBA(0, 0, 0, 0)))),
+                                                  W1: If(IsBlank(e1), 0, If(e1.Concern, 2, If(e1.Status = "To be confirmed", 1, 0))),
+                                                  S1: !IsBlank(e1) &amp;&amp; e1.Status = "To be confirmed" &amp;&amp; !e1.Concern,
+                                                  I1: If(IsBlank(e1), 0, e1.Id),
+                                                  T2: If(IsBlank(e2), "", If(e2.Concern, "! ", "") &amp; e2.Title),
+                                                  F2: If(IsBlank(e2), RGBA(0, 0, 0, 0), ColorFade(ColorValue(e2.Hex), 0.8)),
+                                                  B2: If(IsBlank(e2), RGBA(0, 0, 0, 0), If(e2.Concern, RGBA(142, 21, 55, 1), If(e2.Status = "To be confirmed", ColorValue(e2.Hex), RGBA(0, 0, 0, 0)))),
+                                                  W2: If(IsBlank(e2), 0, If(e2.Concern, 2, If(e2.Status = "To be confirmed", 1, 0))),
+                                                  S2: !IsBlank(e2) &amp;&amp; e2.Status = "To be confirmed" &amp;&amp; !e2.Concern,
+                                                  I2: If(IsBlank(e2), 0, e2.Id),
+                                                  T3: If(IsBlank(e3), "", If(e3.Concern, "! ", "") &amp; e3.Title),
+                                                  F3: If(IsBlank(e3), RGBA(0, 0, 0, 0), ColorFade(ColorValue(e3.Hex), 0.8)),
+                                                  B3: If(IsBlank(e3), RGBA(0, 0, 0, 0), If(e3.Concern, RGBA(142, 21, 55, 1), If(e3.Status = "To be confirmed", ColorValue(e3.Hex), RGBA(0, 0, 0, 0)))),
+                                                  W3: If(IsBlank(e3), 0, If(e3.Concern, 2, If(e3.Status = "To be confirmed", 1, 0))),
+                                                  S3: !IsBlank(e3) &amp;&amp; e3.Status = "To be confirmed" &amp;&amp; !e3.Concern,
+                                                  I3: If(IsBlank(e3), 0, e3.Id)
+                                              }
+                                          )
+                                      )
+                                  )
+                              )
+                          );
+                          Navigate(scrCalendar, ScreenTransition.Fade)
+                        PressedColor: =If(false, RGBA(83, 42, 69, 1), RGBA(255, 255, 255, 1))
+                        PressedFill: =If(false, RGBA(247, 244, 246, 1), RGBA(255, 255, 255, 0.34))
+                        RadiusBottomLeft: =0
+                        RadiusBottomRight: =0
+                        RadiusTopLeft: =10
+                        RadiusTopRight: =10
+                        Size: =11
                         Text: ="National Activity"
-                        Width: =((Parent.Width - 48) / 5) - 28
-                        X: =((Parent.Width - 48) / 5) * 0 + 12 * 0 + 14
-                        Y: =12
-                  - lblHBlurb0:
-                      Control: ModernText@1.0.0
-                      Properties:
-                        Color: =RGBA(94, 107, 123, 1)
-                        Fill: =RGBA(0, 0, 0, 0)
-                        Height: =34
-                        PaddingBottom: =0
-                        PaddingTop: =0
-                        Size: =10
-                        Text: ="National courses, competitions, conferences and ceremonial events."
-                        Width: =((Parent.Width - 48) / 5) - 28
-                        X: =((Parent.Width - 48) / 5) * 0 + 12 * 0 + 14
-                        Y: =38
-                  - lblHCount0:
-                      Control: ModernText@1.0.0
-                      Properties:
-                        Color: =RGBA(30, 24, 34, 1)
-                        Fill: =RGBA(0, 0, 0, 0)
-                        FontWeight: =FontWeight.Semibold
-                        Height: =26
-                        PaddingBottom: =0
-                        PaddingTop: =0
-                        Size: =18
-                        Text: =CountRows(Filter(colEvents, !Deleted &amp;&amp; Programme = "National Activity")) &amp; " events"
-                        Width: =((Parent.Width - 48) / 5) - 28
-                        X: =((Parent.Width - 48) / 5) * 0 + 12 * 0 + 14
-                        Y: =74
-                  - lblHNext0:
-                      Control: ModernText@1.0.0
-                      Properties:
-                        Color: =RGBA(30, 24, 34, 1)
-                        Fill: =RGBA(0, 0, 0, 0)
-                        Height: =32
-                        PaddingBottom: =0
-                        PaddingTop: =0
-                        Size: =10
-                        Text: '=With({n: First(Sort(Filter(colEvents, !Deleted &amp;&amp; Programme = "National Activity" &amp;&amp; EndDate &gt;= Today()), SortKey, SortOrder.Ascending))}, If(IsBlank(n), "No upcoming events", "Next: " &amp; n.Title &amp; " (" &amp; Text(n.StartDate, "dd/mm/yyyy") &amp; ")"))'
-                        Width: =((Parent.Width - 48) / 5) - 28
-                        X: =((Parent.Width - 48) / 5) * 0 + 12 * 0 + 14
-                        Y: =102
-                  - lblHGo0:
-                      Control: ModernText@1.0.0
-                      Properties:
-                        Color: =RGBA(83, 42, 69, 1)
-                        Fill: =RGBA(0, 0, 0, 0)
-                        FontWeight: =FontWeight.Semibold
-                        Height: =16
-                        PaddingBottom: =0
-                        PaddingTop: =0
-                        Size: =10
-                        Text: ="Open calendar &gt;"
-                        Width: =((Parent.Width - 48) / 5) - 28
-                        X: =((Parent.Width - 48) / 5) * 0 + 12 * 0 + 14
-                        Y: =130
-                  - btnHHit0:
+                        Width: =150
+                        X: =120
+                        Y: =54
+                  - btnHmTab_overseas:
                       Control: Classic/Button@2.2.0
                       Properties:
                         BorderThickness: =0
-                        Fill: =RGBA(0, 0, 0, 0)
-                        Height: =150
-                        HoverFill: =RGBA(83, 42, 69, 0.06)
+                        Color: =If(false, RGBA(83, 42, 69, 1), RGBA(255, 255, 255, 1))
+                        Fill: =If(false, RGBA(247, 244, 246, 1), RGBA(255, 255, 255, 0.14))
+                        FontWeight: =FontWeight.Semibold
+                        Height: =34
+                        HoverColor: =If(false, RGBA(83, 42, 69, 1), RGBA(255, 255, 255, 1))
+                        HoverFill: =If(false, RGBA(247, 244, 246, 1), RGBA(255, 255, 255, 0.26))
                         OnSelect: |-
-                          =Set(varProg, "national");
+                          =Set(varDlg, "");
+                          Set(varProg, "overseas");
                           Set(varStatus, "All");
                           Set(varSearch, "");
                           ClearCollect(colSelTypes, ForAll(Filter(colTypes, Active), {TKey: ThisRecord.TKey}));
@@ -5711,128 +5765,30 @@ ClearCollect(colList, Filter(colVisible, false))
                               )
                           );
                           Navigate(scrCalendar, ScreenTransition.Fade)
-                        PressedFill: =RGBA(83, 42, 69, 0.12)
-                        RadiusBottomLeft: =10
-                        RadiusBottomRight: =10
+                        PressedColor: =If(false, RGBA(83, 42, 69, 1), RGBA(255, 255, 255, 1))
+                        PressedFill: =If(false, RGBA(247, 244, 246, 1), RGBA(255, 255, 255, 0.34))
+                        RadiusBottomLeft: =0
+                        RadiusBottomRight: =0
                         RadiusTopLeft: =10
                         RadiusTopRight: =10
-                        Text: =""
-                        Width: =(Parent.Width - 48) / 5
-                        X: =((Parent.Width - 48) / 5) * 0 + 12 * 0
-                        Y: =0
-                  - recHCard1:
-                      Control: Classic/Button@2.2.0
-                      Properties:
-                        BorderColor: =RGBA(208, 196, 204, 1)
-                        BorderThickness: =1
-                        DisplayMode: =DisplayMode.View
-                        Fill: =RGBA(255, 255, 255, 1)
-                        Height: =150
-                        HoverFill: =RGBA(255, 255, 255, 1)
-                        PressedFill: =RGBA(255, 255, 255, 1)
-                        RadiusBottomLeft: =14
-                        RadiusBottomRight: =14
-                        RadiusTopLeft: =14
-                        RadiusTopRight: =14
-                        Text: =""
-                        Width: =(Parent.Width - 48) / 5
-                        X: =((Parent.Width - 48) / 5) * 1 + 12 * 1
-                        Y: =0
-                  - recHStrip1:
-                      Control: Classic/Button@2.2.0
-                      Properties:
-                        BorderColor: =RGBA(208, 196, 204, 1)
-                        BorderThickness: =0
-                        DisplayMode: =DisplayMode.View
-                        Fill: =#0E7C86
-                        Height: =5
-                        HoverFill: =#0E7C86
-                        PressedFill: =#0E7C86
-                        RadiusBottomLeft: =3
-                        RadiusBottomRight: =3
-                        RadiusTopLeft: =3
-                        RadiusTopRight: =3
-                        Text: =""
-                        Width: =((Parent.Width - 48) / 5) - 28
-                        X: =((Parent.Width - 48) / 5) * 1 + 12 * 1 + 14
-                        Y: =0
-                  - lblHName1:
-                      Control: ModernText@1.0.0
-                      Properties:
-                        Color: =RGBA(30, 24, 34, 1)
-                        Fill: =RGBA(0, 0, 0, 0)
-                        FontWeight: =FontWeight.Semibold
-                        Height: =24
-                        PaddingBottom: =0
-                        PaddingTop: =0
-                        Size: =15
+                        Size: =11
                         Text: ="Overseas Activity"
-                        Width: =((Parent.Width - 48) / 5) - 28
-                        X: =((Parent.Width - 48) / 5) * 1 + 12 * 1 + 14
-                        Y: =12
-                  - lblHBlurb1:
-                      Control: ModernText@1.0.0
-                      Properties:
-                        Color: =RGBA(94, 107, 123, 1)
-                        Fill: =RGBA(0, 0, 0, 0)
-                        Height: =34
-                        PaddingBottom: =0
-                        PaddingTop: =0
-                        Size: =10
-                        Text: '="Events and expeditions abroad. Provisional: picked out by a tick box for now."'
-                        Width: =((Parent.Width - 48) / 5) - 28
-                        X: =((Parent.Width - 48) / 5) * 1 + 12 * 1 + 14
-                        Y: =38
-                  - lblHCount1:
-                      Control: ModernText@1.0.0
-                      Properties:
-                        Color: =RGBA(30, 24, 34, 1)
-                        Fill: =RGBA(0, 0, 0, 0)
-                        FontWeight: =FontWeight.Semibold
-                        Height: =26
-                        PaddingBottom: =0
-                        PaddingTop: =0
-                        Size: =18
-                        Text: =CountRows(Filter(colEvents, !Deleted &amp;&amp; Overseas)) &amp; " events"
-                        Width: =((Parent.Width - 48) / 5) - 28
-                        X: =((Parent.Width - 48) / 5) * 1 + 12 * 1 + 14
-                        Y: =74
-                  - lblHNext1:
-                      Control: ModernText@1.0.0
-                      Properties:
-                        Color: =RGBA(30, 24, 34, 1)
-                        Fill: =RGBA(0, 0, 0, 0)
-                        Height: =32
-                        PaddingBottom: =0
-                        PaddingTop: =0
-                        Size: =10
-                        Text: '=With({n: First(Sort(Filter(colEvents, !Deleted &amp;&amp; Overseas &amp;&amp; EndDate &gt;= Today()), SortKey, SortOrder.Ascending))}, If(IsBlank(n), "No upcoming events", "Next: " &amp; n.Title &amp; " (" &amp; Text(n.StartDate, "dd/mm/yyyy") &amp; ")"))'
-                        Width: =((Parent.Width - 48) / 5) - 28
-                        X: =((Parent.Width - 48) / 5) * 1 + 12 * 1 + 14
-                        Y: =102
-                  - lblHGo1:
-                      Control: ModernText@1.0.0
-                      Properties:
-                        Color: =RGBA(83, 42, 69, 1)
-                        Fill: =RGBA(0, 0, 0, 0)
-                        FontWeight: =FontWeight.Semibold
-                        Height: =16
-                        PaddingBottom: =0
-                        PaddingTop: =0
-                        Size: =10
-                        Text: ="Open calendar &gt;"
-                        Width: =((Parent.Width - 48) / 5) - 28
-                        X: =((Parent.Width - 48) / 5) * 1 + 12 * 1 + 14
-                        Y: =130
-                  - btnHHit1:
+                        Width: =150
+                        X: =276
+                        Y: =54
+                  - btnHmTab_ctc:
                       Control: Classic/Button@2.2.0
                       Properties:
                         BorderThickness: =0
-                        Fill: =RGBA(0, 0, 0, 0)
-                        Height: =150
-                        HoverFill: =RGBA(83, 42, 69, 0.06)
+                        Color: =If(false, RGBA(83, 42, 69, 1), RGBA(255, 255, 255, 1))
+                        Fill: =If(false, RGBA(247, 244, 246, 1), RGBA(255, 255, 255, 0.14))
+                        FontWeight: =FontWeight.Semibold
+                        Height: =34
+                        HoverColor: =If(false, RGBA(83, 42, 69, 1), RGBA(255, 255, 255, 1))
+                        HoverFill: =If(false, RGBA(247, 244, 246, 1), RGBA(255, 255, 255, 0.26))
                         OnSelect: |-
-                          =Set(varProg, "overseas");
+                          =Set(varDlg, "");
+                          Set(varProg, "ctc");
                           Set(varStatus, "All");
                           Set(varSearch, "");
                           ClearCollect(colSelTypes, ForAll(Filter(colTypes, Active), {TKey: ThisRecord.TKey}));
@@ -5895,128 +5851,30 @@ ClearCollect(colList, Filter(colVisible, false))
                               )
                           );
                           Navigate(scrCalendar, ScreenTransition.Fade)
-                        PressedFill: =RGBA(83, 42, 69, 0.12)
-                        RadiusBottomLeft: =10
-                        RadiusBottomRight: =10
+                        PressedColor: =If(false, RGBA(83, 42, 69, 1), RGBA(255, 255, 255, 1))
+                        PressedFill: =If(false, RGBA(247, 244, 246, 1), RGBA(255, 255, 255, 0.34))
+                        RadiusBottomLeft: =0
+                        RadiusBottomRight: =0
                         RadiusTopLeft: =10
                         RadiusTopRight: =10
-                        Text: =""
-                        Width: =(Parent.Width - 48) / 5
-                        X: =((Parent.Width - 48) / 5) * 1 + 12 * 1
-                        Y: =0
-                  - recHCard2:
-                      Control: Classic/Button@2.2.0
-                      Properties:
-                        BorderColor: =RGBA(208, 196, 204, 1)
-                        BorderThickness: =1
-                        DisplayMode: =DisplayMode.View
-                        Fill: =RGBA(255, 255, 255, 1)
-                        Height: =150
-                        HoverFill: =RGBA(255, 255, 255, 1)
-                        PressedFill: =RGBA(255, 255, 255, 1)
-                        RadiusBottomLeft: =14
-                        RadiusBottomRight: =14
-                        RadiusTopLeft: =14
-                        RadiusTopRight: =14
-                        Text: =""
-                        Width: =(Parent.Width - 48) / 5
-                        X: =((Parent.Width - 48) / 5) * 2 + 12 * 2
-                        Y: =0
-                  - recHStrip2:
-                      Control: Classic/Button@2.2.0
-                      Properties:
-                        BorderColor: =RGBA(208, 196, 204, 1)
-                        BorderThickness: =0
-                        DisplayMode: =DisplayMode.View
-                        Fill: =#C2410C
-                        Height: =5
-                        HoverFill: =#C2410C
-                        PressedFill: =#C2410C
-                        RadiusBottomLeft: =3
-                        RadiusBottomRight: =3
-                        RadiusTopLeft: =3
-                        RadiusTopRight: =3
-                        Text: =""
-                        Width: =((Parent.Width - 48) / 5) - 28
-                        X: =((Parent.Width - 48) / 5) * 2 + 12 * 2 + 14
-                        Y: =0
-                  - lblHName2:
-                      Control: ModernText@1.0.0
-                      Properties:
-                        Color: =RGBA(30, 24, 34, 1)
-                        Fill: =RGBA(0, 0, 0, 0)
-                        FontWeight: =FontWeight.Semibold
-                        Height: =24
-                        PaddingBottom: =0
-                        PaddingTop: =0
-                        Size: =15
+                        Size: =11
                         Text: ="CTC"
-                        Width: =((Parent.Width - 48) / 5) - 28
-                        X: =((Parent.Width - 48) / 5) * 2 + 12 * 2 + 14
-                        Y: =12
-                  - lblHBlurb2:
-                      Control: ModernText@1.0.0
-                      Properties:
-                        Color: =RGBA(94, 107, 123, 1)
-                        Fill: =RGBA(0, 0, 0, 0)
-                        Height: =34
-                        PaddingBottom: =0
-                        PaddingTop: =0
-                        Size: =10
-                        Text: ="Cadet Training Centre programme."
-                        Width: =((Parent.Width - 48) / 5) - 28
-                        X: =((Parent.Width - 48) / 5) * 2 + 12 * 2 + 14
-                        Y: =38
-                  - lblHCount2:
-                      Control: ModernText@1.0.0
-                      Properties:
-                        Color: =RGBA(30, 24, 34, 1)
-                        Fill: =RGBA(0, 0, 0, 0)
-                        FontWeight: =FontWeight.Semibold
-                        Height: =26
-                        PaddingBottom: =0
-                        PaddingTop: =0
-                        Size: =18
-                        Text: =CountRows(Filter(colEvents, !Deleted &amp;&amp; Programme = "CTC")) &amp; " events"
-                        Width: =((Parent.Width - 48) / 5) - 28
-                        X: =((Parent.Width - 48) / 5) * 2 + 12 * 2 + 14
-                        Y: =74
-                  - lblHNext2:
-                      Control: ModernText@1.0.0
-                      Properties:
-                        Color: =RGBA(30, 24, 34, 1)
-                        Fill: =RGBA(0, 0, 0, 0)
-                        Height: =32
-                        PaddingBottom: =0
-                        PaddingTop: =0
-                        Size: =10
-                        Text: '=With({n: First(Sort(Filter(colEvents, !Deleted &amp;&amp; Programme = "CTC" &amp;&amp; EndDate &gt;= Today()), SortKey, SortOrder.Ascending))}, If(IsBlank(n), "No upcoming events", "Next: " &amp; n.Title &amp; " (" &amp; Text(n.StartDate, "dd/mm/yyyy") &amp; ")"))'
-                        Width: =((Parent.Width - 48) / 5) - 28
-                        X: =((Parent.Width - 48) / 5) * 2 + 12 * 2 + 14
-                        Y: =102
-                  - lblHGo2:
-                      Control: ModernText@1.0.0
-                      Properties:
-                        Color: =RGBA(83, 42, 69, 1)
-                        Fill: =RGBA(0, 0, 0, 0)
-                        FontWeight: =FontWeight.Semibold
-                        Height: =16
-                        PaddingBottom: =0
-                        PaddingTop: =0
-                        Size: =10
-                        Text: ="Open calendar &gt;"
-                        Width: =((Parent.Width - 48) / 5) - 28
-                        X: =((Parent.Width - 48) / 5) * 2 + 12 * 2 + 14
-                        Y: =130
-                  - btnHHit2:
+                        Width: =80
+                        X: =432
+                        Y: =54
+                  - btnHmTab_ctt:
                       Control: Classic/Button@2.2.0
                       Properties:
                         BorderThickness: =0
-                        Fill: =RGBA(0, 0, 0, 0)
-                        Height: =150
-                        HoverFill: =RGBA(83, 42, 69, 0.06)
+                        Color: =If(false, RGBA(83, 42, 69, 1), RGBA(255, 255, 255, 1))
+                        Fill: =If(false, RGBA(247, 244, 246, 1), RGBA(255, 255, 255, 0.14))
+                        FontWeight: =FontWeight.Semibold
+                        Height: =34
+                        HoverColor: =If(false, RGBA(83, 42, 69, 1), RGBA(255, 255, 255, 1))
+                        HoverFill: =If(false, RGBA(247, 244, 246, 1), RGBA(255, 255, 255, 0.26))
                         OnSelect: |-
-                          =Set(varProg, "ctc");
+                          =Set(varDlg, "");
+                          Set(varProg, "ctt");
                           Set(varStatus, "All");
                           Set(varSearch, "");
                           ClearCollect(colSelTypes, ForAll(Filter(colTypes, Active), {TKey: ThisRecord.TKey}));
@@ -6079,128 +5937,30 @@ ClearCollect(colList, Filter(colVisible, false))
                               )
                           );
                           Navigate(scrCalendar, ScreenTransition.Fade)
-                        PressedFill: =RGBA(83, 42, 69, 0.12)
-                        RadiusBottomLeft: =10
-                        RadiusBottomRight: =10
+                        PressedColor: =If(false, RGBA(83, 42, 69, 1), RGBA(255, 255, 255, 1))
+                        PressedFill: =If(false, RGBA(247, 244, 246, 1), RGBA(255, 255, 255, 0.34))
+                        RadiusBottomLeft: =0
+                        RadiusBottomRight: =0
                         RadiusTopLeft: =10
                         RadiusTopRight: =10
-                        Text: =""
-                        Width: =(Parent.Width - 48) / 5
-                        X: =((Parent.Width - 48) / 5) * 2 + 12 * 2
-                        Y: =0
-                  - recHCard3:
-                      Control: Classic/Button@2.2.0
-                      Properties:
-                        BorderColor: =RGBA(208, 196, 204, 1)
-                        BorderThickness: =1
-                        DisplayMode: =DisplayMode.View
-                        Fill: =RGBA(255, 255, 255, 1)
-                        Height: =150
-                        HoverFill: =RGBA(255, 255, 255, 1)
-                        PressedFill: =RGBA(255, 255, 255, 1)
-                        RadiusBottomLeft: =14
-                        RadiusBottomRight: =14
-                        RadiusTopLeft: =14
-                        RadiusTopRight: =14
-                        Text: =""
-                        Width: =(Parent.Width - 48) / 5
-                        X: =((Parent.Width - 48) / 5) * 3 + 12 * 3
-                        Y: =0
-                  - recHStrip3:
-                      Control: Classic/Button@2.2.0
-                      Properties:
-                        BorderColor: =RGBA(208, 196, 204, 1)
-                        BorderThickness: =0
-                        DisplayMode: =DisplayMode.View
-                        Fill: =#5B6770
-                        Height: =5
-                        HoverFill: =#5B6770
-                        PressedFill: =#5B6770
-                        RadiusBottomLeft: =3
-                        RadiusBottomRight: =3
-                        RadiusTopLeft: =3
-                        RadiusTopRight: =3
-                        Text: =""
-                        Width: =((Parent.Width - 48) / 5) - 28
-                        X: =((Parent.Width - 48) / 5) * 3 + 12 * 3 + 14
-                        Y: =0
-                  - lblHName3:
-                      Control: ModernText@1.0.0
-                      Properties:
-                        Color: =RGBA(30, 24, 34, 1)
-                        Fill: =RGBA(0, 0, 0, 0)
-                        FontWeight: =FontWeight.Semibold
-                        Height: =24
-                        PaddingBottom: =0
-                        PaddingTop: =0
-                        Size: =15
+                        Size: =11
                         Text: ="CTTs"
-                        Width: =((Parent.Width - 48) / 5) - 28
-                        X: =((Parent.Width - 48) / 5) * 3 + 12 * 3 + 14
-                        Y: =12
-                  - lblHBlurb3:
-                      Control: ModernText@1.0.0
-                      Properties:
-                        Color: =RGBA(94, 107, 123, 1)
-                        Fill: =RGBA(0, 0, 0, 0)
-                        Height: =34
-                        PaddingBottom: =0
-                        PaddingTop: =0
-                        Size: =10
-                        Text: ="Cadet Training Teams. No dates supplied yet."
-                        Width: =((Parent.Width - 48) / 5) - 28
-                        X: =((Parent.Width - 48) / 5) * 3 + 12 * 3 + 14
-                        Y: =38
-                  - lblHCount3:
-                      Control: ModernText@1.0.0
-                      Properties:
-                        Color: =RGBA(30, 24, 34, 1)
-                        Fill: =RGBA(0, 0, 0, 0)
-                        FontWeight: =FontWeight.Semibold
-                        Height: =26
-                        PaddingBottom: =0
-                        PaddingTop: =0
-                        Size: =18
-                        Text: =CountRows(Filter(colEvents, !Deleted &amp;&amp; Programme = "CTTs")) &amp; " events"
-                        Width: =((Parent.Width - 48) / 5) - 28
-                        X: =((Parent.Width - 48) / 5) * 3 + 12 * 3 + 14
-                        Y: =74
-                  - lblHNext3:
-                      Control: ModernText@1.0.0
-                      Properties:
-                        Color: =RGBA(30, 24, 34, 1)
-                        Fill: =RGBA(0, 0, 0, 0)
-                        Height: =32
-                        PaddingBottom: =0
-                        PaddingTop: =0
-                        Size: =10
-                        Text: '=With({n: First(Sort(Filter(colEvents, !Deleted &amp;&amp; Programme = "CTTs" &amp;&amp; EndDate &gt;= Today()), SortKey, SortOrder.Ascending))}, If(IsBlank(n), "No upcoming events", "Next: " &amp; n.Title &amp; " (" &amp; Text(n.StartDate, "dd/mm/yyyy") &amp; ")"))'
-                        Width: =((Parent.Width - 48) / 5) - 28
-                        X: =((Parent.Width - 48) / 5) * 3 + 12 * 3 + 14
-                        Y: =102
-                  - lblHGo3:
-                      Control: ModernText@1.0.0
-                      Properties:
-                        Color: =RGBA(83, 42, 69, 1)
-                        Fill: =RGBA(0, 0, 0, 0)
-                        FontWeight: =FontWeight.Semibold
-                        Height: =16
-                        PaddingBottom: =0
-                        PaddingTop: =0
-                        Size: =10
-                        Text: ="Open calendar &gt;"
-                        Width: =((Parent.Width - 48) / 5) - 28
-                        X: =((Parent.Width - 48) / 5) * 3 + 12 * 3 + 14
-                        Y: =130
-                  - btnHHit3:
+                        Width: =80
+                        X: =518
+                        Y: =54
+                  - btnHmTab_meet:
                       Control: Classic/Button@2.2.0
                       Properties:
                         BorderThickness: =0
-                        Fill: =RGBA(0, 0, 0, 0)
-                        Height: =150
-                        HoverFill: =RGBA(83, 42, 69, 0.06)
+                        Color: =If(false, RGBA(83, 42, 69, 1), RGBA(255, 255, 255, 1))
+                        Fill: =If(false, RGBA(247, 244, 246, 1), RGBA(255, 255, 255, 0.14))
+                        FontWeight: =FontWeight.Semibold
+                        Height: =34
+                        HoverColor: =If(false, RGBA(83, 42, 69, 1), RGBA(255, 255, 255, 1))
+                        HoverFill: =If(false, RGBA(247, 244, 246, 1), RGBA(255, 255, 255, 0.26))
                         OnSelect: |-
-                          =Set(varProg, "ctt");
+                          =Set(varDlg, "");
+                          Set(varProg, "meet");
                           Set(varStatus, "All");
                           Set(varSearch, "");
                           ClearCollect(colSelTypes, ForAll(Filter(colTypes, Active), {TKey: ThisRecord.TKey}));
@@ -6263,199 +6023,17 @@ ClearCollect(colList, Filter(colVisible, false))
                               )
                           );
                           Navigate(scrCalendar, ScreenTransition.Fade)
-                        PressedFill: =RGBA(83, 42, 69, 0.12)
-                        RadiusBottomLeft: =10
-                        RadiusBottomRight: =10
+                        PressedColor: =If(false, RGBA(83, 42, 69, 1), RGBA(255, 255, 255, 1))
+                        PressedFill: =If(false, RGBA(247, 244, 246, 1), RGBA(255, 255, 255, 0.34))
+                        RadiusBottomLeft: =0
+                        RadiusBottomRight: =0
                         RadiusTopLeft: =10
                         RadiusTopRight: =10
-                        Text: =""
-                        Width: =(Parent.Width - 48) / 5
-                        X: =((Parent.Width - 48) / 5) * 3 + 12 * 3
-                        Y: =0
-                  - recHCard4:
-                      Control: Classic/Button@2.2.0
-                      Properties:
-                        BorderColor: =RGBA(208, 196, 204, 1)
-                        BorderThickness: =1
-                        DisplayMode: =DisplayMode.View
-                        Fill: =RGBA(255, 255, 255, 1)
-                        Height: =150
-                        HoverFill: =RGBA(255, 255, 255, 1)
-                        PressedFill: =RGBA(255, 255, 255, 1)
-                        RadiusBottomLeft: =14
-                        RadiusBottomRight: =14
-                        RadiusTopLeft: =14
-                        RadiusTopRight: =14
-                        Text: =""
-                        Width: =(Parent.Width - 48) / 5
-                        X: =((Parent.Width - 48) / 5) * 4 + 12 * 4
-                        Y: =0
-                  - recHStrip4:
-                      Control: Classic/Button@2.2.0
-                      Properties:
-                        BorderColor: =RGBA(208, 196, 204, 1)
-                        BorderThickness: =0
-                        DisplayMode: =DisplayMode.View
-                        Fill: =#7A4B9A
-                        Height: =5
-                        HoverFill: =#7A4B9A
-                        PressedFill: =#7A4B9A
-                        RadiusBottomLeft: =3
-                        RadiusBottomRight: =3
-                        RadiusTopLeft: =3
-                        RadiusTopRight: =3
-                        Text: =""
-                        Width: =((Parent.Width - 48) / 5) - 28
-                        X: =((Parent.Width - 48) / 5) * 4 + 12 * 4 + 14
-                        Y: =0
-                  - lblHName4:
-                      Control: ModernText@1.0.0
-                      Properties:
-                        Color: =RGBA(30, 24, 34, 1)
-                        Fill: =RGBA(0, 0, 0, 0)
-                        FontWeight: =FontWeight.Semibold
-                        Height: =24
-                        PaddingBottom: =0
-                        PaddingTop: =0
-                        Size: =15
+                        Size: =11
                         Text: ="Meetings and conferences"
-                        Width: =((Parent.Width - 48) / 5) - 28
-                        X: =((Parent.Width - 48) / 5) * 4 + 12 * 4 + 14
-                        Y: =12
-                  - lblHBlurb4:
-                      Control: ModernText@1.0.0
-                      Properties:
-                        Color: =RGBA(94, 107, 123, 1)
-                        Fill: =RGBA(0, 0, 0, 0)
-                        Height: =34
-                        PaddingBottom: =0
-                        PaddingTop: =0
-                        Size: =10
-                        Text: ="Boards, panels and conferences from every programme."
-                        Width: =((Parent.Width - 48) / 5) - 28
-                        X: =((Parent.Width - 48) / 5) * 4 + 12 * 4 + 14
-                        Y: =38
-                  - lblHCount4:
-                      Control: ModernText@1.0.0
-                      Properties:
-                        Color: =RGBA(30, 24, 34, 1)
-                        Fill: =RGBA(0, 0, 0, 0)
-                        FontWeight: =FontWeight.Semibold
-                        Height: =26
-                        PaddingBottom: =0
-                        PaddingTop: =0
-                        Size: =18
-                        Text: =CountRows(Filter(colEvents, !Deleted &amp;&amp; Kind &lt;&gt; "event")) &amp; " entries"
-                        Width: =((Parent.Width - 48) / 5) - 28
-                        X: =((Parent.Width - 48) / 5) * 4 + 12 * 4 + 14
-                        Y: =74
-                  - lblHNext4:
-                      Control: ModernText@1.0.0
-                      Properties:
-                        Color: =RGBA(30, 24, 34, 1)
-                        Fill: =RGBA(0, 0, 0, 0)
-                        Height: =32
-                        PaddingBottom: =0
-                        PaddingTop: =0
-                        Size: =10
-                        Text: '=With({n: First(Sort(Filter(colEvents, !Deleted &amp;&amp; Kind &lt;&gt; "event" &amp;&amp; EndDate &gt;= Today()), SortKey, SortOrder.Ascending))}, If(IsBlank(n), "No upcoming events", "Next: " &amp; n.Title &amp; " (" &amp; Text(n.StartDate, "dd/mm/yyyy") &amp; ")"))'
-                        Width: =((Parent.Width - 48) / 5) - 28
-                        X: =((Parent.Width - 48) / 5) * 4 + 12 * 4 + 14
-                        Y: =102
-                  - lblHGo4:
-                      Control: ModernText@1.0.0
-                      Properties:
-                        Color: =RGBA(83, 42, 69, 1)
-                        Fill: =RGBA(0, 0, 0, 0)
-                        FontWeight: =FontWeight.Semibold
-                        Height: =16
-                        PaddingBottom: =0
-                        PaddingTop: =0
-                        Size: =10
-                        Text: ="Open calendar &gt;"
-                        Width: =((Parent.Width - 48) / 5) - 28
-                        X: =((Parent.Width - 48) / 5) * 4 + 12 * 4 + 14
-                        Y: =130
-                  - btnHHit4:
-                      Control: Classic/Button@2.2.0
-                      Properties:
-                        BorderThickness: =0
-                        Fill: =RGBA(0, 0, 0, 0)
-                        Height: =150
-                        HoverFill: =RGBA(83, 42, 69, 0.06)
-                        OnSelect: |-
-                          =Set(varProg, "meet");
-                          Set(varStatus, "All");
-                          Set(varSearch, "");
-                          ClearCollect(colSelTypes, ForAll(Filter(colTypes, Active), {TKey: ThisRecord.TKey}));
-                          ClearCollect(colScope, Filter(colEvents, !Deleted &amp;&amp; (varProg = "all" || (varProg = "national" &amp;&amp; Programme = "National Activity") || (varProg = "ctc" &amp;&amp; Programme = "CTC") || (varProg = "ctt" &amp;&amp; Programme = "CTTs") || (varProg = "overseas" &amp;&amp; Overseas) || (varProg = "meet" &amp;&amp; Kind &lt;&gt; "event"))));
-                          ClearCollect(
-                              colVisible,
-                              AddColumns(
-                                  SortByColumns(
-                                      Filter(
-                                          colScope,
-                                          (TypeKey in colSelTypes.TKey) &amp;&amp;
-                                          (varStatus = "All" || Status = varStatus) &amp;&amp;
-                                          (IsBlank(varSearch) || Lower(varSearch) in Lower(Title))
-                                      ),
-                                      "SortKey",
-                                      SortOrder.Ascending
-                                  ),
-                                  Concern,
-                                  !Deleted &amp;&amp; EndDate &gt;= Today() &amp;&amp; DateDiff(Today(), StartDate, "Days") &lt;= varThresh &amp;&amp; (PeopleState = "needs" || MoneyState = "needs" || EquipState = "needs"),
-                                  Hex,
-                                  With({k: TypeKey}, LookUp(colTypes, TKey = k).Hex)
-                              )
-                          );
-                          ClearCollect(
-                              colDays,
-                              ForAll(
-                                  Sequence(42) As s,
-                                  With(
-                                      {d: DateAdd(varGridStart, s.Value - 1, "Days")},
-                                      With(
-                                          {f: Filter(colVisible, StartDate &lt;= d &amp;&amp; EndDate &gt;= d)},
-                                          With(
-                                              {e1: If(CountRows(f) &gt;= 1, Index(f, 1)), e2: If(CountRows(f) &gt;= 2, Index(f, 2)), e3: If(CountRows(f) &gt;= 3, Index(f, 3))},
-                                              {
-                                                  Idx: s.Value,
-                                                  D: d,
-                                                  N: CountRows(f),
-                                                  T1: If(IsBlank(e1), "", If(e1.Concern, "! ", "") &amp; e1.Title),
-                                                  F1: If(IsBlank(e1), RGBA(0, 0, 0, 0), ColorFade(ColorValue(e1.Hex), 0.8)),
-                                                  B1: If(IsBlank(e1), RGBA(0, 0, 0, 0), If(e1.Concern, RGBA(142, 21, 55, 1), If(e1.Status = "To be confirmed", ColorValue(e1.Hex), RGBA(0, 0, 0, 0)))),
-                                                  W1: If(IsBlank(e1), 0, If(e1.Concern, 2, If(e1.Status = "To be confirmed", 1, 0))),
-                                                  S1: !IsBlank(e1) &amp;&amp; e1.Status = "To be confirmed" &amp;&amp; !e1.Concern,
-                                                  I1: If(IsBlank(e1), 0, e1.Id),
-                                                  T2: If(IsBlank(e2), "", If(e2.Concern, "! ", "") &amp; e2.Title),
-                                                  F2: If(IsBlank(e2), RGBA(0, 0, 0, 0), ColorFade(ColorValue(e2.Hex), 0.8)),
-                                                  B2: If(IsBlank(e2), RGBA(0, 0, 0, 0), If(e2.Concern, RGBA(142, 21, 55, 1), If(e2.Status = "To be confirmed", ColorValue(e2.Hex), RGBA(0, 0, 0, 0)))),
-                                                  W2: If(IsBlank(e2), 0, If(e2.Concern, 2, If(e2.Status = "To be confirmed", 1, 0))),
-                                                  S2: !IsBlank(e2) &amp;&amp; e2.Status = "To be confirmed" &amp;&amp; !e2.Concern,
-                                                  I2: If(IsBlank(e2), 0, e2.Id),
-                                                  T3: If(IsBlank(e3), "", If(e3.Concern, "! ", "") &amp; e3.Title),
-                                                  F3: If(IsBlank(e3), RGBA(0, 0, 0, 0), ColorFade(ColorValue(e3.Hex), 0.8)),
-                                                  B3: If(IsBlank(e3), RGBA(0, 0, 0, 0), If(e3.Concern, RGBA(142, 21, 55, 1), If(e3.Status = "To be confirmed", ColorValue(e3.Hex), RGBA(0, 0, 0, 0)))),
-                                                  W3: If(IsBlank(e3), 0, If(e3.Concern, 2, If(e3.Status = "To be confirmed", 1, 0))),
-                                                  S3: !IsBlank(e3) &amp;&amp; e3.Status = "To be confirmed" &amp;&amp; !e3.Concern,
-                                                  I3: If(IsBlank(e3), 0, e3.Id)
-                                              }
-                                          )
-                                      )
-                                  )
-                              )
-                          );
-                          Navigate(scrCalendar, ScreenTransition.Fade)
-                        PressedFill: =RGBA(83, 42, 69, 0.12)
-                        RadiusBottomLeft: =10
-                        RadiusBottomRight: =10
-                        RadiusTopLeft: =10
-                        RadiusTopRight: =10
-                        Text: =""
-                        Width: =(Parent.Width - 48) / 5
-                        X: =((Parent.Width - 48) / 5) * 4 + 12 * 4
-                        Y: =0
+                        Width: =200
+                        X: =604
+                        Y: =54
             - lblHKeysH:
                 Control: ModernText@1.0.0
                 Properties:
@@ -6466,23 +6044,23 @@ ClearCollect(colList, Filter(colVisible, false))
                   PaddingBottom: =0
                   PaddingTop: =0
                   Size: =13
-                  Text: ="Key dates coming up"
-                  Width: =(Parent.Width - 48) * 0.58
+                  Text: '="Key dates: next 30 days"'
+                  Width: =(Parent.Width - 48) * 0.56
                   X: =16
-                  Y: =232
+                  Y: =100
             - galHKeys:
                 Control: Gallery@2.15.0
                 Variant: Vertical
                 Properties:
                   Height: =174
-                  Items: =FirstN(Sort(Filter(colEvents, !Deleted &amp;&amp; KeyDate &amp;&amp; EndDate &gt;= Today()), SortKey, SortOrder.Ascending), 3)
+                  Items: =Sort(Filter(colEvents, !Deleted &amp;&amp; KeyDate &amp;&amp; EndDate &gt;= Today() &amp;&amp; StartDate &lt;= DateAdd(Today(), 30, "Days")), SortKey, SortOrder.Ascending)
                   LoadingSpinner: =LoadingSpinner.None
-                  ShowScrollbar: =false
+                  ShowScrollbar: =true
                   TemplatePadding: =0
                   TemplateSize: =58
-                  Width: =(Parent.Width - 48) * 0.58
+                  Width: =(Parent.Width - 48) * 0.56
                   X: =16
-                  Y: =256
+                  Y: =124
                 Children:
                   - recHRowK:
                       Control: Classic/Button@2.2.0
@@ -6633,6 +6211,20 @@ ClearCollect(colList, Filter(colVisible, false))
                         Width: =Parent.TemplateWidth
                         X: =0
                         Y: =0
+            - lblHKeysEmpty:
+                Control: ModernText@1.0.0
+                Properties:
+                  Color: =RGBA(94, 107, 123, 1)
+                  Fill: =RGBA(0, 0, 0, 0)
+                  Height: =22
+                  PaddingBottom: =0
+                  PaddingTop: =0
+                  Size: =11
+                  Text: ="No key dates in the next 30 days."
+                  Visible: =CountRows(Sort(Filter(colEvents, !Deleted &amp;&amp; KeyDate &amp;&amp; EndDate &gt;= Today() &amp;&amp; StartDate &lt;= DateAdd(Today(), 30, "Days")), SortKey, SortOrder.Ascending)) = 0
+                  Width: =(Parent.Width - 48) * 0.56
+                  X: =16
+                  Y: =132
             - lblHNeedH:
                 Control: ModernText@1.0.0
                 Properties:
@@ -6644,22 +6236,22 @@ ClearCollect(colList, Filter(colVisible, false))
                   PaddingTop: =0
                   Size: =13
                   Text: '="Needs attention: resources still to organise"'
-                  Width: =(Parent.Width - 48) * 0.58
+                  Width: =(Parent.Width - 48) * 0.56
                   X: =16
-                  Y: =438
+                  Y: =306
             - galHNeed:
                 Control: Gallery@2.15.0
                 Variant: Vertical
                 Properties:
-                  Height: =180
-                  Items: =FirstN(Sort(Filter(colEvents, !Deleted &amp;&amp; EndDate &gt;= Today() &amp;&amp; DateDiff(Today(), StartDate, "Days") &lt;= varThresh &amp;&amp; (PeopleState = "needs" || MoneyState = "needs" || EquipState = "needs")), SortKey, SortOrder.Ascending), 3)
+                  Height: =(Parent.Height - 262) - 8 - 330
+                  Items: =Sort(Filter(colEvents, !Deleted &amp;&amp; EndDate &gt;= Today() &amp;&amp; DateDiff(Today(), StartDate, "Days") &lt;= varThresh &amp;&amp; (PeopleState = "needs" || MoneyState = "needs" || EquipState = "needs")), SortKey, SortOrder.Ascending)
                   LoadingSpinner: =LoadingSpinner.None
-                  ShowScrollbar: =false
+                  ShowScrollbar: =true
                   TemplatePadding: =0
                   TemplateSize: =62
-                  Width: =(Parent.Width - 48) * 0.58
+                  Width: =(Parent.Width - 48) * 0.56
                   X: =16
-                  Y: =462
+                  Y: =330
                 Children:
                   - recHRowN:
                       Control: Classic/Button@2.2.0
@@ -6906,10 +6498,168 @@ ClearCollect(colList, Filter(colVisible, false))
                   Size: =11
                   Text: ="Nothing needs attention."
                   Visible: =CountRows(Filter(colEvents, !Deleted &amp;&amp; EndDate &gt;= Today() &amp;&amp; DateDiff(Today(), StartDate, "Days") &lt;= varThresh &amp;&amp; (PeopleState = "needs" || MoneyState = "needs" || EquipState = "needs"))) = 0
-                  Width: =(Parent.Width - 48) * 0.58
+                  Width: =(Parent.Width - 48) * 0.56
                   X: =16
-                  Y: =470
-            - lblHPrioH:
+                  Y: =338
+            - conHMsg:
+                Control: GroupContainer@1.5.0
+                Variant: ManualLayout
+                Properties:
+                  DropShadow: =DropShadow.None
+                  Height: =(Parent.Height - 262) - 8 - 100
+                  Width: =(Parent.Width - 48) * 0.44
+                  X: =16 + (Parent.Width - 48) * 0.56 + 16
+                  Y: =100
+                Children:
+                  - recHMsgBg:
+                      Control: Classic/Button@2.2.0
+                      Properties:
+                        BorderColor: =RGBA(208, 196, 204, 1)
+                        BorderThickness: =1
+                        DisplayMode: =DisplayMode.View
+                        Fill: =RGBA(255, 255, 255, 1)
+                        Height: =Parent.Height
+                        HoverFill: =RGBA(255, 255, 255, 1)
+                        PressedFill: =RGBA(255, 255, 255, 1)
+                        RadiusBottomLeft: =14
+                        RadiusBottomRight: =14
+                        RadiusTopLeft: =14
+                        RadiusTopRight: =14
+                        Text: =""
+                        Width: =Parent.Width
+                        X: =0
+                        Y: =0
+                  - lblHMsgH:
+                      Control: ModernText@1.0.0
+                      Properties:
+                        Color: =RGBA(83, 42, 69, 1)
+                        Fill: =RGBA(0, 0, 0, 0)
+                        FontWeight: =FontWeight.Semibold
+                        Height: =24
+                        PaddingBottom: =0
+                        PaddingTop: =0
+                        Size: =15
+                        Text: ="Brigadier's message"
+                        Width: =Parent.Width - 80
+                        X: =16
+                        Y: =12
+                  - lblHMsgU:
+                      Control: ModernText@1.0.0
+                      Properties:
+                        Color: =RGBA(94, 107, 123, 1)
+                        Fill: =RGBA(0, 0, 0, 0)
+                        Height: =16
+                        PaddingBottom: =0
+                        PaddingTop: =0
+                        Size: =10
+                        Text: ="Updated " &amp; Text(varMsgUpdated, "dd/mm/yyyy")
+                        Width: =Parent.Width - 80
+                        X: =16
+                        Y: =36
+                  - icoHMsgEdit:
+                      Control: Classic/Icon@2.5.0
+                      Properties:
+                        Color: =RGBA(83, 42, 69, 1)
+                        Height: =28
+                        HoverColor: =RGBA(142, 21, 55, 1)
+                        Icon: =Icon.Edit
+                        OnSelect: =Navigate(scrBrigadier, ScreenTransition.Fade)
+                        Visible: =varRole = "admin" || varRole = "brigadier"
+                        Width: =28
+                        X: =Parent.Width - 46
+                        Y: =12
+                  - galHMsg:
+                      Control: Gallery@2.15.0
+                      Variant: Vertical
+                      Properties:
+                        Height: =Parent.Height - 68
+                        Items: =Filter(colMsg, !IsBlank(Heading) || !IsBlank(Body))
+                        LoadingSpinner: =LoadingSpinner.None
+                        ShowScrollbar: =true
+                        TemplatePadding: =0
+                        TemplateSize: =Max(64, (Parent.Height - 68) / Max(1, CountRows(Filter(colMsg, !IsBlank(Heading) || !IsBlank(Body)))))
+                        Width: =Parent.Width - 24
+                        X: =12
+                        Y: =58
+                      Children:
+                        - recHMsgRow:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              BorderColor: =RGBA(208, 196, 204, 1)
+                              BorderThickness: =1
+                              DisplayMode: =DisplayMode.View
+                              Fill: =RGBA(251, 249, 251, 1)
+                              Height: =Parent.TemplateHeight - 8
+                              HoverFill: =RGBA(251, 249, 251, 1)
+                              PressedFill: =RGBA(251, 249, 251, 1)
+                              RadiusBottomLeft: =10
+                              RadiusBottomRight: =10
+                              RadiusTopLeft: =10
+                              RadiusTopRight: =10
+                              Text: =""
+                              Width: =Parent.TemplateWidth
+                              X: =0
+                              Y: =0
+                        - recHMsgBar:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              BorderColor: =RGBA(208, 196, 204, 1)
+                              BorderThickness: =0
+                              DisplayMode: =DisplayMode.View
+                              Fill: =RGBA(83, 42, 69, 1)
+                              Height: =Parent.TemplateHeight - 24
+                              HoverFill: =RGBA(83, 42, 69, 1)
+                              PressedFill: =RGBA(83, 42, 69, 1)
+                              RadiusBottomLeft: =3
+                              RadiusBottomRight: =3
+                              RadiusTopLeft: =3
+                              RadiusTopRight: =3
+                              Text: =""
+                              Width: =5
+                              X: =0
+                              Y: =8
+                        - lblHMsgHead:
+                            Control: ModernText@1.0.0
+                            Properties:
+                              Color: =RGBA(83, 42, 69, 1)
+                              Fill: =RGBA(0, 0, 0, 0)
+                              FontWeight: =FontWeight.Semibold
+                              Height: =20
+                              PaddingBottom: =0
+                              PaddingTop: =0
+                              Size: =13
+                              Text: =ThisItem.Heading
+                              Width: =Parent.TemplateWidth - 28
+                              X: =16
+                              Y: =6
+                        - lblHMsgBody:
+                            Control: ModernText@1.0.0
+                            Properties:
+                              Color: =RGBA(30, 24, 34, 1)
+                              Fill: =RGBA(0, 0, 0, 0)
+                              Height: =Parent.TemplateHeight - 40
+                              PaddingBottom: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: =Concat(Filter(Split(Substitute(ThisItem.Body, Char(13), ""), Char(10)), !IsBlank(Trim(Result))), UniChar(8226) &amp; " " &amp; Trim(Result), Char(10))
+                              Width: =Parent.TemplateWidth - 28
+                              X: =16
+                              Y: =28
+                  - lblHMsgEmpty:
+                      Control: ModernText@1.0.0
+                      Properties:
+                        Color: =RGBA(94, 107, 123, 1)
+                        Fill: =RGBA(0, 0, 0, 0)
+                        Height: =22
+                        PaddingBottom: =0
+                        PaddingTop: =0
+                        Size: =12
+                        Text: ="No message has been published yet."
+                        Visible: =CountRows(Filter(colMsg, !IsBlank(Heading) || !IsBlank(Body))) = 0
+                        Width: =Parent.Width - 32
+                        X: =16
+                        Y: =64
+            - lblHMeetH:
                 Control: ModernText@1.0.0
                 Properties:
                   Color: =RGBA(83, 42, 69, 1)
@@ -6919,75 +6669,25 @@ ClearCollect(colList, Filter(colVisible, false))
                   PaddingBottom: =0
                   PaddingTop: =0
                   Size: =13
-                  Text: ="Commander's priorities"
-                  Width: =(Parent.Width - 48) * 0.42
-                  X: =16 + (Parent.Width - 48) * 0.58 + 16
-                  Y: =232
-            - recHPrio:
-                Control: Classic/Button@2.2.0
-                Properties:
-                  BorderColor: =RGBA(208, 196, 204, 1)
-                  BorderStyle: =BorderStyle.Dashed
-                  BorderThickness: =1
-                  Color: =RGBA(94, 107, 123, 1)
-                  DisplayMode: =DisplayMode.View
-                  Fill: =RGBA(255, 255, 255, 1)
-                  Height: =250
-                  HoverColor: =RGBA(94, 107, 123, 1)
-                  HoverFill: =RGBA(255, 255, 255, 1)
-                  PressedColor: =RGBA(94, 107, 123, 1)
-                  PressedFill: =RGBA(255, 255, 255, 1)
-                  RadiusBottomLeft: =14
-                  RadiusBottomRight: =14
-                  RadiusTopLeft: =14
-                  RadiusTopRight: =14
-                  Size: =14
-                  Text: ="Priorities graphic goes here"
-                  Width: =(Parent.Width - 48) * 0.42
-                  X: =16 + (Parent.Width - 48) * 0.58 + 16
-                  Y: =256
-            - lblHPrioN:
-                Control: ModernText@1.0.0
-                Properties:
-                  Color: =RGBA(94, 107, 123, 1)
-                  Fill: =RGBA(0, 0, 0, 0)
-                  Height: =48
-                  PaddingBottom: =0
-                  PaddingTop: =0
-                  Size: =10
-                  Text: ="In the real app this is an image control showing the latest file in a SharePoint picture library, so its owner can swap the slide without editing the app."
-                  Width: =(Parent.Width - 48) * 0.42
-                  X: =16 + (Parent.Width - 48) * 0.58 + 16
-                  Y: =512
-            - lblHWeeksH:
-                Control: ModernText@1.0.0
-                Properties:
-                  Color: =RGBA(83, 42, 69, 1)
-                  Fill: =RGBA(0, 0, 0, 0)
-                  FontWeight: =FontWeight.Semibold
-                  Height: =22
-                  PaddingBottom: =0
-                  PaddingTop: =0
-                  Size: =13
-                  Text: ="Next 8 weeks, all programmes"
-                  Width: =400
+                  Text: '="Meetings: upcoming (" &amp; If(varHomeMode = "weeks", "8 weeks", "8 months") &amp; ")"'
+                  Width: =700
                   X: =16
-                  Y: =Parent.Height - 130
-            - galHWeeks:
+                  Y: =(Parent.Height - 262)
+            - galHPcM:
                 Control: Gallery@2.15.0
                 Variant: Horizontal
                 Properties:
                   Height: =84
-                  Items: =colWeeks
+                  Items: =colHomeM
                   LoadingSpinner: =LoadingSpinner.None
                   ShowScrollbar: =false
                   TemplatePadding: =0
                   TemplateSize: =(Parent.Width - 32) / 8
                   Width: =Parent.Width - 32
                   X: =16
-                  Y: =Parent.Height - 106
+                  Y: =(Parent.Height - 262) + 22
                 Children:
-                  - recHWeek:
+                  - recHPcM:
                       Control: Classic/Button@2.2.0
                       Properties:
                         BorderColor: =If(ThisItem.N = 1, RGBA(83, 42, 69, 1), RGBA(208, 196, 204, 1))
@@ -7005,7 +6705,7 @@ ClearCollect(colList, Filter(colVisible, false))
                         Width: =Parent.TemplateWidth - 6
                         X: =3
                         Y: =0
-                  - lblHWeekD:
+                  - lblHPcLM:
                       Control: ModernText@1.0.0
                       Properties:
                         Color: =RGBA(94, 107, 123, 1)
@@ -7015,14 +6715,14 @@ ClearCollect(colList, Filter(colVisible, false))
                         PaddingBottom: =0
                         PaddingTop: =0
                         Size: =10
-                        Text: =If(ThisItem.N = 1, "This week", "w/c " &amp; Text(ThisItem.WeekStart, "dd/mm"))
+                        Text: =ThisItem.Label
                         Width: =Parent.TemplateWidth - 24
                         X: =12
-                        Y: =4
-                  - lblHWeekN:
+                        Y: =5
+                  - lblHPcNM:
                       Control: ModernText@1.0.0
                       Properties:
-                        Color: =RGBA(30, 24, 34, 1)
+                        Color: =If(ThisItem.Count = 0, RGBA(107, 122, 141, 1), RGBA(30, 24, 34, 1))
                         Fill: =RGBA(0, 0, 0, 0)
                         FontWeight: =FontWeight.Semibold
                         Height: =26
@@ -7032,8 +6732,8 @@ ClearCollect(colList, Filter(colVisible, false))
                         Text: =ThisItem.Count
                         Width: =Parent.TemplateWidth - 24
                         X: =12
-                        Y: =18
-                  - lblHWeekA:
+                        Y: =21
+                  - lblHPcAM:
                       Control: ModernText@1.0.0
                       Properties:
                         Color: =RGBA(30, 24, 34, 1)
@@ -7042,11 +6742,11 @@ ClearCollect(colList, Filter(colVisible, false))
                         PaddingBottom: =0
                         PaddingTop: =0
                         Size: =10
-                        Text: =Coalesce(ThisItem.L1, "")
+                        Text: =If(ThisItem.Count = 0, "No events", ThisItem.L1)
                         Width: =Parent.TemplateWidth - 24
                         X: =12
-                        Y: =44
-                  - lblHWeekB:
+                        Y: =49
+                  - lblHPcBM:
                       Control: ModernText@1.0.0
                       Properties:
                         Color: =RGBA(30, 24, 34, 1)
@@ -7055,10 +6755,1608 @@ ClearCollect(colList, Filter(colVisible, false))
                         PaddingBottom: =0
                         PaddingTop: =0
                         Size: =10
-                        Text: =Coalesce(ThisItem.L2, "")
+                        Text: =ThisItem.L2
                         Width: =Parent.TemplateWidth - 24
                         X: =12
-                        Y: =60
+                        Y: =64
+                  - btnHPcHitM:
+                      Control: Classic/Button@2.2.0
+                      Properties:
+                        BorderThickness: =0
+                        Fill: =RGBA(0, 0, 0, 0)
+                        Height: =Parent.TemplateHeight - 4
+                        HoverFill: =RGBA(83, 42, 69, 0.06)
+                        OnSelect: |-
+                          =Set(varListTitle, "Meetings: " &amp; ThisItem.Label);
+                          ClearCollect(
+                              colList,
+                              AddColumns(
+                                  SortByColumns(
+                                      Sort(Filter(colEvents, !Deleted &amp;&amp; Kind &lt;&gt; "event" &amp;&amp; StartDate &lt;= ThisItem.PEnd &amp;&amp; EndDate &gt;= ThisItem.PStart), SortKey, SortOrder.Ascending),
+                                      "SortKey",
+                                      SortOrder.Ascending
+                                  ),
+                                  Concern,
+                                  !Deleted &amp;&amp; EndDate &gt;= Today() &amp;&amp; DateDiff(Today(), StartDate, "Days") &lt;= varThresh &amp;&amp; (PeopleState = "needs" || MoneyState = "needs" || EquipState = "needs"),
+                                  Hex,
+                                  With({k: TypeKey}, LookUp(colTypes, TKey = k).Hex)
+                              )
+                          );
+                          Set(varDlg, "list")
+                        PressedFill: =RGBA(83, 42, 69, 0.12)
+                        RadiusBottomLeft: =10
+                        RadiusBottomRight: =10
+                        RadiusTopLeft: =10
+                        RadiusTopRight: =10
+                        Text: =""
+                        Width: =Parent.TemplateWidth - 6
+                        X: =3
+                        Y: =0
+            - lblHActH:
+                Control: ModernText@1.0.0
+                Properties:
+                  Color: =RGBA(83, 42, 69, 1)
+                  Fill: =RGBA(0, 0, 0, 0)
+                  FontWeight: =FontWeight.Semibold
+                  Height: =22
+                  PaddingBottom: =0
+                  PaddingTop: =0
+                  Size: =13
+                  Text: '="Activities: upcoming (" &amp; If(varHomeMode = "weeks", "8 weeks", "8 months") &amp; ")"'
+                  Width: =700
+                  X: =16
+                  Y: =(Parent.Height - 262) + 112
+            - galHPcA:
+                Control: Gallery@2.15.0
+                Variant: Horizontal
+                Properties:
+                  Height: =84
+                  Items: =colHomeA
+                  LoadingSpinner: =LoadingSpinner.None
+                  ShowScrollbar: =false
+                  TemplatePadding: =0
+                  TemplateSize: =(Parent.Width - 32) / 8
+                  Width: =Parent.Width - 32
+                  X: =16
+                  Y: =(Parent.Height - 262) + 134
+                Children:
+                  - recHPcA:
+                      Control: Classic/Button@2.2.0
+                      Properties:
+                        BorderColor: =If(ThisItem.N = 1, RGBA(83, 42, 69, 1), RGBA(208, 196, 204, 1))
+                        BorderThickness: =If(ThisItem.N = 1, 2, 1)
+                        DisplayMode: =DisplayMode.View
+                        Fill: =RGBA(255, 255, 255, 1)
+                        Height: =Parent.TemplateHeight - 4
+                        HoverFill: =RGBA(255, 255, 255, 1)
+                        PressedFill: =RGBA(255, 255, 255, 1)
+                        RadiusBottomLeft: =10
+                        RadiusBottomRight: =10
+                        RadiusTopLeft: =10
+                        RadiusTopRight: =10
+                        Text: =""
+                        Width: =Parent.TemplateWidth - 6
+                        X: =3
+                        Y: =0
+                  - lblHPcLA:
+                      Control: ModernText@1.0.0
+                      Properties:
+                        Color: =RGBA(94, 107, 123, 1)
+                        Fill: =RGBA(0, 0, 0, 0)
+                        FontWeight: =FontWeight.Semibold
+                        Height: =16
+                        PaddingBottom: =0
+                        PaddingTop: =0
+                        Size: =10
+                        Text: =ThisItem.Label
+                        Width: =Parent.TemplateWidth - 24
+                        X: =12
+                        Y: =5
+                  - lblHPcNA:
+                      Control: ModernText@1.0.0
+                      Properties:
+                        Color: =If(ThisItem.Count = 0, RGBA(107, 122, 141, 1), RGBA(30, 24, 34, 1))
+                        Fill: =RGBA(0, 0, 0, 0)
+                        FontWeight: =FontWeight.Semibold
+                        Height: =26
+                        PaddingBottom: =0
+                        PaddingTop: =0
+                        Size: =20
+                        Text: =ThisItem.Count
+                        Width: =Parent.TemplateWidth - 24
+                        X: =12
+                        Y: =21
+                  - lblHPcAA:
+                      Control: ModernText@1.0.0
+                      Properties:
+                        Color: =RGBA(30, 24, 34, 1)
+                        Fill: =RGBA(0, 0, 0, 0)
+                        Height: =16
+                        PaddingBottom: =0
+                        PaddingTop: =0
+                        Size: =10
+                        Text: =If(ThisItem.Count = 0, "No events", ThisItem.L1)
+                        Width: =Parent.TemplateWidth - 24
+                        X: =12
+                        Y: =49
+                  - lblHPcBA:
+                      Control: ModernText@1.0.0
+                      Properties:
+                        Color: =RGBA(30, 24, 34, 1)
+                        Fill: =RGBA(0, 0, 0, 0)
+                        Height: =16
+                        PaddingBottom: =0
+                        PaddingTop: =0
+                        Size: =10
+                        Text: =ThisItem.L2
+                        Width: =Parent.TemplateWidth - 24
+                        X: =12
+                        Y: =64
+                  - btnHPcHitA:
+                      Control: Classic/Button@2.2.0
+                      Properties:
+                        BorderThickness: =0
+                        Fill: =RGBA(0, 0, 0, 0)
+                        Height: =Parent.TemplateHeight - 4
+                        HoverFill: =RGBA(83, 42, 69, 0.06)
+                        OnSelect: |-
+                          =Set(varListTitle, "Activities: " &amp; ThisItem.Label);
+                          ClearCollect(
+                              colList,
+                              AddColumns(
+                                  SortByColumns(
+                                      Sort(Filter(colEvents, !Deleted &amp;&amp; Kind = "event" &amp;&amp; StartDate &lt;= ThisItem.PEnd &amp;&amp; EndDate &gt;= ThisItem.PStart), SortKey, SortOrder.Ascending),
+                                      "SortKey",
+                                      SortOrder.Ascending
+                                  ),
+                                  Concern,
+                                  !Deleted &amp;&amp; EndDate &gt;= Today() &amp;&amp; DateDiff(Today(), StartDate, "Days") &lt;= varThresh &amp;&amp; (PeopleState = "needs" || MoneyState = "needs" || EquipState = "needs"),
+                                  Hex,
+                                  With({k: TypeKey}, LookUp(colTypes, TKey = k).Hex)
+                              )
+                          );
+                          Set(varDlg, "list")
+                        PressedFill: =RGBA(83, 42, 69, 0.12)
+                        RadiusBottomLeft: =10
+                        RadiusBottomRight: =10
+                        RadiusTopLeft: =10
+                        RadiusTopRight: =10
+                        Text: =""
+                        Width: =Parent.TemplateWidth - 6
+                        X: =3
+                        Y: =0
+            - lblHModeH:
+                Control: ModernText@1.0.0
+                Properties:
+                  Color: =RGBA(94, 107, 123, 1)
+                  Fill: =RGBA(0, 0, 0, 0)
+                  Height: =20
+                  PaddingBottom: =0
+                  PaddingTop: =0
+                  Size: =11
+                  Text: ="Show:"
+                  Width: =50
+                  X: =16
+                  Y: =(Parent.Height - 262) + 232
+            - btnHModeW:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  BorderColor: =RGBA(208, 196, 204, 1)
+                  BorderThickness: =1
+                  Color: =If(varHomeMode = "weeks", RGBA(255, 255, 255, 1), RGBA(30, 24, 34, 1))
+                  Fill: =If(varHomeMode = "weeks", RGBA(83, 42, 69, 1), RGBA(255, 255, 255, 1))
+                  FontWeight: =FontWeight.Semibold
+                  Height: =30
+                  HoverColor: =If(varHomeMode = "weeks", RGBA(255, 255, 255, 1), RGBA(30, 24, 34, 1))
+                  HoverFill: =If(varHomeMode = "weeks", RGBA(83, 42, 69, 1), RGBA(240, 236, 240, 1))
+                  OnSelect: |-
+                    =Set(varHomeMode, "weeks");
+                    ClearCollect(
+                        colHomeM,
+                        ForAll(
+                            Sequence(8) As s,
+                            With(
+                                {a: If(varHomeMode = "weeks", DateAdd(DateAdd(Today(), -(Weekday(Today(), StartOfWeek.Monday) - 1), "Days"), (s.Value - 1) * 7, "Days"), DateAdd(Date(Year(Today()), Month(Today()), 1), s.Value - 1, "Months"))},
+                                With(
+                                    {b: If(varHomeMode = "weeks", DateAdd(a, 6, "Days"), DateAdd(DateAdd(a, 1, "Months"), -1, "Days"))},
+                                    With(
+                                        {f: Sort(Filter(colEvents, !Deleted &amp;&amp; Kind &lt;&gt; "event" &amp;&amp; StartDate &lt;= b &amp;&amp; EndDate &gt;= If(s.Value = 1, Today(), a)), SortKey, SortOrder.Ascending)},
+                                        {
+                                            N: s.Value,
+                                            Label: If(varHomeMode = "weeks", If(s.Value = 1, "This week", "w/c " &amp; Text(a, "dd/mm")), If(s.Value = 1, "This month", Text(a, "mmm yyyy"))),
+                                            PStart: If(s.Value = 1, Today(), a),
+                                            PEnd: b,
+                                            Count: CountRows(f),
+                                            L1: If(CountRows(f) &gt;= 1, Index(f, 1).Title, ""),
+                                            L2: If(CountRows(f) &gt;= 2, Index(f, 2).Title, "")
+                                        }
+                                    )
+                                )
+                            )
+                        )
+                    );
+                    ClearCollect(
+                        colHomeA,
+                        ForAll(
+                            Sequence(8) As s,
+                            With(
+                                {a: If(varHomeMode = "weeks", DateAdd(DateAdd(Today(), -(Weekday(Today(), StartOfWeek.Monday) - 1), "Days"), (s.Value - 1) * 7, "Days"), DateAdd(Date(Year(Today()), Month(Today()), 1), s.Value - 1, "Months"))},
+                                With(
+                                    {b: If(varHomeMode = "weeks", DateAdd(a, 6, "Days"), DateAdd(DateAdd(a, 1, "Months"), -1, "Days"))},
+                                    With(
+                                        {f: Sort(Filter(colEvents, !Deleted &amp;&amp; Kind = "event" &amp;&amp; StartDate &lt;= b &amp;&amp; EndDate &gt;= If(s.Value = 1, Today(), a)), SortKey, SortOrder.Ascending)},
+                                        {
+                                            N: s.Value,
+                                            Label: If(varHomeMode = "weeks", If(s.Value = 1, "This week", "w/c " &amp; Text(a, "dd/mm")), If(s.Value = 1, "This month", Text(a, "mmm yyyy"))),
+                                            PStart: If(s.Value = 1, Today(), a),
+                                            PEnd: b,
+                                            Count: CountRows(f),
+                                            L1: If(CountRows(f) &gt;= 1, Index(f, 1).Title, ""),
+                                            L2: If(CountRows(f) &gt;= 2, Index(f, 2).Title, "")
+                                        }
+                                    )
+                                )
+                            )
+                        )
+                    )
+                  PressedColor: =If(varHomeMode = "weeks", RGBA(255, 255, 255, 1), RGBA(30, 24, 34, 1))
+                  PressedFill: =If(varHomeMode = "weeks", RGBA(83, 42, 69, 1), RGBA(228, 220, 228, 1))
+                  RadiusBottomLeft: =15
+                  RadiusBottomRight: =15
+                  RadiusTopLeft: =15
+                  RadiusTopRight: =15
+                  Size: =11
+                  Text: ="Upcoming 8 weeks"
+                  Width: =190
+                  X: =70
+                  Y: =(Parent.Height - 262) + 226
+            - btnHModeM:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  BorderColor: =RGBA(208, 196, 204, 1)
+                  BorderThickness: =1
+                  Color: =If(varHomeMode = "months", RGBA(255, 255, 255, 1), RGBA(30, 24, 34, 1))
+                  Fill: =If(varHomeMode = "months", RGBA(83, 42, 69, 1), RGBA(255, 255, 255, 1))
+                  FontWeight: =FontWeight.Semibold
+                  Height: =30
+                  HoverColor: =If(varHomeMode = "months", RGBA(255, 255, 255, 1), RGBA(30, 24, 34, 1))
+                  HoverFill: =If(varHomeMode = "months", RGBA(83, 42, 69, 1), RGBA(240, 236, 240, 1))
+                  OnSelect: |-
+                    =Set(varHomeMode, "months");
+                    ClearCollect(
+                        colHomeM,
+                        ForAll(
+                            Sequence(8) As s,
+                            With(
+                                {a: If(varHomeMode = "weeks", DateAdd(DateAdd(Today(), -(Weekday(Today(), StartOfWeek.Monday) - 1), "Days"), (s.Value - 1) * 7, "Days"), DateAdd(Date(Year(Today()), Month(Today()), 1), s.Value - 1, "Months"))},
+                                With(
+                                    {b: If(varHomeMode = "weeks", DateAdd(a, 6, "Days"), DateAdd(DateAdd(a, 1, "Months"), -1, "Days"))},
+                                    With(
+                                        {f: Sort(Filter(colEvents, !Deleted &amp;&amp; Kind &lt;&gt; "event" &amp;&amp; StartDate &lt;= b &amp;&amp; EndDate &gt;= If(s.Value = 1, Today(), a)), SortKey, SortOrder.Ascending)},
+                                        {
+                                            N: s.Value,
+                                            Label: If(varHomeMode = "weeks", If(s.Value = 1, "This week", "w/c " &amp; Text(a, "dd/mm")), If(s.Value = 1, "This month", Text(a, "mmm yyyy"))),
+                                            PStart: If(s.Value = 1, Today(), a),
+                                            PEnd: b,
+                                            Count: CountRows(f),
+                                            L1: If(CountRows(f) &gt;= 1, Index(f, 1).Title, ""),
+                                            L2: If(CountRows(f) &gt;= 2, Index(f, 2).Title, "")
+                                        }
+                                    )
+                                )
+                            )
+                        )
+                    );
+                    ClearCollect(
+                        colHomeA,
+                        ForAll(
+                            Sequence(8) As s,
+                            With(
+                                {a: If(varHomeMode = "weeks", DateAdd(DateAdd(Today(), -(Weekday(Today(), StartOfWeek.Monday) - 1), "Days"), (s.Value - 1) * 7, "Days"), DateAdd(Date(Year(Today()), Month(Today()), 1), s.Value - 1, "Months"))},
+                                With(
+                                    {b: If(varHomeMode = "weeks", DateAdd(a, 6, "Days"), DateAdd(DateAdd(a, 1, "Months"), -1, "Days"))},
+                                    With(
+                                        {f: Sort(Filter(colEvents, !Deleted &amp;&amp; Kind = "event" &amp;&amp; StartDate &lt;= b &amp;&amp; EndDate &gt;= If(s.Value = 1, Today(), a)), SortKey, SortOrder.Ascending)},
+                                        {
+                                            N: s.Value,
+                                            Label: If(varHomeMode = "weeks", If(s.Value = 1, "This week", "w/c " &amp; Text(a, "dd/mm")), If(s.Value = 1, "This month", Text(a, "mmm yyyy"))),
+                                            PStart: If(s.Value = 1, Today(), a),
+                                            PEnd: b,
+                                            Count: CountRows(f),
+                                            L1: If(CountRows(f) &gt;= 1, Index(f, 1).Title, ""),
+                                            L2: If(CountRows(f) &gt;= 2, Index(f, 2).Title, "")
+                                        }
+                                    )
+                                )
+                            )
+                        )
+                    )
+                  PressedColor: =If(varHomeMode = "months", RGBA(255, 255, 255, 1), RGBA(30, 24, 34, 1))
+                  PressedFill: =If(varHomeMode = "months", RGBA(83, 42, 69, 1), RGBA(228, 220, 228, 1))
+                  RadiusBottomLeft: =15
+                  RadiusBottomRight: =15
+                  RadiusTopLeft: =15
+                  RadiusTopRight: =15
+                  Size: =11
+                  Text: ="Upcoming 8 months"
+                  Width: =190
+                  X: =268
+                  Y: =(Parent.Height - 262) + 226
+            - btnHScrim:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  BorderColor: =RGBA(208, 196, 204, 1)
+                  BorderThickness: =0
+                  DisplayMode: =DisplayMode.Edit
+                  Fill: =RGBA(30, 24, 34, 0.5)
+                  Height: =Parent.Height
+                  HoverFill: =RGBA(30, 24, 34, 0.5)
+                  OnSelect: =Set(varDlg, "")
+                  PressedFill: =RGBA(30, 24, 34, 0.5)
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Text: =""
+                  Visible: =varDlg &lt;&gt; ""
+                  Width: =Parent.Width
+                  X: =0
+                  Y: =0
+            - conHmDlgList:
+                Control: GroupContainer@1.5.0
+                Variant: ManualLayout
+                Properties:
+                  DropShadow: =DropShadow.None
+                  Height: =540
+                  Visible: =varDlg = "list"
+                  Width: =600
+                  X: =(Parent.Width - 600) / 2
+                  Y: =(Parent.Height - 540) / 2
+                Children:
+                  - recHmDlgListBg:
+                      Control: Classic/Button@2.2.0
+                      Properties:
+                        BorderColor: =RGBA(83, 42, 69, 1)
+                        BorderThickness: =1
+                        DisplayMode: =DisplayMode.View
+                        Fill: =RGBA(255, 255, 255, 1)
+                        Height: =Parent.Height
+                        HoverFill: =RGBA(255, 255, 255, 1)
+                        PressedFill: =RGBA(255, 255, 255, 1)
+                        RadiusBottomLeft: =16
+                        RadiusBottomRight: =16
+                        RadiusTopLeft: =16
+                        RadiusTopRight: =16
+                        Text: =""
+                        Width: =Parent.Width
+                        X: =0
+                        Y: =0
+                  - lblHmListTitle:
+                      Control: ModernText@1.0.0
+                      Properties:
+                        Color: =RGBA(30, 24, 34, 1)
+                        Fill: =RGBA(0, 0, 0, 0)
+                        FontWeight: =FontWeight.Semibold
+                        Height: =30
+                        PaddingBottom: =0
+                        PaddingTop: =0
+                        Size: =17
+                        Text: =varListTitle
+                        Width: =Parent.Width - 80
+                        X: =20
+                        Y: =12
+                  - btnHmListClose:
+                      Control: Classic/Button@2.2.0
+                      Properties:
+                        BorderThickness: =0
+                        Color: =RGBA(30, 24, 34, 1)
+                        Fill: =RGBA(240, 236, 240, 1)
+                        FontWeight: =FontWeight.Semibold
+                        Height: =36
+                        HoverColor: =RGBA(30, 24, 34, 1)
+                        HoverFill: =RGBA(228, 220, 228, 1)
+                        OnSelect: =Set(varDlg, "")
+                        PressedColor: =RGBA(30, 24, 34, 1)
+                        PressedFill: =RGBA(228, 220, 228, 1)
+                        RadiusBottomLeft: =18
+                        RadiusBottomRight: =18
+                        RadiusTopLeft: =18
+                        RadiusTopRight: =18
+                        Size: =12
+                        Text: ="X"
+                        Width: =36
+                        X: =Parent.Width - 52
+                        Y: =12
+                  - lblHmListCount:
+                      Control: ModernText@1.0.0
+                      Properties:
+                        Color: =RGBA(94, 107, 123, 1)
+                        Fill: =RGBA(0, 0, 0, 0)
+                        Height: =20
+                        PaddingBottom: =0
+                        PaddingTop: =0
+                        Size: =11
+                        Text: =CountRows(colList) &amp; If(CountRows(colList) = 1, " event", " events")
+                        Width: =300
+                        X: =20
+                        Y: =42
+                  - galHmList:
+                      Control: Gallery@2.15.0
+                      Variant: Vertical
+                      Properties:
+                        Height: =Parent.Height - 86
+                        Items: =colList
+                        LoadingSpinner: =LoadingSpinner.None
+                        ShowScrollbar: =true
+                        TemplatePadding: =0
+                        TemplateSize: =76
+                        Width: =Parent.Width - 32
+                        X: =16
+                        Y: =70
+                      Children:
+                        - btnHmListRow:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              BorderColor: =RGBA(208, 196, 204, 1)
+                              BorderThickness: =1
+                              DisplayMode: =DisplayMode.Edit
+                              Fill: =RGBA(255, 255, 255, 1)
+                              Height: =Parent.TemplateHeight - 6
+                              HoverFill: =RGBA(251, 248, 251, 1)
+                              OnSelect: |-
+                                =Set(varEvent, LookUp(colEvents, Id = ThisItem.Id));
+                                Set(varBack, "");
+                                Set(varProg, Switch(varEvent.Programme, "CTC", "ctc", "CTTs", "ctt", "national"));
+                                Set(varStatus, "All");
+                                Set(varSearch, "");
+                                ClearCollect(colSelTypes, ForAll(Filter(colTypes, Active), {TKey: ThisRecord.TKey}));
+                                ClearCollect(colScope, Filter(colEvents, !Deleted &amp;&amp; (varProg = "all" || (varProg = "national" &amp;&amp; Programme = "National Activity") || (varProg = "ctc" &amp;&amp; Programme = "CTC") || (varProg = "ctt" &amp;&amp; Programme = "CTTs") || (varProg = "overseas" &amp;&amp; Overseas) || (varProg = "meet" &amp;&amp; Kind &lt;&gt; "event"))));
+                                ClearCollect(
+                                    colVisible,
+                                    AddColumns(
+                                        SortByColumns(
+                                            Filter(
+                                                colScope,
+                                                (TypeKey in colSelTypes.TKey) &amp;&amp;
+                                                (varStatus = "All" || Status = varStatus) &amp;&amp;
+                                                (IsBlank(varSearch) || Lower(varSearch) in Lower(Title))
+                                            ),
+                                            "SortKey",
+                                            SortOrder.Ascending
+                                        ),
+                                        Concern,
+                                        !Deleted &amp;&amp; EndDate &gt;= Today() &amp;&amp; DateDiff(Today(), StartDate, "Days") &lt;= varThresh &amp;&amp; (PeopleState = "needs" || MoneyState = "needs" || EquipState = "needs"),
+                                        Hex,
+                                        With({k: TypeKey}, LookUp(colTypes, TKey = k).Hex)
+                                    )
+                                );
+                                ClearCollect(
+                                    colDays,
+                                    ForAll(
+                                        Sequence(42) As s,
+                                        With(
+                                            {d: DateAdd(varGridStart, s.Value - 1, "Days")},
+                                            With(
+                                                {f: Filter(colVisible, StartDate &lt;= d &amp;&amp; EndDate &gt;= d)},
+                                                With(
+                                                    {e1: If(CountRows(f) &gt;= 1, Index(f, 1)), e2: If(CountRows(f) &gt;= 2, Index(f, 2)), e3: If(CountRows(f) &gt;= 3, Index(f, 3))},
+                                                    {
+                                                        Idx: s.Value,
+                                                        D: d,
+                                                        N: CountRows(f),
+                                                        T1: If(IsBlank(e1), "", If(e1.Concern, "! ", "") &amp; e1.Title),
+                                                        F1: If(IsBlank(e1), RGBA(0, 0, 0, 0), ColorFade(ColorValue(e1.Hex), 0.8)),
+                                                        B1: If(IsBlank(e1), RGBA(0, 0, 0, 0), If(e1.Concern, RGBA(142, 21, 55, 1), If(e1.Status = "To be confirmed", ColorValue(e1.Hex), RGBA(0, 0, 0, 0)))),
+                                                        W1: If(IsBlank(e1), 0, If(e1.Concern, 2, If(e1.Status = "To be confirmed", 1, 0))),
+                                                        S1: !IsBlank(e1) &amp;&amp; e1.Status = "To be confirmed" &amp;&amp; !e1.Concern,
+                                                        I1: If(IsBlank(e1), 0, e1.Id),
+                                                        T2: If(IsBlank(e2), "", If(e2.Concern, "! ", "") &amp; e2.Title),
+                                                        F2: If(IsBlank(e2), RGBA(0, 0, 0, 0), ColorFade(ColorValue(e2.Hex), 0.8)),
+                                                        B2: If(IsBlank(e2), RGBA(0, 0, 0, 0), If(e2.Concern, RGBA(142, 21, 55, 1), If(e2.Status = "To be confirmed", ColorValue(e2.Hex), RGBA(0, 0, 0, 0)))),
+                                                        W2: If(IsBlank(e2), 0, If(e2.Concern, 2, If(e2.Status = "To be confirmed", 1, 0))),
+                                                        S2: !IsBlank(e2) &amp;&amp; e2.Status = "To be confirmed" &amp;&amp; !e2.Concern,
+                                                        I2: If(IsBlank(e2), 0, e2.Id),
+                                                        T3: If(IsBlank(e3), "", If(e3.Concern, "! ", "") &amp; e3.Title),
+                                                        F3: If(IsBlank(e3), RGBA(0, 0, 0, 0), ColorFade(ColorValue(e3.Hex), 0.8)),
+                                                        B3: If(IsBlank(e3), RGBA(0, 0, 0, 0), If(e3.Concern, RGBA(142, 21, 55, 1), If(e3.Status = "To be confirmed", ColorValue(e3.Hex), RGBA(0, 0, 0, 0)))),
+                                                        W3: If(IsBlank(e3), 0, If(e3.Concern, 2, If(e3.Status = "To be confirmed", 1, 0))),
+                                                        S3: !IsBlank(e3) &amp;&amp; e3.Status = "To be confirmed" &amp;&amp; !e3.Concern,
+                                                        I3: If(IsBlank(e3), 0, e3.Id)
+                                                    }
+                                                )
+                                            )
+                                        )
+                                    )
+                                );
+                                Set(varDlg, "detail");
+                                Navigate(scrCalendar, ScreenTransition.Fade)
+                              PressedFill: =RGBA(244, 238, 243, 1)
+                              RadiusBottomLeft: =10
+                              RadiusBottomRight: =10
+                              RadiusTopLeft: =10
+                              RadiusTopRight: =10
+                              Text: =""
+                              Width: =Parent.TemplateWidth
+                              X: =0
+                              Y: =0
+                        - recHmListBar:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              BorderColor: =RGBA(208, 196, 204, 1)
+                              BorderThickness: =0
+                              DisplayMode: =DisplayMode.View
+                              Fill: =ColorValue(ThisItem.Hex)
+                              Height: =Parent.TemplateHeight - 18
+                              HoverFill: =ColorValue(ThisItem.Hex)
+                              PressedFill: =ColorValue(ThisItem.Hex)
+                              RadiusBottomLeft: =3
+                              RadiusBottomRight: =3
+                              RadiusTopLeft: =3
+                              RadiusTopRight: =3
+                              Text: =""
+                              Width: =5
+                              X: =0
+                              Y: =6
+                        - lblHmListRowTitle:
+                            Control: ModernText@1.0.0
+                            Properties:
+                              Color: =RGBA(30, 24, 34, 1)
+                              Fill: =RGBA(0, 0, 0, 0)
+                              FontWeight: =FontWeight.Semibold
+                              Height: =22
+                              OnSelect: |-
+                                =Set(varEvent, LookUp(colEvents, Id = ThisItem.Id));
+                                Set(varBack, "");
+                                Set(varProg, Switch(varEvent.Programme, "CTC", "ctc", "CTTs", "ctt", "national"));
+                                Set(varStatus, "All");
+                                Set(varSearch, "");
+                                ClearCollect(colSelTypes, ForAll(Filter(colTypes, Active), {TKey: ThisRecord.TKey}));
+                                ClearCollect(colScope, Filter(colEvents, !Deleted &amp;&amp; (varProg = "all" || (varProg = "national" &amp;&amp; Programme = "National Activity") || (varProg = "ctc" &amp;&amp; Programme = "CTC") || (varProg = "ctt" &amp;&amp; Programme = "CTTs") || (varProg = "overseas" &amp;&amp; Overseas) || (varProg = "meet" &amp;&amp; Kind &lt;&gt; "event"))));
+                                ClearCollect(
+                                    colVisible,
+                                    AddColumns(
+                                        SortByColumns(
+                                            Filter(
+                                                colScope,
+                                                (TypeKey in colSelTypes.TKey) &amp;&amp;
+                                                (varStatus = "All" || Status = varStatus) &amp;&amp;
+                                                (IsBlank(varSearch) || Lower(varSearch) in Lower(Title))
+                                            ),
+                                            "SortKey",
+                                            SortOrder.Ascending
+                                        ),
+                                        Concern,
+                                        !Deleted &amp;&amp; EndDate &gt;= Today() &amp;&amp; DateDiff(Today(), StartDate, "Days") &lt;= varThresh &amp;&amp; (PeopleState = "needs" || MoneyState = "needs" || EquipState = "needs"),
+                                        Hex,
+                                        With({k: TypeKey}, LookUp(colTypes, TKey = k).Hex)
+                                    )
+                                );
+                                ClearCollect(
+                                    colDays,
+                                    ForAll(
+                                        Sequence(42) As s,
+                                        With(
+                                            {d: DateAdd(varGridStart, s.Value - 1, "Days")},
+                                            With(
+                                                {f: Filter(colVisible, StartDate &lt;= d &amp;&amp; EndDate &gt;= d)},
+                                                With(
+                                                    {e1: If(CountRows(f) &gt;= 1, Index(f, 1)), e2: If(CountRows(f) &gt;= 2, Index(f, 2)), e3: If(CountRows(f) &gt;= 3, Index(f, 3))},
+                                                    {
+                                                        Idx: s.Value,
+                                                        D: d,
+                                                        N: CountRows(f),
+                                                        T1: If(IsBlank(e1), "", If(e1.Concern, "! ", "") &amp; e1.Title),
+                                                        F1: If(IsBlank(e1), RGBA(0, 0, 0, 0), ColorFade(ColorValue(e1.Hex), 0.8)),
+                                                        B1: If(IsBlank(e1), RGBA(0, 0, 0, 0), If(e1.Concern, RGBA(142, 21, 55, 1), If(e1.Status = "To be confirmed", ColorValue(e1.Hex), RGBA(0, 0, 0, 0)))),
+                                                        W1: If(IsBlank(e1), 0, If(e1.Concern, 2, If(e1.Status = "To be confirmed", 1, 0))),
+                                                        S1: !IsBlank(e1) &amp;&amp; e1.Status = "To be confirmed" &amp;&amp; !e1.Concern,
+                                                        I1: If(IsBlank(e1), 0, e1.Id),
+                                                        T2: If(IsBlank(e2), "", If(e2.Concern, "! ", "") &amp; e2.Title),
+                                                        F2: If(IsBlank(e2), RGBA(0, 0, 0, 0), ColorFade(ColorValue(e2.Hex), 0.8)),
+                                                        B2: If(IsBlank(e2), RGBA(0, 0, 0, 0), If(e2.Concern, RGBA(142, 21, 55, 1), If(e2.Status = "To be confirmed", ColorValue(e2.Hex), RGBA(0, 0, 0, 0)))),
+                                                        W2: If(IsBlank(e2), 0, If(e2.Concern, 2, If(e2.Status = "To be confirmed", 1, 0))),
+                                                        S2: !IsBlank(e2) &amp;&amp; e2.Status = "To be confirmed" &amp;&amp; !e2.Concern,
+                                                        I2: If(IsBlank(e2), 0, e2.Id),
+                                                        T3: If(IsBlank(e3), "", If(e3.Concern, "! ", "") &amp; e3.Title),
+                                                        F3: If(IsBlank(e3), RGBA(0, 0, 0, 0), ColorFade(ColorValue(e3.Hex), 0.8)),
+                                                        B3: If(IsBlank(e3), RGBA(0, 0, 0, 0), If(e3.Concern, RGBA(142, 21, 55, 1), If(e3.Status = "To be confirmed", ColorValue(e3.Hex), RGBA(0, 0, 0, 0)))),
+                                                        W3: If(IsBlank(e3), 0, If(e3.Concern, 2, If(e3.Status = "To be confirmed", 1, 0))),
+                                                        S3: !IsBlank(e3) &amp;&amp; e3.Status = "To be confirmed" &amp;&amp; !e3.Concern,
+                                                        I3: If(IsBlank(e3), 0, e3.Id)
+                                                    }
+                                                )
+                                            )
+                                        )
+                                    )
+                                );
+                                Set(varDlg, "detail");
+                                Navigate(scrCalendar, ScreenTransition.Fade)
+                              PaddingBottom: =0
+                              PaddingTop: =0
+                              Size: =12
+                              Text: =If(ThisItem.Concern, "! ", "") &amp; ThisItem.Title
+                              Width: =Parent.TemplateWidth - 24
+                              X: =16
+                              Y: =4
+                        - lblHmListRowMeta:
+                            Control: ModernText@1.0.0
+                            Properties:
+                              Color: =RGBA(94, 107, 123, 1)
+                              Fill: =RGBA(0, 0, 0, 0)
+                              Height: =18
+                              OnSelect: |-
+                                =Set(varEvent, LookUp(colEvents, Id = ThisItem.Id));
+                                Set(varBack, "");
+                                Set(varProg, Switch(varEvent.Programme, "CTC", "ctc", "CTTs", "ctt", "national"));
+                                Set(varStatus, "All");
+                                Set(varSearch, "");
+                                ClearCollect(colSelTypes, ForAll(Filter(colTypes, Active), {TKey: ThisRecord.TKey}));
+                                ClearCollect(colScope, Filter(colEvents, !Deleted &amp;&amp; (varProg = "all" || (varProg = "national" &amp;&amp; Programme = "National Activity") || (varProg = "ctc" &amp;&amp; Programme = "CTC") || (varProg = "ctt" &amp;&amp; Programme = "CTTs") || (varProg = "overseas" &amp;&amp; Overseas) || (varProg = "meet" &amp;&amp; Kind &lt;&gt; "event"))));
+                                ClearCollect(
+                                    colVisible,
+                                    AddColumns(
+                                        SortByColumns(
+                                            Filter(
+                                                colScope,
+                                                (TypeKey in colSelTypes.TKey) &amp;&amp;
+                                                (varStatus = "All" || Status = varStatus) &amp;&amp;
+                                                (IsBlank(varSearch) || Lower(varSearch) in Lower(Title))
+                                            ),
+                                            "SortKey",
+                                            SortOrder.Ascending
+                                        ),
+                                        Concern,
+                                        !Deleted &amp;&amp; EndDate &gt;= Today() &amp;&amp; DateDiff(Today(), StartDate, "Days") &lt;= varThresh &amp;&amp; (PeopleState = "needs" || MoneyState = "needs" || EquipState = "needs"),
+                                        Hex,
+                                        With({k: TypeKey}, LookUp(colTypes, TKey = k).Hex)
+                                    )
+                                );
+                                ClearCollect(
+                                    colDays,
+                                    ForAll(
+                                        Sequence(42) As s,
+                                        With(
+                                            {d: DateAdd(varGridStart, s.Value - 1, "Days")},
+                                            With(
+                                                {f: Filter(colVisible, StartDate &lt;= d &amp;&amp; EndDate &gt;= d)},
+                                                With(
+                                                    {e1: If(CountRows(f) &gt;= 1, Index(f, 1)), e2: If(CountRows(f) &gt;= 2, Index(f, 2)), e3: If(CountRows(f) &gt;= 3, Index(f, 3))},
+                                                    {
+                                                        Idx: s.Value,
+                                                        D: d,
+                                                        N: CountRows(f),
+                                                        T1: If(IsBlank(e1), "", If(e1.Concern, "! ", "") &amp; e1.Title),
+                                                        F1: If(IsBlank(e1), RGBA(0, 0, 0, 0), ColorFade(ColorValue(e1.Hex), 0.8)),
+                                                        B1: If(IsBlank(e1), RGBA(0, 0, 0, 0), If(e1.Concern, RGBA(142, 21, 55, 1), If(e1.Status = "To be confirmed", ColorValue(e1.Hex), RGBA(0, 0, 0, 0)))),
+                                                        W1: If(IsBlank(e1), 0, If(e1.Concern, 2, If(e1.Status = "To be confirmed", 1, 0))),
+                                                        S1: !IsBlank(e1) &amp;&amp; e1.Status = "To be confirmed" &amp;&amp; !e1.Concern,
+                                                        I1: If(IsBlank(e1), 0, e1.Id),
+                                                        T2: If(IsBlank(e2), "", If(e2.Concern, "! ", "") &amp; e2.Title),
+                                                        F2: If(IsBlank(e2), RGBA(0, 0, 0, 0), ColorFade(ColorValue(e2.Hex), 0.8)),
+                                                        B2: If(IsBlank(e2), RGBA(0, 0, 0, 0), If(e2.Concern, RGBA(142, 21, 55, 1), If(e2.Status = "To be confirmed", ColorValue(e2.Hex), RGBA(0, 0, 0, 0)))),
+                                                        W2: If(IsBlank(e2), 0, If(e2.Concern, 2, If(e2.Status = "To be confirmed", 1, 0))),
+                                                        S2: !IsBlank(e2) &amp;&amp; e2.Status = "To be confirmed" &amp;&amp; !e2.Concern,
+                                                        I2: If(IsBlank(e2), 0, e2.Id),
+                                                        T3: If(IsBlank(e3), "", If(e3.Concern, "! ", "") &amp; e3.Title),
+                                                        F3: If(IsBlank(e3), RGBA(0, 0, 0, 0), ColorFade(ColorValue(e3.Hex), 0.8)),
+                                                        B3: If(IsBlank(e3), RGBA(0, 0, 0, 0), If(e3.Concern, RGBA(142, 21, 55, 1), If(e3.Status = "To be confirmed", ColorValue(e3.Hex), RGBA(0, 0, 0, 0)))),
+                                                        W3: If(IsBlank(e3), 0, If(e3.Concern, 2, If(e3.Status = "To be confirmed", 1, 0))),
+                                                        S3: !IsBlank(e3) &amp;&amp; e3.Status = "To be confirmed" &amp;&amp; !e3.Concern,
+                                                        I3: If(IsBlank(e3), 0, e3.Id)
+                                                    }
+                                                )
+                                            )
+                                        )
+                                    )
+                                );
+                                Set(varDlg, "detail");
+                                Navigate(scrCalendar, ScreenTransition.Fade)
+                              PaddingBottom: =0
+                              PaddingTop: =0
+                              Size: =10
+                              Text: =Text(ThisItem.StartDate, "dd/mm/yyyy") &amp; If(ThisItem.EndDate &gt; ThisItem.StartDate, " to " &amp; Text(ThisItem.EndDate, "dd/mm/yyyy"), "") &amp; "  |  " &amp; LookUp(colTypes, TKey = ThisItem.TypeKey).Name &amp; If(ThisItem.Status = "To be confirmed", "  |  To be confirmed", "")
+                              Width: =Parent.TemplateWidth - 24
+                              X: =16
+                              Y: =26
+                        - lblHmListMkP:
+                            Control: ModernText@1.0.0
+                            Properties:
+                              Align: =Align.Center
+                              Color: =Switch(ThisItem.PeopleState, "needs", RGBA(110, 67, 0, 1), "ok", RGBA(23, 73, 44, 1), RGBA(79, 91, 106, 1))
+                              Fill: =Switch(ThisItem.PeopleState, "needs", RGBA(255, 233, 199, 1), "ok", RGBA(221, 240, 227, 1), "none", RGBA(238, 234, 238, 1), RGBA(255, 255, 255, 1))
+                              FontWeight: =FontWeight.Semibold
+                              Height: =18
+                              OnSelect: |-
+                                =Set(varEvent, LookUp(colEvents, Id = ThisItem.Id));
+                                Set(varBack, "");
+                                Set(varProg, Switch(varEvent.Programme, "CTC", "ctc", "CTTs", "ctt", "national"));
+                                Set(varStatus, "All");
+                                Set(varSearch, "");
+                                ClearCollect(colSelTypes, ForAll(Filter(colTypes, Active), {TKey: ThisRecord.TKey}));
+                                ClearCollect(colScope, Filter(colEvents, !Deleted &amp;&amp; (varProg = "all" || (varProg = "national" &amp;&amp; Programme = "National Activity") || (varProg = "ctc" &amp;&amp; Programme = "CTC") || (varProg = "ctt" &amp;&amp; Programme = "CTTs") || (varProg = "overseas" &amp;&amp; Overseas) || (varProg = "meet" &amp;&amp; Kind &lt;&gt; "event"))));
+                                ClearCollect(
+                                    colVisible,
+                                    AddColumns(
+                                        SortByColumns(
+                                            Filter(
+                                                colScope,
+                                                (TypeKey in colSelTypes.TKey) &amp;&amp;
+                                                (varStatus = "All" || Status = varStatus) &amp;&amp;
+                                                (IsBlank(varSearch) || Lower(varSearch) in Lower(Title))
+                                            ),
+                                            "SortKey",
+                                            SortOrder.Ascending
+                                        ),
+                                        Concern,
+                                        !Deleted &amp;&amp; EndDate &gt;= Today() &amp;&amp; DateDiff(Today(), StartDate, "Days") &lt;= varThresh &amp;&amp; (PeopleState = "needs" || MoneyState = "needs" || EquipState = "needs"),
+                                        Hex,
+                                        With({k: TypeKey}, LookUp(colTypes, TKey = k).Hex)
+                                    )
+                                );
+                                ClearCollect(
+                                    colDays,
+                                    ForAll(
+                                        Sequence(42) As s,
+                                        With(
+                                            {d: DateAdd(varGridStart, s.Value - 1, "Days")},
+                                            With(
+                                                {f: Filter(colVisible, StartDate &lt;= d &amp;&amp; EndDate &gt;= d)},
+                                                With(
+                                                    {e1: If(CountRows(f) &gt;= 1, Index(f, 1)), e2: If(CountRows(f) &gt;= 2, Index(f, 2)), e3: If(CountRows(f) &gt;= 3, Index(f, 3))},
+                                                    {
+                                                        Idx: s.Value,
+                                                        D: d,
+                                                        N: CountRows(f),
+                                                        T1: If(IsBlank(e1), "", If(e1.Concern, "! ", "") &amp; e1.Title),
+                                                        F1: If(IsBlank(e1), RGBA(0, 0, 0, 0), ColorFade(ColorValue(e1.Hex), 0.8)),
+                                                        B1: If(IsBlank(e1), RGBA(0, 0, 0, 0), If(e1.Concern, RGBA(142, 21, 55, 1), If(e1.Status = "To be confirmed", ColorValue(e1.Hex), RGBA(0, 0, 0, 0)))),
+                                                        W1: If(IsBlank(e1), 0, If(e1.Concern, 2, If(e1.Status = "To be confirmed", 1, 0))),
+                                                        S1: !IsBlank(e1) &amp;&amp; e1.Status = "To be confirmed" &amp;&amp; !e1.Concern,
+                                                        I1: If(IsBlank(e1), 0, e1.Id),
+                                                        T2: If(IsBlank(e2), "", If(e2.Concern, "! ", "") &amp; e2.Title),
+                                                        F2: If(IsBlank(e2), RGBA(0, 0, 0, 0), ColorFade(ColorValue(e2.Hex), 0.8)),
+                                                        B2: If(IsBlank(e2), RGBA(0, 0, 0, 0), If(e2.Concern, RGBA(142, 21, 55, 1), If(e2.Status = "To be confirmed", ColorValue(e2.Hex), RGBA(0, 0, 0, 0)))),
+                                                        W2: If(IsBlank(e2), 0, If(e2.Concern, 2, If(e2.Status = "To be confirmed", 1, 0))),
+                                                        S2: !IsBlank(e2) &amp;&amp; e2.Status = "To be confirmed" &amp;&amp; !e2.Concern,
+                                                        I2: If(IsBlank(e2), 0, e2.Id),
+                                                        T3: If(IsBlank(e3), "", If(e3.Concern, "! ", "") &amp; e3.Title),
+                                                        F3: If(IsBlank(e3), RGBA(0, 0, 0, 0), ColorFade(ColorValue(e3.Hex), 0.8)),
+                                                        B3: If(IsBlank(e3), RGBA(0, 0, 0, 0), If(e3.Concern, RGBA(142, 21, 55, 1), If(e3.Status = "To be confirmed", ColorValue(e3.Hex), RGBA(0, 0, 0, 0)))),
+                                                        W3: If(IsBlank(e3), 0, If(e3.Concern, 2, If(e3.Status = "To be confirmed", 1, 0))),
+                                                        S3: !IsBlank(e3) &amp;&amp; e3.Status = "To be confirmed" &amp;&amp; !e3.Concern,
+                                                        I3: If(IsBlank(e3), 0, e3.Id)
+                                                    }
+                                                )
+                                            )
+                                        )
+                                    )
+                                );
+                                Set(varDlg, "detail");
+                                Navigate(scrCalendar, ScreenTransition.Fade)
+                              PaddingBottom: =0
+                              PaddingLeft: =4
+                              PaddingRight: =4
+                              PaddingTop: =0
+                              RadiusBottomLeft: =11
+                              RadiusBottomRight: =11
+                              RadiusTopLeft: =11
+                              RadiusTopRight: =11
+                              Size: =10
+                              Text: =Left(varResNames.P, 1) &amp; Switch(ThisItem.PeopleState, "needs", " !", "ok", " OK", "none", " -", " ?")
+                              Width: =56
+                              X: =16
+                              Y: =48
+                        - lblHmListMkM:
+                            Control: ModernText@1.0.0
+                            Properties:
+                              Align: =Align.Center
+                              Color: =Switch(ThisItem.MoneyState, "needs", RGBA(110, 67, 0, 1), "ok", RGBA(23, 73, 44, 1), RGBA(79, 91, 106, 1))
+                              Fill: =Switch(ThisItem.MoneyState, "needs", RGBA(255, 233, 199, 1), "ok", RGBA(221, 240, 227, 1), "none", RGBA(238, 234, 238, 1), RGBA(255, 255, 255, 1))
+                              FontWeight: =FontWeight.Semibold
+                              Height: =18
+                              OnSelect: |-
+                                =Set(varEvent, LookUp(colEvents, Id = ThisItem.Id));
+                                Set(varBack, "");
+                                Set(varProg, Switch(varEvent.Programme, "CTC", "ctc", "CTTs", "ctt", "national"));
+                                Set(varStatus, "All");
+                                Set(varSearch, "");
+                                ClearCollect(colSelTypes, ForAll(Filter(colTypes, Active), {TKey: ThisRecord.TKey}));
+                                ClearCollect(colScope, Filter(colEvents, !Deleted &amp;&amp; (varProg = "all" || (varProg = "national" &amp;&amp; Programme = "National Activity") || (varProg = "ctc" &amp;&amp; Programme = "CTC") || (varProg = "ctt" &amp;&amp; Programme = "CTTs") || (varProg = "overseas" &amp;&amp; Overseas) || (varProg = "meet" &amp;&amp; Kind &lt;&gt; "event"))));
+                                ClearCollect(
+                                    colVisible,
+                                    AddColumns(
+                                        SortByColumns(
+                                            Filter(
+                                                colScope,
+                                                (TypeKey in colSelTypes.TKey) &amp;&amp;
+                                                (varStatus = "All" || Status = varStatus) &amp;&amp;
+                                                (IsBlank(varSearch) || Lower(varSearch) in Lower(Title))
+                                            ),
+                                            "SortKey",
+                                            SortOrder.Ascending
+                                        ),
+                                        Concern,
+                                        !Deleted &amp;&amp; EndDate &gt;= Today() &amp;&amp; DateDiff(Today(), StartDate, "Days") &lt;= varThresh &amp;&amp; (PeopleState = "needs" || MoneyState = "needs" || EquipState = "needs"),
+                                        Hex,
+                                        With({k: TypeKey}, LookUp(colTypes, TKey = k).Hex)
+                                    )
+                                );
+                                ClearCollect(
+                                    colDays,
+                                    ForAll(
+                                        Sequence(42) As s,
+                                        With(
+                                            {d: DateAdd(varGridStart, s.Value - 1, "Days")},
+                                            With(
+                                                {f: Filter(colVisible, StartDate &lt;= d &amp;&amp; EndDate &gt;= d)},
+                                                With(
+                                                    {e1: If(CountRows(f) &gt;= 1, Index(f, 1)), e2: If(CountRows(f) &gt;= 2, Index(f, 2)), e3: If(CountRows(f) &gt;= 3, Index(f, 3))},
+                                                    {
+                                                        Idx: s.Value,
+                                                        D: d,
+                                                        N: CountRows(f),
+                                                        T1: If(IsBlank(e1), "", If(e1.Concern, "! ", "") &amp; e1.Title),
+                                                        F1: If(IsBlank(e1), RGBA(0, 0, 0, 0), ColorFade(ColorValue(e1.Hex), 0.8)),
+                                                        B1: If(IsBlank(e1), RGBA(0, 0, 0, 0), If(e1.Concern, RGBA(142, 21, 55, 1), If(e1.Status = "To be confirmed", ColorValue(e1.Hex), RGBA(0, 0, 0, 0)))),
+                                                        W1: If(IsBlank(e1), 0, If(e1.Concern, 2, If(e1.Status = "To be confirmed", 1, 0))),
+                                                        S1: !IsBlank(e1) &amp;&amp; e1.Status = "To be confirmed" &amp;&amp; !e1.Concern,
+                                                        I1: If(IsBlank(e1), 0, e1.Id),
+                                                        T2: If(IsBlank(e2), "", If(e2.Concern, "! ", "") &amp; e2.Title),
+                                                        F2: If(IsBlank(e2), RGBA(0, 0, 0, 0), ColorFade(ColorValue(e2.Hex), 0.8)),
+                                                        B2: If(IsBlank(e2), RGBA(0, 0, 0, 0), If(e2.Concern, RGBA(142, 21, 55, 1), If(e2.Status = "To be confirmed", ColorValue(e2.Hex), RGBA(0, 0, 0, 0)))),
+                                                        W2: If(IsBlank(e2), 0, If(e2.Concern, 2, If(e2.Status = "To be confirmed", 1, 0))),
+                                                        S2: !IsBlank(e2) &amp;&amp; e2.Status = "To be confirmed" &amp;&amp; !e2.Concern,
+                                                        I2: If(IsBlank(e2), 0, e2.Id),
+                                                        T3: If(IsBlank(e3), "", If(e3.Concern, "! ", "") &amp; e3.Title),
+                                                        F3: If(IsBlank(e3), RGBA(0, 0, 0, 0), ColorFade(ColorValue(e3.Hex), 0.8)),
+                                                        B3: If(IsBlank(e3), RGBA(0, 0, 0, 0), If(e3.Concern, RGBA(142, 21, 55, 1), If(e3.Status = "To be confirmed", ColorValue(e3.Hex), RGBA(0, 0, 0, 0)))),
+                                                        W3: If(IsBlank(e3), 0, If(e3.Concern, 2, If(e3.Status = "To be confirmed", 1, 0))),
+                                                        S3: !IsBlank(e3) &amp;&amp; e3.Status = "To be confirmed" &amp;&amp; !e3.Concern,
+                                                        I3: If(IsBlank(e3), 0, e3.Id)
+                                                    }
+                                                )
+                                            )
+                                        )
+                                    )
+                                );
+                                Set(varDlg, "detail");
+                                Navigate(scrCalendar, ScreenTransition.Fade)
+                              PaddingBottom: =0
+                              PaddingLeft: =4
+                              PaddingRight: =4
+                              PaddingTop: =0
+                              RadiusBottomLeft: =11
+                              RadiusBottomRight: =11
+                              RadiusTopLeft: =11
+                              RadiusTopRight: =11
+                              Size: =10
+                              Text: =Left(varResNames.M, 1) &amp; Switch(ThisItem.MoneyState, "needs", " !", "ok", " OK", "none", " -", " ?")
+                              Width: =56
+                              X: =78
+                              Y: =48
+                        - lblHmListMkE:
+                            Control: ModernText@1.0.0
+                            Properties:
+                              Align: =Align.Center
+                              Color: =Switch(ThisItem.EquipState, "needs", RGBA(110, 67, 0, 1), "ok", RGBA(23, 73, 44, 1), RGBA(79, 91, 106, 1))
+                              Fill: =Switch(ThisItem.EquipState, "needs", RGBA(255, 233, 199, 1), "ok", RGBA(221, 240, 227, 1), "none", RGBA(238, 234, 238, 1), RGBA(255, 255, 255, 1))
+                              FontWeight: =FontWeight.Semibold
+                              Height: =18
+                              OnSelect: |-
+                                =Set(varEvent, LookUp(colEvents, Id = ThisItem.Id));
+                                Set(varBack, "");
+                                Set(varProg, Switch(varEvent.Programme, "CTC", "ctc", "CTTs", "ctt", "national"));
+                                Set(varStatus, "All");
+                                Set(varSearch, "");
+                                ClearCollect(colSelTypes, ForAll(Filter(colTypes, Active), {TKey: ThisRecord.TKey}));
+                                ClearCollect(colScope, Filter(colEvents, !Deleted &amp;&amp; (varProg = "all" || (varProg = "national" &amp;&amp; Programme = "National Activity") || (varProg = "ctc" &amp;&amp; Programme = "CTC") || (varProg = "ctt" &amp;&amp; Programme = "CTTs") || (varProg = "overseas" &amp;&amp; Overseas) || (varProg = "meet" &amp;&amp; Kind &lt;&gt; "event"))));
+                                ClearCollect(
+                                    colVisible,
+                                    AddColumns(
+                                        SortByColumns(
+                                            Filter(
+                                                colScope,
+                                                (TypeKey in colSelTypes.TKey) &amp;&amp;
+                                                (varStatus = "All" || Status = varStatus) &amp;&amp;
+                                                (IsBlank(varSearch) || Lower(varSearch) in Lower(Title))
+                                            ),
+                                            "SortKey",
+                                            SortOrder.Ascending
+                                        ),
+                                        Concern,
+                                        !Deleted &amp;&amp; EndDate &gt;= Today() &amp;&amp; DateDiff(Today(), StartDate, "Days") &lt;= varThresh &amp;&amp; (PeopleState = "needs" || MoneyState = "needs" || EquipState = "needs"),
+                                        Hex,
+                                        With({k: TypeKey}, LookUp(colTypes, TKey = k).Hex)
+                                    )
+                                );
+                                ClearCollect(
+                                    colDays,
+                                    ForAll(
+                                        Sequence(42) As s,
+                                        With(
+                                            {d: DateAdd(varGridStart, s.Value - 1, "Days")},
+                                            With(
+                                                {f: Filter(colVisible, StartDate &lt;= d &amp;&amp; EndDate &gt;= d)},
+                                                With(
+                                                    {e1: If(CountRows(f) &gt;= 1, Index(f, 1)), e2: If(CountRows(f) &gt;= 2, Index(f, 2)), e3: If(CountRows(f) &gt;= 3, Index(f, 3))},
+                                                    {
+                                                        Idx: s.Value,
+                                                        D: d,
+                                                        N: CountRows(f),
+                                                        T1: If(IsBlank(e1), "", If(e1.Concern, "! ", "") &amp; e1.Title),
+                                                        F1: If(IsBlank(e1), RGBA(0, 0, 0, 0), ColorFade(ColorValue(e1.Hex), 0.8)),
+                                                        B1: If(IsBlank(e1), RGBA(0, 0, 0, 0), If(e1.Concern, RGBA(142, 21, 55, 1), If(e1.Status = "To be confirmed", ColorValue(e1.Hex), RGBA(0, 0, 0, 0)))),
+                                                        W1: If(IsBlank(e1), 0, If(e1.Concern, 2, If(e1.Status = "To be confirmed", 1, 0))),
+                                                        S1: !IsBlank(e1) &amp;&amp; e1.Status = "To be confirmed" &amp;&amp; !e1.Concern,
+                                                        I1: If(IsBlank(e1), 0, e1.Id),
+                                                        T2: If(IsBlank(e2), "", If(e2.Concern, "! ", "") &amp; e2.Title),
+                                                        F2: If(IsBlank(e2), RGBA(0, 0, 0, 0), ColorFade(ColorValue(e2.Hex), 0.8)),
+                                                        B2: If(IsBlank(e2), RGBA(0, 0, 0, 0), If(e2.Concern, RGBA(142, 21, 55, 1), If(e2.Status = "To be confirmed", ColorValue(e2.Hex), RGBA(0, 0, 0, 0)))),
+                                                        W2: If(IsBlank(e2), 0, If(e2.Concern, 2, If(e2.Status = "To be confirmed", 1, 0))),
+                                                        S2: !IsBlank(e2) &amp;&amp; e2.Status = "To be confirmed" &amp;&amp; !e2.Concern,
+                                                        I2: If(IsBlank(e2), 0, e2.Id),
+                                                        T3: If(IsBlank(e3), "", If(e3.Concern, "! ", "") &amp; e3.Title),
+                                                        F3: If(IsBlank(e3), RGBA(0, 0, 0, 0), ColorFade(ColorValue(e3.Hex), 0.8)),
+                                                        B3: If(IsBlank(e3), RGBA(0, 0, 0, 0), If(e3.Concern, RGBA(142, 21, 55, 1), If(e3.Status = "To be confirmed", ColorValue(e3.Hex), RGBA(0, 0, 0, 0)))),
+                                                        W3: If(IsBlank(e3), 0, If(e3.Concern, 2, If(e3.Status = "To be confirmed", 1, 0))),
+                                                        S3: !IsBlank(e3) &amp;&amp; e3.Status = "To be confirmed" &amp;&amp; !e3.Concern,
+                                                        I3: If(IsBlank(e3), 0, e3.Id)
+                                                    }
+                                                )
+                                            )
+                                        )
+                                    )
+                                );
+                                Set(varDlg, "detail");
+                                Navigate(scrCalendar, ScreenTransition.Fade)
+                              PaddingBottom: =0
+                              PaddingLeft: =4
+                              PaddingRight: =4
+                              PaddingTop: =0
+                              RadiusBottomLeft: =11
+                              RadiusBottomRight: =11
+                              RadiusTopLeft: =11
+                              RadiusTopRight: =11
+                              Size: =10
+                              Text: =Left(varResNames.E, 1) &amp; Switch(ThisItem.EquipState, "needs", " !", "ok", " OK", "none", " -", " ?")
+                              Width: =56
+                              X: =140
+                              Y: =48
+                        - lblHmListMkB:
+                            Control: ModernText@1.0.0
+                            Properties:
+                              Align: =Align.Center
+                              Color: =RGBA(63, 39, 102, 1)
+                              Fill: =RGBA(233, 225, 243, 1)
+                              FontWeight: =FontWeight.Semibold
+                              Height: =18
+                              OnSelect: |-
+                                =Set(varEvent, LookUp(colEvents, Id = ThisItem.Id));
+                                Set(varBack, "");
+                                Set(varProg, Switch(varEvent.Programme, "CTC", "ctc", "CTTs", "ctt", "national"));
+                                Set(varStatus, "All");
+                                Set(varSearch, "");
+                                ClearCollect(colSelTypes, ForAll(Filter(colTypes, Active), {TKey: ThisRecord.TKey}));
+                                ClearCollect(colScope, Filter(colEvents, !Deleted &amp;&amp; (varProg = "all" || (varProg = "national" &amp;&amp; Programme = "National Activity") || (varProg = "ctc" &amp;&amp; Programme = "CTC") || (varProg = "ctt" &amp;&amp; Programme = "CTTs") || (varProg = "overseas" &amp;&amp; Overseas) || (varProg = "meet" &amp;&amp; Kind &lt;&gt; "event"))));
+                                ClearCollect(
+                                    colVisible,
+                                    AddColumns(
+                                        SortByColumns(
+                                            Filter(
+                                                colScope,
+                                                (TypeKey in colSelTypes.TKey) &amp;&amp;
+                                                (varStatus = "All" || Status = varStatus) &amp;&amp;
+                                                (IsBlank(varSearch) || Lower(varSearch) in Lower(Title))
+                                            ),
+                                            "SortKey",
+                                            SortOrder.Ascending
+                                        ),
+                                        Concern,
+                                        !Deleted &amp;&amp; EndDate &gt;= Today() &amp;&amp; DateDiff(Today(), StartDate, "Days") &lt;= varThresh &amp;&amp; (PeopleState = "needs" || MoneyState = "needs" || EquipState = "needs"),
+                                        Hex,
+                                        With({k: TypeKey}, LookUp(colTypes, TKey = k).Hex)
+                                    )
+                                );
+                                ClearCollect(
+                                    colDays,
+                                    ForAll(
+                                        Sequence(42) As s,
+                                        With(
+                                            {d: DateAdd(varGridStart, s.Value - 1, "Days")},
+                                            With(
+                                                {f: Filter(colVisible, StartDate &lt;= d &amp;&amp; EndDate &gt;= d)},
+                                                With(
+                                                    {e1: If(CountRows(f) &gt;= 1, Index(f, 1)), e2: If(CountRows(f) &gt;= 2, Index(f, 2)), e3: If(CountRows(f) &gt;= 3, Index(f, 3))},
+                                                    {
+                                                        Idx: s.Value,
+                                                        D: d,
+                                                        N: CountRows(f),
+                                                        T1: If(IsBlank(e1), "", If(e1.Concern, "! ", "") &amp; e1.Title),
+                                                        F1: If(IsBlank(e1), RGBA(0, 0, 0, 0), ColorFade(ColorValue(e1.Hex), 0.8)),
+                                                        B1: If(IsBlank(e1), RGBA(0, 0, 0, 0), If(e1.Concern, RGBA(142, 21, 55, 1), If(e1.Status = "To be confirmed", ColorValue(e1.Hex), RGBA(0, 0, 0, 0)))),
+                                                        W1: If(IsBlank(e1), 0, If(e1.Concern, 2, If(e1.Status = "To be confirmed", 1, 0))),
+                                                        S1: !IsBlank(e1) &amp;&amp; e1.Status = "To be confirmed" &amp;&amp; !e1.Concern,
+                                                        I1: If(IsBlank(e1), 0, e1.Id),
+                                                        T2: If(IsBlank(e2), "", If(e2.Concern, "! ", "") &amp; e2.Title),
+                                                        F2: If(IsBlank(e2), RGBA(0, 0, 0, 0), ColorFade(ColorValue(e2.Hex), 0.8)),
+                                                        B2: If(IsBlank(e2), RGBA(0, 0, 0, 0), If(e2.Concern, RGBA(142, 21, 55, 1), If(e2.Status = "To be confirmed", ColorValue(e2.Hex), RGBA(0, 0, 0, 0)))),
+                                                        W2: If(IsBlank(e2), 0, If(e2.Concern, 2, If(e2.Status = "To be confirmed", 1, 0))),
+                                                        S2: !IsBlank(e2) &amp;&amp; e2.Status = "To be confirmed" &amp;&amp; !e2.Concern,
+                                                        I2: If(IsBlank(e2), 0, e2.Id),
+                                                        T3: If(IsBlank(e3), "", If(e3.Concern, "! ", "") &amp; e3.Title),
+                                                        F3: If(IsBlank(e3), RGBA(0, 0, 0, 0), ColorFade(ColorValue(e3.Hex), 0.8)),
+                                                        B3: If(IsBlank(e3), RGBA(0, 0, 0, 0), If(e3.Concern, RGBA(142, 21, 55, 1), If(e3.Status = "To be confirmed", ColorValue(e3.Hex), RGBA(0, 0, 0, 0)))),
+                                                        W3: If(IsBlank(e3), 0, If(e3.Concern, 2, If(e3.Status = "To be confirmed", 1, 0))),
+                                                        S3: !IsBlank(e3) &amp;&amp; e3.Status = "To be confirmed" &amp;&amp; !e3.Concern,
+                                                        I3: If(IsBlank(e3), 0, e3.Id)
+                                                    }
+                                                )
+                                            )
+                                        )
+                                    )
+                                );
+                                Set(varDlg, "detail");
+                                Navigate(scrCalendar, ScreenTransition.Fade)
+                              PaddingBottom: =0
+                              PaddingLeft: =4
+                              PaddingRight: =4
+                              PaddingTop: =0
+                              RadiusBottomLeft: =11
+                              RadiusBottomRight: =11
+                              RadiusTopLeft: =11
+                              RadiusTopRight: =11
+                              Size: =10
+                              Text: ="Branch"
+                              Visible: =ThisItem.BranchReq
+                              Width: =56
+                              X: =202
+                              Y: =48
+                  - lblHmListEmpty:
+                      Control: ModernText@1.0.0
+                      Properties:
+                        Color: =RGBA(94, 107, 123, 1)
+                        Fill: =RGBA(0, 0, 0, 0)
+                        Height: =24
+                        PaddingBottom: =0
+                        PaddingTop: =0
+                        Size: =12
+                        Text: ="Nothing to show."
+                        Visible: =CountRows(colList) = 0
+                        Width: =300
+                        X: =20
+                        Y: =90
+</pre>
+          </details>
+        </div>
+
+      </section>
+
+      <section id="brig">
+        <h2><span class="step">6</span>Brigadier message editor <label class="done"><input type="checkbox" data-step="brig"> Done</label></h2>
+        <p>Add a blank screen and paste. It is opened from the pencil on the Home card (Admin and Brigadier roles only). Use the <strong>Viewing as</strong> button to switch role while testing.</p>
+        <div class="code-card">
+          <div class="code-toolbar">
+            <div class="code-meta">
+              <span>Screen - scrBrigadier</span>
+              <span class="code-stamp" data-updated="2026-11-24T23:08:41Z">v2 &middot; 24/11/2026 23:08 GMT &mdash; new</span>
+            </div>
+            <button data-copy="foe-brig" type="button">Copy</button>
+          </div>
+          <details class="code"><summary>Show the code (514 lines)</summary>
+<pre id="foe-brig">Screens:
+  scrBrigadier:
+    Properties:
+      Fill: =RGBA(247, 244, 246, 1)
+      OnVisible: |-
+        =Reset(txtMg1H);
+        Reset(txtMg1B);
+        Reset(txtMg2H);
+        Reset(txtMg2B);
+        Reset(txtMg3H);
+        Reset(txtMg3B);
+        Reset(txtMg4H);
+        Reset(txtMg4B)
+    Children:
+      - conMgRoot:
+          Control: GroupContainer@1.5.0
+          Variant: ManualLayout
+          Properties:
+            DropShadow: =DropShadow.None
+            Fill: =RGBA(247, 244, 246, 1)
+            Height: =Parent.Height
+            Width: =Parent.Width
+            X: =0
+            Y: =0
+          Children:
+            - conMgBand:
+                Control: GroupContainer@1.5.0
+                Variant: ManualLayout
+                Properties:
+                  DropShadow: =DropShadow.None
+                  Fill: =RGBA(83, 42, 69, 1)
+                  Height: =56
+                  Width: =Parent.Width
+                  X: =0
+                  Y: =0
+                Children:
+                  - btnMgBack:
+                      Control: Classic/Button@2.2.0
+                      Properties:
+                        BorderColor: =RGBA(255, 255, 255, 0.5)
+                        BorderThickness: =1
+                        Color: =RGBA(255, 255, 255, 1)
+                        Fill: =RGBA(255, 255, 255, 0.16)
+                        FontWeight: =FontWeight.Semibold
+                        Height: =28
+                        HoverColor: =RGBA(255, 255, 255, 1)
+                        HoverFill: =RGBA(255, 255, 255, 0.28)
+                        OnSelect: =Navigate(scrHome, ScreenTransition.Fade)
+                        PressedColor: =RGBA(255, 255, 255, 1)
+                        PressedFill: =RGBA(255, 255, 255, 0.28)
+                        RadiusBottomLeft: =14
+                        RadiusBottomRight: =14
+                        RadiusTopLeft: =14
+                        RadiusTopRight: =14
+                        Size: =11
+                        Text: ="&lt; Back to home"
+                        Width: =150
+                        X: =24
+                        Y: =14
+                  - lblMgTitle:
+                      Control: ModernText@1.0.0
+                      Properties:
+                        Color: =RGBA(255, 255, 255, 1)
+                        Fill: =RGBA(0, 0, 0, 0)
+                        FontWeight: =FontWeight.Semibold
+                        Height: =32
+                        PaddingBottom: =0
+                        PaddingTop: =0
+                        Size: =18
+                        Text: '="Brigadier''s message: edit"'
+                        Width: =600
+                        X: =194
+                        Y: =12
+            - lblMgHint:
+                Control: ModernText@1.0.0
+                Properties:
+                  Color: =RGBA(94, 107, 123, 1)
+                  Fill: =RGBA(0, 0, 0, 0)
+                  Height: =30
+                  PaddingBottom: =0
+                  PaddingTop: =0
+                  Size: =11
+                  Text: ="Up to four sections. Write one bullet point per line. Leave a section empty and it is hidden on the Home page. Nothing changes on Home until you press Save. (Sample wording in this spike.)"
+                  Width: =Parent.Width - 32
+                  X: =16
+                  Y: =62
+            - conMgSlot1:
+                Control: GroupContainer@1.5.0
+                Variant: ManualLayout
+                Properties:
+                  DropShadow: =DropShadow.None
+                  Height: =(Parent.Height - 96 - 70 - 12) / 2
+                  Width: =(Parent.Width - 48) / 2
+                  X: =16 + 0 * (((Parent.Width - 48) / 2) + 16)
+                  Y: =96 + 0 * (((Parent.Height - 96 - 70 - 12) / 2) + 12)
+                Children:
+                  - recMgBg1:
+                      Control: Classic/Button@2.2.0
+                      Properties:
+                        BorderColor: =RGBA(208, 196, 204, 1)
+                        BorderThickness: =1
+                        DisplayMode: =DisplayMode.View
+                        Fill: =RGBA(255, 255, 255, 1)
+                        Height: =Parent.Height
+                        HoverFill: =RGBA(255, 255, 255, 1)
+                        PressedFill: =RGBA(255, 255, 255, 1)
+                        RadiusBottomLeft: =12
+                        RadiusBottomRight: =12
+                        RadiusTopLeft: =12
+                        RadiusTopRight: =12
+                        Text: =""
+                        Width: =Parent.Width
+                        X: =0
+                        Y: =0
+                  - lblMgN1:
+                      Control: ModernText@1.0.0
+                      Properties:
+                        Color: =RGBA(94, 107, 123, 1)
+                        Fill: =RGBA(0, 0, 0, 0)
+                        FontWeight: =FontWeight.Semibold
+                        Height: =18
+                        PaddingBottom: =0
+                        PaddingTop: =0
+                        Size: =11
+                        Text: ="Section 1"
+                        Width: =200
+                        X: =14
+                        Y: =8
+                  - txtMg1H:
+                      Control: ModernTextInput@1.1.1
+                      Properties:
+                        Default: =Coalesce(LookUp(colMsg, Order = 1).Heading, "")
+                        Height: =34
+                        Placeholder: ="Heading"
+                        Width: =Parent.Width - 28
+                        X: =14
+                        Y: =30
+                  - txtMg1B:
+                      Control: Classic/TextInput@2.3.2
+                      Properties:
+                        BorderColor: =RGBA(208, 196, 204, 1)
+                        BorderThickness: =1
+                        Default: =Coalesce(LookUp(colMsg, Order = 1).Body, "")
+                        Height: =Parent.Height - 72 - 46
+                        HintText: ="One bullet point per line"
+                        Mode: =TextMode.MultiLine
+                        RadiusBottomLeft: =8
+                        RadiusBottomRight: =8
+                        RadiusTopLeft: =8
+                        RadiusTopRight: =8
+                        Size: =12
+                        Width: =Parent.Width - 28
+                        X: =14
+                        Y: =72
+                  - btnMgX1:
+                      Control: Classic/Button@2.2.0
+                      Properties:
+                        BorderColor: =RGBA(208, 196, 204, 1)
+                        BorderThickness: =1
+                        Color: =RGBA(30, 24, 34, 1)
+                        Fill: =RGBA(255, 255, 255, 1)
+                        FontWeight: =FontWeight.Semibold
+                        Height: =28
+                        HoverColor: =RGBA(30, 24, 34, 1)
+                        HoverFill: =RGBA(240, 236, 240, 1)
+                        OnSelect: |-
+                          =Patch(colMsg, LookUp(colMsg, Order = 1), {Heading: "", Body: ""});
+                          Reset(txtMg1H);
+                          Reset(txtMg1B)
+                        PressedColor: =RGBA(30, 24, 34, 1)
+                        PressedFill: =RGBA(240, 236, 240, 1)
+                        RadiusBottomLeft: =14
+                        RadiusBottomRight: =14
+                        RadiusTopLeft: =14
+                        RadiusTopRight: =14
+                        Size: =11
+                        Text: ="Remove section"
+                        Width: =130
+                        X: =Parent.Width - 144
+                        Y: =Parent.Height - 38
+            - conMgSlot2:
+                Control: GroupContainer@1.5.0
+                Variant: ManualLayout
+                Properties:
+                  DropShadow: =DropShadow.None
+                  Height: =(Parent.Height - 96 - 70 - 12) / 2
+                  Width: =(Parent.Width - 48) / 2
+                  X: =16 + 1 * (((Parent.Width - 48) / 2) + 16)
+                  Y: =96 + 0 * (((Parent.Height - 96 - 70 - 12) / 2) + 12)
+                Children:
+                  - recMgBg2:
+                      Control: Classic/Button@2.2.0
+                      Properties:
+                        BorderColor: =RGBA(208, 196, 204, 1)
+                        BorderThickness: =1
+                        DisplayMode: =DisplayMode.View
+                        Fill: =RGBA(255, 255, 255, 1)
+                        Height: =Parent.Height
+                        HoverFill: =RGBA(255, 255, 255, 1)
+                        PressedFill: =RGBA(255, 255, 255, 1)
+                        RadiusBottomLeft: =12
+                        RadiusBottomRight: =12
+                        RadiusTopLeft: =12
+                        RadiusTopRight: =12
+                        Text: =""
+                        Width: =Parent.Width
+                        X: =0
+                        Y: =0
+                  - lblMgN2:
+                      Control: ModernText@1.0.0
+                      Properties:
+                        Color: =RGBA(94, 107, 123, 1)
+                        Fill: =RGBA(0, 0, 0, 0)
+                        FontWeight: =FontWeight.Semibold
+                        Height: =18
+                        PaddingBottom: =0
+                        PaddingTop: =0
+                        Size: =11
+                        Text: ="Section 2"
+                        Width: =200
+                        X: =14
+                        Y: =8
+                  - txtMg2H:
+                      Control: ModernTextInput@1.1.1
+                      Properties:
+                        Default: =Coalesce(LookUp(colMsg, Order = 2).Heading, "")
+                        Height: =34
+                        Placeholder: ="Heading"
+                        Width: =Parent.Width - 28
+                        X: =14
+                        Y: =30
+                  - txtMg2B:
+                      Control: Classic/TextInput@2.3.2
+                      Properties:
+                        BorderColor: =RGBA(208, 196, 204, 1)
+                        BorderThickness: =1
+                        Default: =Coalesce(LookUp(colMsg, Order = 2).Body, "")
+                        Height: =Parent.Height - 72 - 46
+                        HintText: ="One bullet point per line"
+                        Mode: =TextMode.MultiLine
+                        RadiusBottomLeft: =8
+                        RadiusBottomRight: =8
+                        RadiusTopLeft: =8
+                        RadiusTopRight: =8
+                        Size: =12
+                        Width: =Parent.Width - 28
+                        X: =14
+                        Y: =72
+                  - btnMgX2:
+                      Control: Classic/Button@2.2.0
+                      Properties:
+                        BorderColor: =RGBA(208, 196, 204, 1)
+                        BorderThickness: =1
+                        Color: =RGBA(30, 24, 34, 1)
+                        Fill: =RGBA(255, 255, 255, 1)
+                        FontWeight: =FontWeight.Semibold
+                        Height: =28
+                        HoverColor: =RGBA(30, 24, 34, 1)
+                        HoverFill: =RGBA(240, 236, 240, 1)
+                        OnSelect: |-
+                          =Patch(colMsg, LookUp(colMsg, Order = 2), {Heading: "", Body: ""});
+                          Reset(txtMg2H);
+                          Reset(txtMg2B)
+                        PressedColor: =RGBA(30, 24, 34, 1)
+                        PressedFill: =RGBA(240, 236, 240, 1)
+                        RadiusBottomLeft: =14
+                        RadiusBottomRight: =14
+                        RadiusTopLeft: =14
+                        RadiusTopRight: =14
+                        Size: =11
+                        Text: ="Remove section"
+                        Width: =130
+                        X: =Parent.Width - 144
+                        Y: =Parent.Height - 38
+            - conMgSlot3:
+                Control: GroupContainer@1.5.0
+                Variant: ManualLayout
+                Properties:
+                  DropShadow: =DropShadow.None
+                  Height: =(Parent.Height - 96 - 70 - 12) / 2
+                  Width: =(Parent.Width - 48) / 2
+                  X: =16 + 0 * (((Parent.Width - 48) / 2) + 16)
+                  Y: =96 + 1 * (((Parent.Height - 96 - 70 - 12) / 2) + 12)
+                Children:
+                  - recMgBg3:
+                      Control: Classic/Button@2.2.0
+                      Properties:
+                        BorderColor: =RGBA(208, 196, 204, 1)
+                        BorderThickness: =1
+                        DisplayMode: =DisplayMode.View
+                        Fill: =RGBA(255, 255, 255, 1)
+                        Height: =Parent.Height
+                        HoverFill: =RGBA(255, 255, 255, 1)
+                        PressedFill: =RGBA(255, 255, 255, 1)
+                        RadiusBottomLeft: =12
+                        RadiusBottomRight: =12
+                        RadiusTopLeft: =12
+                        RadiusTopRight: =12
+                        Text: =""
+                        Width: =Parent.Width
+                        X: =0
+                        Y: =0
+                  - lblMgN3:
+                      Control: ModernText@1.0.0
+                      Properties:
+                        Color: =RGBA(94, 107, 123, 1)
+                        Fill: =RGBA(0, 0, 0, 0)
+                        FontWeight: =FontWeight.Semibold
+                        Height: =18
+                        PaddingBottom: =0
+                        PaddingTop: =0
+                        Size: =11
+                        Text: ="Section 3"
+                        Width: =200
+                        X: =14
+                        Y: =8
+                  - txtMg3H:
+                      Control: ModernTextInput@1.1.1
+                      Properties:
+                        Default: =Coalesce(LookUp(colMsg, Order = 3).Heading, "")
+                        Height: =34
+                        Placeholder: ="Heading"
+                        Width: =Parent.Width - 28
+                        X: =14
+                        Y: =30
+                  - txtMg3B:
+                      Control: Classic/TextInput@2.3.2
+                      Properties:
+                        BorderColor: =RGBA(208, 196, 204, 1)
+                        BorderThickness: =1
+                        Default: =Coalesce(LookUp(colMsg, Order = 3).Body, "")
+                        Height: =Parent.Height - 72 - 46
+                        HintText: ="One bullet point per line"
+                        Mode: =TextMode.MultiLine
+                        RadiusBottomLeft: =8
+                        RadiusBottomRight: =8
+                        RadiusTopLeft: =8
+                        RadiusTopRight: =8
+                        Size: =12
+                        Width: =Parent.Width - 28
+                        X: =14
+                        Y: =72
+                  - btnMgX3:
+                      Control: Classic/Button@2.2.0
+                      Properties:
+                        BorderColor: =RGBA(208, 196, 204, 1)
+                        BorderThickness: =1
+                        Color: =RGBA(30, 24, 34, 1)
+                        Fill: =RGBA(255, 255, 255, 1)
+                        FontWeight: =FontWeight.Semibold
+                        Height: =28
+                        HoverColor: =RGBA(30, 24, 34, 1)
+                        HoverFill: =RGBA(240, 236, 240, 1)
+                        OnSelect: |-
+                          =Patch(colMsg, LookUp(colMsg, Order = 3), {Heading: "", Body: ""});
+                          Reset(txtMg3H);
+                          Reset(txtMg3B)
+                        PressedColor: =RGBA(30, 24, 34, 1)
+                        PressedFill: =RGBA(240, 236, 240, 1)
+                        RadiusBottomLeft: =14
+                        RadiusBottomRight: =14
+                        RadiusTopLeft: =14
+                        RadiusTopRight: =14
+                        Size: =11
+                        Text: ="Remove section"
+                        Width: =130
+                        X: =Parent.Width - 144
+                        Y: =Parent.Height - 38
+            - conMgSlot4:
+                Control: GroupContainer@1.5.0
+                Variant: ManualLayout
+                Properties:
+                  DropShadow: =DropShadow.None
+                  Height: =(Parent.Height - 96 - 70 - 12) / 2
+                  Width: =(Parent.Width - 48) / 2
+                  X: =16 + 1 * (((Parent.Width - 48) / 2) + 16)
+                  Y: =96 + 1 * (((Parent.Height - 96 - 70 - 12) / 2) + 12)
+                Children:
+                  - recMgBg4:
+                      Control: Classic/Button@2.2.0
+                      Properties:
+                        BorderColor: =RGBA(208, 196, 204, 1)
+                        BorderThickness: =1
+                        DisplayMode: =DisplayMode.View
+                        Fill: =RGBA(255, 255, 255, 1)
+                        Height: =Parent.Height
+                        HoverFill: =RGBA(255, 255, 255, 1)
+                        PressedFill: =RGBA(255, 255, 255, 1)
+                        RadiusBottomLeft: =12
+                        RadiusBottomRight: =12
+                        RadiusTopLeft: =12
+                        RadiusTopRight: =12
+                        Text: =""
+                        Width: =Parent.Width
+                        X: =0
+                        Y: =0
+                  - lblMgN4:
+                      Control: ModernText@1.0.0
+                      Properties:
+                        Color: =RGBA(94, 107, 123, 1)
+                        Fill: =RGBA(0, 0, 0, 0)
+                        FontWeight: =FontWeight.Semibold
+                        Height: =18
+                        PaddingBottom: =0
+                        PaddingTop: =0
+                        Size: =11
+                        Text: ="Section 4"
+                        Width: =200
+                        X: =14
+                        Y: =8
+                  - txtMg4H:
+                      Control: ModernTextInput@1.1.1
+                      Properties:
+                        Default: =Coalesce(LookUp(colMsg, Order = 4).Heading, "")
+                        Height: =34
+                        Placeholder: ="Heading"
+                        Width: =Parent.Width - 28
+                        X: =14
+                        Y: =30
+                  - txtMg4B:
+                      Control: Classic/TextInput@2.3.2
+                      Properties:
+                        BorderColor: =RGBA(208, 196, 204, 1)
+                        BorderThickness: =1
+                        Default: =Coalesce(LookUp(colMsg, Order = 4).Body, "")
+                        Height: =Parent.Height - 72 - 46
+                        HintText: ="One bullet point per line"
+                        Mode: =TextMode.MultiLine
+                        RadiusBottomLeft: =8
+                        RadiusBottomRight: =8
+                        RadiusTopLeft: =8
+                        RadiusTopRight: =8
+                        Size: =12
+                        Width: =Parent.Width - 28
+                        X: =14
+                        Y: =72
+                  - btnMgX4:
+                      Control: Classic/Button@2.2.0
+                      Properties:
+                        BorderColor: =RGBA(208, 196, 204, 1)
+                        BorderThickness: =1
+                        Color: =RGBA(30, 24, 34, 1)
+                        Fill: =RGBA(255, 255, 255, 1)
+                        FontWeight: =FontWeight.Semibold
+                        Height: =28
+                        HoverColor: =RGBA(30, 24, 34, 1)
+                        HoverFill: =RGBA(240, 236, 240, 1)
+                        OnSelect: |-
+                          =Patch(colMsg, LookUp(colMsg, Order = 4), {Heading: "", Body: ""});
+                          Reset(txtMg4H);
+                          Reset(txtMg4B)
+                        PressedColor: =RGBA(30, 24, 34, 1)
+                        PressedFill: =RGBA(240, 236, 240, 1)
+                        RadiusBottomLeft: =14
+                        RadiusBottomRight: =14
+                        RadiusTopLeft: =14
+                        RadiusTopRight: =14
+                        Size: =11
+                        Text: ="Remove section"
+                        Width: =130
+                        X: =Parent.Width - 144
+                        Y: =Parent.Height - 38
+            - btnMgCancel:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  BorderColor: =RGBA(208, 196, 204, 1)
+                  BorderThickness: =1
+                  Color: =RGBA(30, 24, 34, 1)
+                  Fill: =RGBA(255, 255, 255, 1)
+                  FontWeight: =FontWeight.Semibold
+                  Height: =34
+                  HoverColor: =RGBA(30, 24, 34, 1)
+                  HoverFill: =RGBA(240, 236, 240, 1)
+                  OnSelect: =Navigate(scrHome, ScreenTransition.Fade)
+                  PressedColor: =RGBA(30, 24, 34, 1)
+                  PressedFill: =RGBA(240, 236, 240, 1)
+                  RadiusBottomLeft: =17
+                  RadiusBottomRight: =17
+                  RadiusTopLeft: =17
+                  RadiusTopRight: =17
+                  Size: =11
+                  Text: ="Cancel"
+                  Width: =110
+                  X: =Parent.Width - 262
+                  Y: =Parent.Height - 52
+            - btnMgSave:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  BorderThickness: =0
+                  Color: =RGBA(255, 255, 255, 1)
+                  Fill: =RGBA(83, 42, 69, 1)
+                  FontWeight: =FontWeight.Semibold
+                  Height: =34
+                  HoverColor: =RGBA(255, 255, 255, 1)
+                  HoverFill: =RGBA(83, 42, 69, 1)
+                  OnSelect: |-
+                    =Patch(colMsg, LookUp(colMsg, Order = 1), {Heading: Trim(txtMg1H.Text), Body: Trim(txtMg1B.Text)});
+                    Patch(colMsg, LookUp(colMsg, Order = 2), {Heading: Trim(txtMg2H.Text), Body: Trim(txtMg2B.Text)});
+                    Patch(colMsg, LookUp(colMsg, Order = 3), {Heading: Trim(txtMg3H.Text), Body: Trim(txtMg3B.Text)});
+                    Patch(colMsg, LookUp(colMsg, Order = 4), {Heading: Trim(txtMg4H.Text), Body: Trim(txtMg4B.Text)});
+                    Set(varMsgUpdated, Today());
+                    Notify("Message saved (dummy data only).", NotificationType.Success);
+                    Navigate(scrHome, ScreenTransition.Fade)
+                  PressedColor: =RGBA(255, 255, 255, 1)
+                  PressedFill: =RGBA(83, 42, 69, 1)
+                  RadiusBottomLeft: =17
+                  RadiusBottomRight: =17
+                  RadiusTopLeft: =17
+                  RadiusTopRight: =17
+                  Size: =11
+                  Text: ="Save"
+                  Width: =120
+                  X: =Parent.Width - 136
+                  Y: =Parent.Height - 52
 </pre>
           </details>
         </div>
@@ -7066,13 +8364,13 @@ ClearCollect(colList, Filter(colVisible, false))
       </section>
 
       <section id="start">
-        <h2><span class="step">6</span>Start screen <label class="done"><input type="checkbox" data-step="start"> Done</label></h2>
+        <h2><span class="step">7</span>Start screen <label class="done"><input type="checkbox" data-step="start"> Done</label></h2>
         <p>Select <strong>App</strong>, set <span class="kb">StartScreen</span> to <span class="kb">scrHome</span>, save, and run from Home.</p>
         <p>If Studio reports an unknown property (PA2108), delete just that line and tell me which one.</p>
       </section>
 
       <section id="lists">
-        <h2><span class="step">7</span>SharePoint lists (provisional) <label class="done"><input type="checkbox" data-step="lists"> Done</label></h2>
+        <h2><span class="step">8</span>SharePoint lists (provisional) <label class="done"><input type="checkbox" data-step="lists"> Done</label></h2>
         <div class="callout warn">Not connected to the app yet. Create them with <strong>New list &rarr; From CSV</strong> using the downloads, or by hand from the tables. The CSV import is untried. Do not load real data yet. Names must match exactly.</div>
         <h3>FOE Events</h3>
         <p>The events, meetings and conferences. One row per event. <a class="dl" href="lists/FOE_Events.csv" download>Download FOE_Events.csv</a></p>
