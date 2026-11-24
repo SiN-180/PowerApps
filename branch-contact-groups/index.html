@@ -314,11 +314,11 @@
 
     <main>
       <div class="topline">
-        <span class="pill">Current step: v2.48 - members preview on Quick Contacts, version labels removed</span>
+        <span class="pill">Current step: v2.49 - cadetnet addresses approved</span>
         <span class="pill">Updated 18 Nov 2026</span>
       </div>
       <h1>Branch Contact Groups - Current Task</h1>
-      <p class="lead"><strong>v2.48 adds a "Who's in it" popup to every Quick Contacts row</strong> so you can check the members before copying the addresses, and removes the version labels from the top right of all four screens (none will be added again). <strong>Re-paste all four screens</strong> (delete the old ones first). App.Formulas was also fixed: its parallel streams now write to separate collections. Everything else from v2.47 is unchanged. I cannot time or click it in Studio, so please tell me how it feels.</p>
+      <p class="lead"><strong>v2.49: cadetnet.mod.uk addresses are now treated as approved (accredited for OFFICIAL-SENSITIVE).</strong> They are no longer flagged as external, no longer force BCC on Send Email, and are not counted as "Other domains". The approved list is a new <code>IsApprovedAddress()</code> function at the top of App.Formulas. <strong>Re-paste App.Formulas, then scrQuickContacts and scrSendEmail</strong> (delete those two screens first). App.OnStart is optional. armymail.mod.uk and cadetmail.mod.uk are still flagged until you confirm them.</p>
       <div class="callout warn" style="margin-bottom: 18px;">
         <strong>Still open, not yet diagnosed:</strong> a popup/lightbox (e.g. Manage Members) disappearing while scrolling. Need more detail before this can be fixed properly &mdash; which screen, and whether it happens scrolling the page behind the popup or a list inside the popup itself.
       </div>
@@ -335,8 +335,13 @@
           <li>Set <strong>App &rarr; StartScreen</strong> to <code>scrQuickContacts</code>, then save the new screens back into the Screen YAML Vault so I can check them.</li>
         </ol>
         <div class="code-card">
-          <div class="code-toolbar"><div class="code-meta"><span>App.Formulas (new)</span><span class="code-stamp" data-updated="2026-11-18T11:52:14Z">v2.47 &middot; 18/11/2026 11:52 GMT &mdash; fixed</span></div><button type="button" data-copy="formulasBlock">Copy</button></div>
-          <pre id="formulasBlock">LoadCache(): Boolean = {
+          <div class="code-toolbar"><div class="code-meta"><span>App.Formulas (new)</span><span class="code-stamp" data-updated="2026-11-24T12:14:26Z">v2.49 &middot; 24/11/2026 12:14 GMT &mdash; changed</span></div><button type="button" data-copy="formulasBlock">Copy</button></div>
+          <pre id="formulasBlock">IsApprovedAddress(addr: Text): Boolean = (
+    EndsWith(Lower(Trim(addr)), "@mod.gov.uk") ||
+    EndsWith(Lower(Trim(addr)), "@cadetnet.mod.uk")
+);
+
+LoadCache(): Boolean = {
     Set(varLoading, true);
     Set(varCacheReady, false);
     IfError(
@@ -369,9 +374,8 @@
 };</pre>
         </div>
         <div class="code-card">
-          <div class="code-toolbar"><div class="code-meta"><span>App.OnStart (changed)</span><span class="code-stamp" data-updated="2026-11-18T09:01:07Z">v2.47 &middot; 18/11/2026 09:01 GMT &mdash; changed</span></div><button type="button" data-copy="onStartBlock">Copy</button></div>
-          <pre id="onStartBlock">Set(varModDomain, "mod.gov.uk");
-Set(varMyEmail, Lower(User().Email));
+          <div class="code-toolbar"><div class="code-meta"><span>App.OnStart (changed)</span><span class="code-stamp" data-updated="2026-11-24T12:14:26Z">v2.49 &middot; 24/11/2026 12:14 GMT &mdash; changed</span></div><button type="button" data-copy="onStartBlock">Copy</button></div>
+          <pre id="onStartBlock">Set(varMyEmail, Lower(User().Email));
 Set(varIsMaintainer, false);
 Set(varCacheReady, false);
 Set(varLoading, false);
@@ -395,24 +399,24 @@ Set(varLightboxGroupID, 0)</pre>
         <p>All four screens changed this round. Delete the old ones first, then paste each of these into a new blank screen.</p>
         <div class="links">
           <div class="link-card">
-            <a href="screens/scrQuickContacts.html?v=2.48"><strong>scrQuickContacts <span class="pill" style="font-size:.7rem;padding:2px 8px;min-height:auto;">v2.48</span></strong><span>Start screen. Loading overlay, then single-column rounded rows with initials tiles, filter pills, a Who's in it popup and Copy addresses.</span></a>
+            <a href="screens/scrQuickContacts.html?v=2.49"><strong>scrQuickContacts <span class="pill" style="font-size:.7rem;padding:2px 8px;min-height:auto;">v2.49</span></strong><span>Start screen. Loading overlay, then single-column rounded rows with initials tiles, filter pills, a Who's in it popup and Copy addresses.</span></a>
             <div class="last-updated newest" data-updated="2026-11-18T12:02:50Z">Updated &hellip;</div>
-            <div class="card-actions"><a href="screens/scrQuickContacts.html?v=2.48">Open</a><button type="button" data-yaml-url="screens/scrQuickContacts.html?v=2.48">Copy YAML</button></div>
+            <div class="card-actions"><a href="screens/scrQuickContacts.html?v=2.49">Open</a><button type="button" data-yaml-url="screens/scrQuickContacts.html?v=2.49">Copy YAML</button></div>
           </div>
           <div class="link-card">
-            <a href="screens/scrSendEmail.html?v=2.48"><strong>scrSendEmail <span class="pill" style="font-size:.7rem;padding:2px 8px;min-height:auto;">v2.48</span></strong><span>Version label removed. History loads on demand, single-pass recipient count, Refresh uses LoadCache().</span></a>
+            <a href="screens/scrSendEmail.html?v=2.49"><strong>scrSendEmail <span class="pill" style="font-size:.7rem;padding:2px 8px;min-height:auto;">v2.49</span></strong><span>Version label removed. History loads on demand, single-pass recipient count, Refresh uses LoadCache().</span></a>
             <div class="last-updated newest" data-updated="2026-11-18T12:02:50Z">Updated &hellip;</div>
-            <div class="card-actions"><a href="screens/scrSendEmail.html?v=2.48">Open</a><button type="button" data-yaml-url="screens/scrSendEmail.html?v=2.48">Copy YAML</button></div>
+            <div class="card-actions"><a href="screens/scrSendEmail.html?v=2.49">Open</a><button type="button" data-yaml-url="screens/scrSendEmail.html?v=2.49">Copy YAML</button></div>
           </div>
           <div class="link-card">
-            <a href="screens/scrManageGroups.html?v=2.48"><strong>scrManageGroups <span class="pill" style="font-size:.7rem;padding:2px 8px;min-height:auto;">v2.48</span></strong><span>Version label removed. No hidden GAL lookups, history on demand, faster Add existing, Thursday Batches overview, GAL pick captures JMC/County.</span></a>
+            <a href="screens/scrManageGroups.html?v=2.49"><strong>scrManageGroups <span class="pill" style="font-size:.7rem;padding:2px 8px;min-height:auto;">v2.49</span></strong><span>Version label removed. No hidden GAL lookups, history on demand, faster Add existing, Thursday Batches overview, GAL pick captures JMC/County.</span></a>
             <div class="last-updated newest" data-updated="2026-11-18T12:02:50Z">Updated &hellip;</div>
-            <div class="card-actions"><a href="screens/scrManageGroups.html?v=2.48">Open</a><button type="button" data-yaml-url="screens/scrManageGroups.html?v=2.48">Copy YAML</button></div>
+            <div class="card-actions"><a href="screens/scrManageGroups.html?v=2.49">Open</a><button type="button" data-yaml-url="screens/scrManageGroups.html?v=2.49">Copy YAML</button></div>
           </div>
           <div class="link-card">
-            <a href="screens/scrManagePeople.html?v=2.48"><strong>scrManagePeople <span class="pill" style="font-size:.7rem;padding:2px 8px;min-height:auto;">v2.48</span></strong><span>Version label removed. No hidden GAL lookups, Refresh uses LoadCache().</span></a>
+            <a href="screens/scrManagePeople.html?v=2.49"><strong>scrManagePeople <span class="pill" style="font-size:.7rem;padding:2px 8px;min-height:auto;">v2.49</span></strong><span>Version label removed. No hidden GAL lookups, Refresh uses LoadCache().</span></a>
             <div class="last-updated newest" data-updated="2026-11-18T12:02:50Z">Updated &hellip;</div>
-            <div class="card-actions"><a href="screens/scrManagePeople.html?v=2.48">Open</a><button type="button" data-yaml-url="screens/scrManagePeople.html?v=2.48">Copy YAML</button></div>
+            <div class="card-actions"><a href="screens/scrManagePeople.html?v=2.49">Open</a><button type="button" data-yaml-url="screens/scrManagePeople.html?v=2.49">Copy YAML</button></div>
           </div>
         </div>
       </section>
@@ -423,6 +427,7 @@ Set(varLightboxGroupID, 0)</pre>
           <thead><tr><th>Check</th><th>Expected result</th></tr></thead>
           <tbody>
             <tr><td><strong>Open the app (priority)</strong></td><td>A loading screen appears on Quick Contacts, then the list shows. Tell me roughly how many seconds that takes.</td></tr>
+            <tr><td><strong>Send Email: tick a group made up of cadetnet.mod.uk addresses (priority)</strong></td><td>BCC is not forced and the summary shows Other domains: 0. A group containing an armymail address still forces BCC for now. In Who's in it, cadetnet addresses are not marked.</td></tr>
             <tr><td><strong>Quick Contacts: press Who's in it on a row (priority)</strong></td><td>A popup lists each member's name and email, external addresses are marked, and Copy addresses and Close work. Tapping the row itself does the same.</td></tr>
             <tr><td><strong>Quick Contacts: type in the search box (priority)</strong></td><td>Typing is smooth, no waiting; filter pills and Copy addresses work.</td></tr>
             <tr><td><strong>Manage Groups: open Manage Members on a group (priority)</strong></td><td>The popup opens straight away (it used to wait on a hidden GAL lookup).</td></tr>
