@@ -285,7 +285,7 @@
 
       <div class="topline">
         <span class="pill">v2.50</span>
-        <span class="pill">Last build 25/11/2026 11:34 GMT</span>
+        <span class="pill">Last build 25/11/2026 11:42 GMT</span>
       </div>
       <h1>Branch Contact Groups</h1>
       <div class="replace-all">
@@ -2092,16 +2092,16 @@ Set(varLightboxGroupID, 0)</pre>
 
       <section id="manage">
         <h2><span class="step">6</span>scrManageGroups <label class="done"><input type="checkbox" data-step="manage"> Done</label></h2>
-        <p>Add a blank screen named exactly <span class="kb">scrManageGroups</span>, then paste. (It has a new <strong>Import from paste</strong> button.)</p>
+        <p>Add a blank screen named exactly <span class="kb">scrManageGroups</span>, then paste. (It has the <strong>Import from paste</strong> button, A to Z sorting, and a progress bar when you rename a group.)</p>
         <div class="code-card">
           <div class="code-toolbar">
             <div class="code-meta">
               <span>Screen - scrManageGroups</span>
-              <span class="code-stamp" data-updated="2026-11-25T11:34:40Z">25/11/2026 11:34 GMT <span class="code-age"></span></span><span class="code-stamp">Replace all of it</span>
+              <span class="code-stamp" data-updated="2026-11-25T11:42:35Z">25/11/2026 11:42 GMT <span class="code-age"></span></span><span class="code-stamp">Replace all of it</span>
             </div>
             <button data-copy="bcg-manage" data-crlf="true" type="button">Copy</button>
           </div>
-          <details class="code"><summary>Show the code (2,202 lines)</summary>
+          <details class="code"><summary>Show the code (2,395 lines)</summary>
 <pre id="bcg-manage">Screens:
   scrManageGroups:
     Properties:
@@ -2110,6 +2110,11 @@ Set(varLightboxGroupID, 0)</pre>
         =If(
             !varIsMaintainer,
             Back(),
+            Set(varRenameBusy, false);
+            Set(varRenameTimerOn, false);
+            Set(varRenameTotal, 0);
+            Set(varRenameDone, 0);
+            ClearCollect(colRenameQueue, Filter(Table({ID: 0}), false));
             Set(varErrManualName, false);
             Set(varErrManualEmail, false);
             Set(varErrMaintainerName, false);
@@ -3067,7 +3072,6 @@ Set(varLightboxGroupID, 0)</pre>
                       Set(varShowLightbox, false);
                       Notify("Created " &amp; newTitle &amp; ".", NotificationType.Success),
                       Patch('BM Groups', LookUp('BM Groups', ID = varManageGroupID), {
-                          Title: newTitle,
                           Notes: Trim(txtEditNotes.Text),
                           ThursdayBatch: {Value: drpEditThursdayBatch.Selected.Value},
                           Private: chkEditPrivate.Checked,
@@ -3077,14 +3081,20 @@ Set(varLightboxGroupID, 0)</pre>
                       });
                       If(
                           Lower(Trim(newTitle)) &lt;&gt; Lower(Trim(oldTitle)),
-                          UpdateIf('BM Memberships', Lower(Trim(GroupName)) = Lower(Trim(oldTitle)), {GroupName: newTitle});
-                          UpdateIf('BM History', Lower(Trim(GroupName)) = Lower(Trim(oldTitle)), {GroupName: newTitle});
-                          UpdateIf(colMemberships, Lower(Trim(GroupName)) = Lower(Trim(oldTitle)), {GroupName: newTitle})
-                      );
-                      ClearCollect(colGroups, AddColumns(Sort('BM Groups', SortOrder, SortOrder.Ascending), Ticked, false));
-                      Patch('BM History', Defaults('BM History'), {Title: "Group details updated", GroupName: newTitle, EventType: {Value: "Edited"}});
-                      Set(varShowLightbox, false);
-                      Notify("Saved.", NotificationType.Success)
+                          ClearCollect(colRenameQueue, ShowColumns(Filter(colMemberships, Lower(Trim(GroupName)) = Lower(Trim(oldTitle))), ID));
+                          Set(varRenameOld, oldTitle);
+                          Set(varRenameNew, newTitle);
+                          Set(varRenameGroupID, varManageGroupID);
+                          Set(varRenameTotal, CountRows(colRenameQueue));
+                          Set(varRenameDone, 0);
+                          Set(varRenameBusy, true);
+                          Set(varRenameTimerOn, true),
+                          Patch('BM Groups', LookUp('BM Groups', ID = varManageGroupID), {Title: newTitle});
+                          ClearCollect(colGroups, AddColumns(Sort('BM Groups', SortOrder, SortOrder.Ascending), Ticked, false));
+                          Patch('BM History', Defaults('BM History'), {Title: "Group details updated", GroupName: newTitle, EventType: {Value: "Edited"}});
+                          Set(varShowLightbox, false);
+                          Notify("Saved.", NotificationType.Success)
+                      )
                   )
               )
             X: =183
@@ -4303,7 +4313,190 @@ Set(varLightboxGroupID, 0)</pre>
             X: =183
             Y: =522
             Width: =1000
-            Height: =44</pre>
+            Height: =44
+      - recRenameShade:
+          Control: Classic/Button@2.2.0
+          Properties:
+            Text: =""
+            DisplayMode: =DisplayMode.View
+            Visible: =varRenameBusy
+            Fill: =RGBA(15,25,20,0.6)
+            HoverFill: =Self.Fill
+            PressedFill: =Self.Fill
+            BorderThickness: =0
+            RadiusTopLeft: =0
+            RadiusTopRight: =0
+            RadiusBottomLeft: =0
+            RadiusBottomRight: =0
+            X: =0
+            Y: =0
+            Width: =1366
+            Height: =768
+      - recRenamePanel:
+          Control: Classic/Button@2.2.0
+          Properties:
+            Text: =""
+            DisplayMode: =DisplayMode.View
+            Visible: =varRenameBusy
+            Fill: =RGBA(255,255,255,1)
+            HoverFill: =Self.Fill
+            PressedFill: =Self.Fill
+            BorderColor: =RGBA(220,228,225,1)
+            BorderThickness: =1
+            RadiusTopLeft: =14
+            RadiusTopRight: =14
+            RadiusBottomLeft: =14
+            RadiusBottomRight: =14
+            X: =383
+            Y: =240
+            Width: =600
+            Height: =250
+      - lblRenameTitle:
+          Control: Label@2.5.1
+          Properties:
+            Text: ="Renaming the group... please wait"
+            Visible: =varRenameBusy
+            Color: =RGBA(0,78,66,1)
+            Size: =18
+            Font: =Font.'Open Sans'
+            FontWeight: =FontWeight.Bold
+            X: =413
+            Y: =262
+            Width: =540
+            Height: =30
+      - lblRenameMsg:
+          Control: Label@2.5.1
+          Properties:
+            Text: ="Changing the group name on " &amp; varRenameTotal &amp; " member rows, one at a time. Please keep this window open until it finishes."
+            Visible: =varRenameBusy
+            Color: =RGBA(45,58,64,1)
+            Size: =13
+            Font: =Font.'Open Sans'
+            X: =413
+            Y: =300
+            Width: =540
+            Height: =44
+      - recRenameBarBack:
+          Control: Classic/Button@2.2.0
+          Properties:
+            Text: =""
+            DisplayMode: =DisplayMode.View
+            Visible: =varRenameBusy
+            Fill: =RGBA(220,228,225,1)
+            HoverFill: =Self.Fill
+            PressedFill: =Self.Fill
+            BorderThickness: =0
+            RadiusTopLeft: =10
+            RadiusTopRight: =10
+            RadiusBottomLeft: =10
+            RadiusBottomRight: =10
+            X: =413
+            Y: =364
+            Width: =540
+            Height: =20
+      - recRenameBarFill:
+          Control: Classic/Button@2.2.0
+          Properties:
+            Text: =""
+            DisplayMode: =DisplayMode.View
+            Visible: =varRenameBusy
+            Fill: =RGBA(0,78,66,1)
+            HoverFill: =Self.Fill
+            PressedFill: =Self.Fill
+            BorderThickness: =0
+            RadiusTopLeft: =10
+            RadiusTopRight: =10
+            RadiusBottomLeft: =10
+            RadiusBottomRight: =10
+            X: =413
+            Y: =364
+            Width: =If(varRenameTotal = 0, 540, Round(540 * varRenameDone / varRenameTotal, 0))
+            Height: =20
+      - lblRenameCount:
+          Control: Label@2.5.1
+          Properties:
+            Text: =varRenameDone &amp; " of " &amp; varRenameTotal &amp; " done" &amp; If(varRenameTotal &gt; 0, " (" &amp; Round(100 * varRenameDone / varRenameTotal, 0) &amp; " percent)", "")
+            Visible: =varRenameBusy
+            Color: =RGBA(45,58,64,1)
+            Size: =13
+            Font: =Font.'Open Sans'
+            FontWeight: =FontWeight.Bold
+            X: =413
+            Y: =394
+            Width: =540
+            Height: =24
+      - lblRenameNote:
+          Control: Label@2.5.1
+          Properties:
+            Text: ="Roughly " &amp; RoundUp((varRenameTotal - varRenameDone) / 4, 0) &amp; " seconds left. Nothing is lost if this stops. Press Save again on the group to finish."
+            Visible: =varRenameBusy
+            Color: =RGBA(96,105,103,1)
+            Size: =11
+            Font: =Font.'Open Sans'
+            X: =413
+            Y: =424
+            Width: =400
+            Height: =40
+      - btnRenameStop:
+          Control: ModernButton@1.0.0
+          Properties:
+            Text: ="Stop"
+            Visible: =varRenameBusy
+            BasePaletteColor: =RGBA(163,45,45,1)
+            OnSelect: |-
+              =Set(varRenameTimerOn, false);
+              Set(varRenameBusy, false);
+              Notify("Rename stopped. " &amp; CountRows(colRenameQueue) &amp; " member(s) still have the old name. Open the group and press Save again to finish.", NotificationType.Warning)
+            X: =833
+            Y: =436
+            Width: =120
+            Height: =40
+      - tmrRename:
+          Control: Timer@2.1.0
+          Properties:
+            Duration: =150
+            Repeat: =true
+            AutoStart: =false
+            Start: =varRenameTimerOn
+            Visible: =true
+            Fill: =RGBA(0,0,0,0)
+            Color: =RGBA(0,0,0,0)
+            BorderThickness: =0
+            OnTimerEnd: |-
+              =If(
+                  CountRows(colRenameQueue) &gt; 0,
+                  IfError(
+                      With(
+                          {batch: FirstN(colRenameQueue, 4)},
+                          ForAll(
+                              batch As q,
+                              Patch('BM Memberships', LookUp('BM Memberships', ID = q.ID), {GroupName: varRenameNew});
+                              UpdateIf(colMemberships, ID = q.ID, {GroupName: varRenameNew})
+                          );
+                          RemoveIf(colRenameQueue, ID in batch.ID)
+                      );
+                      Set(varRenameDone, varRenameTotal - CountRows(colRenameQueue)),
+                      Set(varRenameTimerOn, false);
+                      Set(varRenameBusy, false);
+                      Notify("Rename stopped: " &amp; FirstError.Message &amp; " " &amp; CountRows(colRenameQueue) &amp; " member(s) still have the old name. Open the group and press Save again to finish.", NotificationType.Error)
+                  ),
+                  Set(varRenameTimerOn, false);
+                  IfError(
+                      Patch('BM Groups', LookUp('BM Groups', ID = varRenameGroupID), {Title: varRenameNew});
+                      UpdateIf('BM History', GroupName = varRenameOld, {GroupName: varRenameNew});
+                      ClearCollect(colGroups, AddColumns(Sort('BM Groups', SortOrder, SortOrder.Ascending), Ticked, false));
+                      Patch('BM History', Defaults('BM History'), {Title: "Group renamed from " &amp; varRenameOld &amp; " (" &amp; varRenameTotal &amp; " members updated)", GroupName: varRenameNew, EventType: {Value: "Edited"}});
+                      Set(varRenameBusy, false);
+                      Set(varShowLightbox, false);
+                      Notify("Saved. The group name was changed on " &amp; varRenameTotal &amp; " members.", NotificationType.Success),
+                      Set(varRenameBusy, false);
+                      Notify("Could not finish the rename: " &amp; FirstError.Message, NotificationType.Error)
+                  )
+              )
+            X: =0
+            Y: =0
+            Width: =2
+            Height: =2</pre>
           </details>
         </div>
 
@@ -6459,6 +6652,7 @@ Set(varLightboxGroupID, 0)</pre>
           <li><label><input type="checkbox" data-step="t4"> Manage Groups &rarr; <strong>Import from paste</strong> opens the Import screen.</label></li>
           <li><label><input type="checkbox" data-step="t5"> Import: paste 3 or 4 made-up lines (for example <span class="kb">TEST: Role One alex@example.test; Role Two sam@example.test</span>), Check paste, name it, Import. Delete the test group afterwards.</label></li>
           <li><label><input type="checkbox" data-step="t6"> Import: the real lists, only after the test worked.</label></li>
+          <li><label><input type="checkbox" data-step="t7"> Manage Groups: edit a group, change its name, Save. A box appears with a progress bar counting up, then a green Saved message. Groups are listed A to Z.</label></li>
         </ul>
       </section>
 
