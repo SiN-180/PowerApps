@@ -61,22 +61,15 @@ ambiguity. **How to apply, every time you touch a code-card:**
 4. The CSS (`.update-pill` + `.code-stamp` styling) and the pill-computing `<script>` block (scans `[data-updated]`, shows "Updated Xh ago" for 48h then auto-hides) must exist somewhere on the page — copy it from `policy-tracker/index.html` (Fix Guide template) or `PhadeDev/policy-tracker`'s `docs/screens/NewsletterPack.html` (Screen YAML / clipboard-copy template) if the page doesn't have it yet, don't reinvent it.
 5. Applies to every guide family — Policy Tracker, Branch Contact Groups, Training Tracker, and any future app — both the Fix Guide code-card template and the Screen YAML clipboard-copy template. As of 2026-08-15 only Policy Tracker's two pages have been retrofitted with this on their EXISTING stamps; Branch Contact Groups and Training Tracker still need their old stamps converted — do that opportunistically the next time either is touched, don't wait to be asked.
 
-**Policy Tracker fix guide has a live completion-tracking system** (added 2026-08-15,
-`functions/api/fix-status.js` + a Cloudflare KV namespace bound to the `powerapps`
-Pages project as `FIX_STATUS`). Each Fix section has a "Mark complete" checkbox;
-checking it POSTs `{app, id, done}` to `/api/fix-status` and collapses that section.
-**You can and should read this state directly instead of asking the user what's
-already fixed:** `curl "https://powerapps.pages.dev/api/fix-status?app=policy-tracker"`
-returns JSON of every completed fix's section `id`. **Retention rule (user's explicit
-call, 2026-08-15): a fix marked complete for 30+ days should be deleted outright** —
-remove its whole `<section>`, its sidebar `<nav>` link, and its KV entry — not just
-left collapsed forever. The KV value is currently just `true`/absent; **before this
-rule can actually fire, the Pages Function needs to store a completion timestamp
-instead of a bare boolean** (check `functions/api/fix-status.js` — if it's still
-storing `true`, update it to store an ISO date string, migrate any existing `true`
-values to "today" once, and only then start actually deleting on future visits). Do
-this check every time you're asked to touch the Policy Tracker guide, not just when
-explicitly asked to clean up.
+**Policy Tracker guide format (changed 2026-11-25).** The old numbered "Fix" guide with server-backed
+"Mark complete" boxes was cleared at the owner's request (everything in it had been applied and was running
+fine). `policy-tracker/index.html` now follows the Branch Contact Groups "replace everything" format: numbered
+steps, full App.Formulas / App.OnStart / screen YAML in collapsed `code-card` blocks with Copy buttons,
+"Done" ticks stored in the reader's browser (localStorage), a Test checklist and a "Save to the Vault" step.
+Only the pieces that actually change in a given build are included; say plainly which screens are untouched.
+Build it from a FRESH Screen YAML Vault export (check the `updated` timestamps first), never from an old one.
+The `/api/fix-status` function and its KV entries are no longer used by this guide; leave them in place unless
+the owner asks for them to be removed.
 
 **Homepage has a password-gated multi-file upload box into R2, plus a file-manager UI**
 (upload box added 2026-08-17; direct-to-R2 large-file path + file manager added
