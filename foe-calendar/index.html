@@ -279,10 +279,11 @@
       <div class="topline">
         <span class="pill">Forecast of Events</span>
         <span class="pill">Dummy data</span>
-        <span class="pill">v2 &middot; 24/11/2026 23:22 GMT</span>
+        <span class="pill">v2 &middot; 25/11/2026 02:23 GMT</span>
       </div>
       <h1>FOE Calendar</h1>
       <p class="lead">Steps and code for the FOE app. Dummy data only: nothing is saved and nothing is connected to a list yet.</p>
+      <div class="callout warn"><strong>Update 25/11/2026:</strong> Step 2 (App.OnStart) now also builds the month list, and the Calendar, Admin, Home and Bars test files changed (month picker, colour dropdown, two formula fixes). Redo Steps 2, 3, 4, 5 and 8. If Studio shows "Pasting the YAML code for screen isn't supported yet", that is the co-authoring lock: Save, refresh the page, then paste again.</div>
       <div class="callout warn"><strong>Stages 6 and 7 (24/11/2026):</strong> every file changed, so redo Steps 2 to 6 in order. For each screen: paste the new code over the old screen (or delete the old screen first) and keep the same screen name. The Calendar is now about 350 KB; if Studio refuses the paste, tell me and I will split the forms out.</div>
 
       <section id="app">
@@ -301,11 +302,11 @@
           <div class="code-toolbar">
             <div class="code-meta">
               <span>App - OnStart</span>
-              <span class="code-stamp" data-updated="2026-11-24T23:22:21Z">v2 &middot; 24/11/2026 23:22 GMT</span>
+              <span class="code-stamp" data-updated="2026-11-25T02:23:01Z">v2 &middot; 25/11/2026 02:23 GMT</span>
             </div>
             <button data-copy="foe-onstart" type="button">Copy</button>
           </div>
-          <details class="code"><summary>Show the code (267 lines)</summary>
+          <details class="code"><summary>Show the code (268 lines)</summary>
 <pre id="foe-onstart">// FOE Calendar spike: DUMMY DATA ONLY. Nothing here is connected to a list.
 Set(varRole, "editor");
 Set(varProg, "all");
@@ -320,6 +321,7 @@ Set(varListTitle, "");
 Set(varATab, "types");
 Set(varHomeMode, "weeks");
 Set(varFormArea, "N");
+ClearCollect(colMonths, ForAll(Sequence(37, -12), {D: DateAdd(DateAdd(Today(), -(Day(Today()) - 1), "Days"), Value, "Months"), T: Text(DateAdd(DateAdd(Today(), -(Day(Today()) - 1), "Days"), Value, "Months"), "mmmm yyyy")}));
 ClearCollect(colKindMeet, Table({Value: "meeting", Label: "Meeting"}, {Value: "conference", Label: "Conference"}));
 ClearCollect(colRepeat, Table({Value: "none", Label: "Does not repeat"}, {Value: "weekly", Label: "Repeats weekly"}, {Value: "monthly", Label: "Repeats monthly"}));
 ClearCollect(
@@ -586,11 +588,11 @@ ClearCollect(colList, Filter(colVisible, false))
           <div class="code-toolbar">
             <div class="code-meta">
               <span>Screen - scrCalendar</span>
-              <span class="code-stamp" data-updated="2026-11-24T23:22:21Z">v2 &middot; 24/11/2026 23:22 GMT &mdash; Stage 7</span>
+              <span class="code-stamp" data-updated="2026-11-25T02:23:01Z">v2 &middot; 25/11/2026 02:23 GMT &mdash; Stage 7</span>
             </div>
             <button data-copy="foe-stage5" type="button">Copy</button>
           </div>
-          <details class="code"><summary>Show the code (6,559 lines)</summary>
+          <details class="code"><summary>Show the code (6,597 lines)</summary>
 <pre id="foe-stage5">Screens:
   scrCalendar:
     Properties:
@@ -1779,21 +1781,59 @@ ClearCollect(colList, Filter(colVisible, false))
                         Width: =36
                         X: =10
                         Y: =7
-                  - lblMonth:
-                      Control: ModernText@1.0.0
+                  - drpMonth:
+                      Control: ModernDropdown@1.0.2
                       Properties:
-                        Align: =Align.Center
-                        Color: =RGBA(30, 24, 34, 1)
-                        Fill: =RGBA(0, 0, 0, 0)
-                        FontWeight: =FontWeight.Semibold
-                        Height: =32
-                        PaddingBottom: =0
-                        PaddingTop: =0
-                        Size: =16
-                        Text: =Text(varFocus, "mmmm yyyy")
+                        Default: =LookUp(colMonths, D = varFocus)
+                        Height: =34
+                        ItemDisplayText: =ThisItem.T
+                        Items: =colMonths
+                        OnChange: |-
+                          =Set(varFocus, Self.Selected.D);
+                          Set(varGridStart, DateAdd(varFocus, -(Weekday(varFocus, StartOfWeek.Monday) - 1), "Days"));
+                          ClearCollect(
+                              colDays,
+                              ForAll(
+                                  Sequence(42) As s,
+                                  With(
+                                      {d: DateAdd(varGridStart, s.Value - 1, "Days")},
+                                      With(
+                                          {f: Filter(colVisible, StartDate &lt;= d &amp;&amp; EndDate &gt;= d)},
+                                          With(
+                                              {e1: If(CountRows(f) &gt;= 1, Index(f, 1)), e2: If(CountRows(f) &gt;= 2, Index(f, 2)), e3: If(CountRows(f) &gt;= 3, Index(f, 3))},
+                                              {
+                                                  Idx: s.Value,
+                                                  D: d,
+                                                  H: Coalesce(LookUp(colBank, BD = d).Name, ""),
+                                                  N: CountRows(f),
+                                                  T1: If(IsBlank(e1), "", If(e1.Concern, "! ", "") &amp; e1.Title),
+                                                  F1: If(IsBlank(e1), RGBA(0, 0, 0, 0), ColorFade(ColorValue(e1.Hex), 0.8)),
+                                                  B1: If(IsBlank(e1), RGBA(0, 0, 0, 0), If(e1.Concern, RGBA(142, 21, 55, 1), If(e1.Status = "To be confirmed", ColorValue(e1.Hex), RGBA(0, 0, 0, 0)))),
+                                                  W1: If(IsBlank(e1), 0, If(e1.Concern, 2, If(e1.Status = "To be confirmed", 1, 0))),
+                                                  S1: !IsBlank(e1) &amp;&amp; e1.Status = "To be confirmed" &amp;&amp; !e1.Concern,
+                                                  I1: If(IsBlank(e1), 0, e1.Id),
+                                                  T2: If(IsBlank(e2), "", If(e2.Concern, "! ", "") &amp; e2.Title),
+                                                  F2: If(IsBlank(e2), RGBA(0, 0, 0, 0), ColorFade(ColorValue(e2.Hex), 0.8)),
+                                                  B2: If(IsBlank(e2), RGBA(0, 0, 0, 0), If(e2.Concern, RGBA(142, 21, 55, 1), If(e2.Status = "To be confirmed", ColorValue(e2.Hex), RGBA(0, 0, 0, 0)))),
+                                                  W2: If(IsBlank(e2), 0, If(e2.Concern, 2, If(e2.Status = "To be confirmed", 1, 0))),
+                                                  S2: !IsBlank(e2) &amp;&amp; e2.Status = "To be confirmed" &amp;&amp; !e2.Concern,
+                                                  I2: If(IsBlank(e2), 0, e2.Id),
+                                                  T3: If(IsBlank(e3), "", If(e3.Concern, "! ", "") &amp; e3.Title),
+                                                  F3: If(IsBlank(e3), RGBA(0, 0, 0, 0), ColorFade(ColorValue(e3.Hex), 0.8)),
+                                                  B3: If(IsBlank(e3), RGBA(0, 0, 0, 0), If(e3.Concern, RGBA(142, 21, 55, 1), If(e3.Status = "To be confirmed", ColorValue(e3.Hex), RGBA(0, 0, 0, 0)))),
+                                                  W3: If(IsBlank(e3), 0, If(e3.Concern, 2, If(e3.Status = "To be confirmed", 1, 0))),
+                                                  S3: !IsBlank(e3) &amp;&amp; e3.Status = "To be confirmed" &amp;&amp; !e3.Concern,
+                                                  I3: If(IsBlank(e3), 0, e3.Id)
+                                              }
+                                          )
+                                      )
+                                  )
+                              )
+                          )
+                        Size: =14
                         Width: =190
                         X: =50
-                        Y: =7
+                        Y: =6
                   - btnNext:
                       Control: Classic/Button@2.2.0
                       Properties:
@@ -7163,11 +7203,11 @@ ClearCollect(colList, Filter(colVisible, false))
           <div class="code-toolbar">
             <div class="code-meta">
               <span>Screen - scrAdmin</span>
-              <span class="code-stamp" data-updated="2026-11-24T23:22:21Z">v2 &middot; 24/11/2026 23:22 GMT</span>
+              <span class="code-stamp" data-updated="2026-11-25T02:23:01Z">v2 &middot; 25/11/2026 02:23 GMT</span>
             </div>
             <button data-copy="foe-admin" type="button">Copy</button>
           </div>
-          <details class="code"><summary>Show the code (971 lines)</summary>
+          <details class="code"><summary>Show the code (960 lines)</summary>
 <pre id="foe-admin">Screens:
   scrAdmin:
     Properties:
@@ -7437,29 +7477,18 @@ ClearCollect(colList, Filter(colVisible, false))
                               Width: =140
                               X: =480
                               Y: =10
-                        - btnAColour:
-                            Control: Classic/Button@2.2.0
+                        - drpAColour:
+                            Control: ModernDropdown@1.0.2
                             Properties:
-                              BorderColor: =RGBA(208, 196, 204, 1)
-                              BorderThickness: =1
-                              Color: =RGBA(30, 24, 34, 1)
-                              Fill: =RGBA(255, 255, 255, 1)
-                              FontWeight: =FontWeight.Semibold
-                              Height: =32
-                              HoverColor: =RGBA(30, 24, 34, 1)
-                              HoverFill: =RGBA(240, 236, 240, 1)
-                              OnSelect: '=Patch(colTypes, LookUp(colTypes, TKey = ThisItem.TKey), {Hex: With({idx: Coalesce(LookUp(colPalette, Hex = ThisItem.Hex).N, 0)}, LookUp(colPalette, N = Mod(idx, CountRows(colPalette)) + 1).Hex)})'
-                              PressedColor: =RGBA(30, 24, 34, 1)
-                              PressedFill: =RGBA(240, 236, 240, 1)
-                              RadiusBottomLeft: =16
-                              RadiusBottomRight: =16
-                              RadiusTopLeft: =16
-                              RadiusTopRight: =16
-                              Size: =10
-                              Text: '="Colour: " &amp; Coalesce(LookUp(colPalette, Hex = ThisItem.Hex).Name, "Custom")'
+                              Default: =LookUp(colPalette, Hex = ThisItem.Hex)
+                              Height: =34
+                              ItemDisplayText: =ThisItem.Name
+                              Items: =colPalette
+                              OnChange: '=Patch(colTypes, LookUp(colTypes, TKey = ThisItem.TKey), {Hex: Self.Selected.Hex})'
+                              Size: =11
                               Width: =150
                               X: =630
-                              Y: =8
+                              Y: =7
                         - lblACount:
                             Control: ModernText@1.0.0
                             Properties:
@@ -8152,7 +8181,7 @@ ClearCollect(colList, Filter(colVisible, false))
           <div class="code-toolbar">
             <div class="code-meta">
               <span>Screen - scrHome</span>
-              <span class="code-stamp" data-updated="2026-11-24T23:22:21Z">v2 &middot; 24/11/2026 23:22 GMT &mdash; Stage 6</span>
+              <span class="code-stamp" data-updated="2026-11-25T02:23:01Z">v2 &middot; 25/11/2026 02:23 GMT &mdash; Stage 6</span>
             </div>
             <button data-copy="foe-home" type="button">Copy</button>
           </div>
@@ -9374,7 +9403,7 @@ ClearCollect(colList, Filter(colVisible, false))
                               PaddingBottom: =0
                               PaddingTop: =0
                               Size: =11
-                              Text: =Concat(Filter(Split(Substitute(ThisItem.Body, Char(13), ""), Char(10)), !IsBlank(Trim(Result))), UniChar(8226) &amp; " " &amp; Trim(Result), Char(10))
+                              Text: =Concat(Filter(Split(Substitute(ThisItem.Body, Char(13), ""), Char(10)), !IsBlank(Trim(Value))), UniChar(8226) &amp; " " &amp; Trim(Value), Char(10))
                               Width: =Parent.TemplateWidth - 28
                               X: =16
                               Y: =28
@@ -10578,7 +10607,7 @@ ClearCollect(colList, Filter(colVisible, false))
           <div class="code-toolbar">
             <div class="code-meta">
               <span>Screen - scrBrigadier</span>
-              <span class="code-stamp" data-updated="2026-11-24T23:22:21Z">v2 &middot; 24/11/2026 23:22 GMT &mdash; new</span>
+              <span class="code-stamp" data-updated="2026-11-25T02:23:01Z">v2 &middot; 25/11/2026 02:23 GMT &mdash; new</span>
             </div>
             <button data-copy="foe-brig" type="button">Copy</button>
           </div>
@@ -11110,32 +11139,39 @@ ClearCollect(colList, Filter(colVisible, false))
           <div class="code-toolbar">
             <div class="code-meta">
               <span>Screen - scrSpanTest (test only)</span>
-              <span class="code-stamp" data-updated="2026-11-24T23:22:21Z">v2 &middot; 24/11/2026 23:22 GMT &mdash; test</span>
+              <span class="code-stamp" data-updated="2026-11-25T02:23:01Z">v2 &middot; 25/11/2026 02:23 GMT &mdash; test</span>
             </div>
             <button data-copy="foe-span" type="button">Copy</button>
           </div>
-          <details class="code"><summary>Show the code (1,998 lines)</summary>
+          <details class="code"><summary>Show the code (2,213 lines)</summary>
 <pre id="foe-span">Screens:
   scrSpanTest:
     Properties:
       Fill: =RGBA(247, 244, 246, 1)
       OnVisible: |-
-        =Set(varSpStart, DateAdd(DateAdd(Today(), -(Day(Today()) - 1), "Days"), -(Weekday(DateAdd(Today(), -(Day(Today()) - 1), "Days"), StartOfWeek.Monday) - 1), "Days"));
+        =Set(varSpBase, DateAdd(Today(), -(Day(Today()) - 1), "Days"));
+        Set(varSpFocus, varSpBase);
+        ClearCollect(colSpanMonths, ForAll(Sequence(37, -12), {D: DateAdd(varSpBase, Value, "Months"), T: Text(DateAdd(varSpBase, Value, "Months"), "mmmm yyyy")}));
         ClearCollect(
             colSpanEv,
             Table(
-                {Id: 1, Title: "Course A (4 days)", StartDate: DateAdd(varSpStart, 8, "Days"), EndDate: DateAdd(varSpStart, 11, "Days"), Hex: "#1F6B57"},
-                {Id: 2, Title: "Course B (5 days, crosses a week)", StartDate: DateAdd(varSpStart, 11, "Days"), EndDate: DateAdd(varSpStart, 15, "Days"), Hex: "#2B4C8C"},
-                {Id: 3, Title: "Single day", StartDate: DateAdd(varSpStart, 9, "Days"), EndDate: DateAdd(varSpStart, 9, "Days"), Hex: "#C2410C"},
-                {Id: 4, Title: "Two day event", StartDate: DateAdd(varSpStart, 9, "Days"), EndDate: DateAdd(varSpStart, 10, "Days"), Hex: "#B8860B"},
-                {Id: 5, Title: "Long event (11 days)", StartDate: DateAdd(varSpStart, 16, "Days"), EndDate: DateAdd(varSpStart, 26, "Days"), Hex: "#7A4B9A"},
-                {Id: 6, Title: "Weekend", StartDate: DateAdd(varSpStart, 19, "Days"), EndDate: DateAdd(varSpStart, 20, "Days"), Hex: "#8E1537"},
-                {Id: 7, Title: "Short", StartDate: DateAdd(varSpStart, 22, "Days"), EndDate: DateAdd(varSpStart, 22, "Days"), Hex: "#0E7C86"},
-                {Id: 8, Title: "Overlaps the long one", StartDate: DateAdd(varSpStart, 20, "Days"), EndDate: DateAdd(varSpStart, 23, "Days"), Hex: "#5C8A1E"},
-                {Id: 9, Title: "First week event", StartDate: DateAdd(varSpStart, 2, "Days"), EndDate: DateAdd(varSpStart, 4, "Days"), Hex: "#0B78B8"},
-                {Id: 10, Title: "End of grid", StartDate: DateAdd(varSpStart, 33, "Days"), EndDate: DateAdd(varSpStart, 37, "Days"), Hex: "#5B6770"}
+                {Id: 1, Title: "Course A (4 days)", StartDate: DateAdd(varSpBase, 8, "Days"), EndDate: DateAdd(varSpBase, 11, "Days"), Hex: "#1F6B57"},
+                {Id: 2, Title: "Course B (5 days, crosses a week)", StartDate: DateAdd(varSpBase, 11, "Days"), EndDate: DateAdd(varSpBase, 15, "Days"), Hex: "#2B4C8C"},
+                {Id: 3, Title: "Single day", StartDate: DateAdd(varSpBase, 9, "Days"), EndDate: DateAdd(varSpBase, 9, "Days"), Hex: "#C2410C"},
+                {Id: 4, Title: "Two day event", StartDate: DateAdd(varSpBase, 9, "Days"), EndDate: DateAdd(varSpBase, 10, "Days"), Hex: "#B8860B"},
+                {Id: 5, Title: "Long event (11 days)", StartDate: DateAdd(varSpBase, 16, "Days"), EndDate: DateAdd(varSpBase, 26, "Days"), Hex: "#7A4B9A"},
+                {Id: 6, Title: "Weekend", StartDate: DateAdd(varSpBase, 19, "Days"), EndDate: DateAdd(varSpBase, 20, "Days"), Hex: "#8E1537"},
+                {Id: 7, Title: "Short", StartDate: DateAdd(varSpBase, 22, "Days"), EndDate: DateAdd(varSpBase, 22, "Days"), Hex: "#0E7C86"},
+                {Id: 8, Title: "Overlaps the long one", StartDate: DateAdd(varSpBase, 20, "Days"), EndDate: DateAdd(varSpBase, 23, "Days"), Hex: "#5C8A1E"},
+                {Id: 9, Title: "First week event", StartDate: DateAdd(varSpBase, 2, "Days"), EndDate: DateAdd(varSpBase, 4, "Days"), Hex: "#0B78B8"},
+                {Id: 10, Title: "Crosses into next month", StartDate: DateAdd(varSpBase, 27, "Days"), EndDate: DateAdd(varSpBase, 34, "Days"), Hex: "#5B6770"},
+                {Id: 11, Title: "Last month event", StartDate: DateAdd(varSpBase, -6, "Days"), EndDate: DateAdd(varSpBase, -2, "Days"), Hex: "#1F6B57"},
+                {Id: 12, Title: "Next month course", StartDate: DateAdd(varSpBase, 40, "Days"), EndDate: DateAdd(varSpBase, 43, "Days"), Hex: "#2B4C8C"},
+                {Id: 13, Title: "Three week event", StartDate: DateAdd(varSpBase, 45, "Days"), EndDate: DateAdd(varSpBase, 65, "Days"), Hex: "#B8860B"},
+                {Id: 14, Title: "Two months away", StartDate: DateAdd(varSpBase, 75, "Days"), EndDate: DateAdd(varSpBase, 77, "Days"), Hex: "#C2410C"}
             )
         );
+        Set(varSpStart, DateAdd(varSpFocus, -(Weekday(varSpFocus, StartOfWeek.Monday) - 1), "Days"));
         ClearCollect(
             colSpanBars,
             Ungroup(
@@ -11161,7 +11197,7 @@ ClearCollect(colList, Filter(colVisible, false))
                         )
                     )
                 ),
-                "Value"
+                Value
             )
         )
     Children:
@@ -11198,7 +11234,7 @@ ClearCollect(colList, Filter(colVisible, false))
                         PaddingTop: =0
                         Size: =20
                         Text: '="Proof of concept: continuous multi-day bars"'
-                        Width: =Parent.Width - 300
+                        Width: =Parent.Width - 660
                         X: =24
                         Y: =6
                   - lblSpSub:
@@ -11211,10 +11247,10 @@ ClearCollect(colList, Filter(colVisible, false))
                         PaddingTop: =0
                         Size: =11
                         Text: ="Separate dummy events. Not connected to the real calendar."
-                        Width: =Parent.Width - 300
+                        Width: =Parent.Width - 660
                         X: =24
                         Y: =34
-                  - btnSpReload:
+                  - btnSpPrev:
                       Control: Classic/Button@2.2.0
                       Properties:
                         BorderColor: =RGBA(255, 255, 255, 0.5)
@@ -11226,22 +11262,8 @@ ClearCollect(colList, Filter(colVisible, false))
                         HoverColor: =RGBA(255, 255, 255, 1)
                         HoverFill: =RGBA(255, 255, 255, 0.28)
                         OnSelect: |-
-                          =Set(varSpStart, DateAdd(DateAdd(Today(), -(Day(Today()) - 1), "Days"), -(Weekday(DateAdd(Today(), -(Day(Today()) - 1), "Days"), StartOfWeek.Monday) - 1), "Days"));
-                          ClearCollect(
-                              colSpanEv,
-                              Table(
-                                  {Id: 1, Title: "Course A (4 days)", StartDate: DateAdd(varSpStart, 8, "Days"), EndDate: DateAdd(varSpStart, 11, "Days"), Hex: "#1F6B57"},
-                                  {Id: 2, Title: "Course B (5 days, crosses a week)", StartDate: DateAdd(varSpStart, 11, "Days"), EndDate: DateAdd(varSpStart, 15, "Days"), Hex: "#2B4C8C"},
-                                  {Id: 3, Title: "Single day", StartDate: DateAdd(varSpStart, 9, "Days"), EndDate: DateAdd(varSpStart, 9, "Days"), Hex: "#C2410C"},
-                                  {Id: 4, Title: "Two day event", StartDate: DateAdd(varSpStart, 9, "Days"), EndDate: DateAdd(varSpStart, 10, "Days"), Hex: "#B8860B"},
-                                  {Id: 5, Title: "Long event (11 days)", StartDate: DateAdd(varSpStart, 16, "Days"), EndDate: DateAdd(varSpStart, 26, "Days"), Hex: "#7A4B9A"},
-                                  {Id: 6, Title: "Weekend", StartDate: DateAdd(varSpStart, 19, "Days"), EndDate: DateAdd(varSpStart, 20, "Days"), Hex: "#8E1537"},
-                                  {Id: 7, Title: "Short", StartDate: DateAdd(varSpStart, 22, "Days"), EndDate: DateAdd(varSpStart, 22, "Days"), Hex: "#0E7C86"},
-                                  {Id: 8, Title: "Overlaps the long one", StartDate: DateAdd(varSpStart, 20, "Days"), EndDate: DateAdd(varSpStart, 23, "Days"), Hex: "#5C8A1E"},
-                                  {Id: 9, Title: "First week event", StartDate: DateAdd(varSpStart, 2, "Days"), EndDate: DateAdd(varSpStart, 4, "Days"), Hex: "#0B78B8"},
-                                  {Id: 10, Title: "End of grid", StartDate: DateAdd(varSpStart, 33, "Days"), EndDate: DateAdd(varSpStart, 37, "Days"), Hex: "#5B6770"}
-                              )
-                          );
+                          =Set(varSpFocus, DateAdd(varSpFocus, -1, "Months"));
+                          Set(varSpStart, DateAdd(varSpFocus, -(Weekday(varSpFocus, StartOfWeek.Monday) - 1), "Days"));
                           ClearCollect(
                               colSpanBars,
                               Ungroup(
@@ -11267,7 +11289,229 @@ ClearCollect(colList, Filter(colVisible, false))
                                           )
                                       )
                                   ),
-                                  "Value"
+                                  Value
+                              )
+                          )
+                        PressedColor: =RGBA(255, 255, 255, 1)
+                        PressedFill: =RGBA(255, 255, 255, 0.28)
+                        RadiusBottomLeft: =14
+                        RadiusBottomRight: =14
+                        RadiusTopLeft: =14
+                        RadiusTopRight: =14
+                        Size: =14
+                        Text: ="&lt;"
+                        Width: =36
+                        X: =Parent.Width - 594
+                        Y: =14
+                  - drpSpMonth:
+                      Control: ModernDropdown@1.0.2
+                      Properties:
+                        Default: =LookUp(colSpanMonths, D = varSpFocus)
+                        Height: =34
+                        ItemDisplayText: =ThisItem.T
+                        Items: =colSpanMonths
+                        OnChange: |-
+                          =Set(varSpFocus, Self.Selected.D);
+                          Set(varSpStart, DateAdd(varSpFocus, -(Weekday(varSpFocus, StartOfWeek.Monday) - 1), "Days"));
+                          ClearCollect(
+                              colSpanBars,
+                              Ungroup(
+                                  ForAll(
+                                      Sequence(6) As w,
+                                      With(
+                                          {ws: DateAdd(varSpStart, (w.Value - 1) * 7, "Days")},
+                                          With(
+                                              {we: DateAdd(ws, 6, "Days")},
+                                              ForAll(
+                                                  Filter(colSpanEv, StartDate &lt;= we &amp;&amp; EndDate &gt;= ws) As e,
+                                                  {
+                                                      Week: w.Value,
+                                                      Col: DateDiff(ws, If(e.StartDate &lt; ws, ws, e.StartDate), "Days") + 1,
+                                                      Span: DateDiff(If(e.StartDate &lt; ws, ws, e.StartDate), If(e.EndDate &gt; we, we, e.EndDate), "Days") + 1,
+                                                      Title: e.Title,
+                                                      Hex: e.Hex,
+                                                      ContL: e.StartDate &lt; ws,
+                                                      ContR: e.EndDate &gt; we,
+                                                      Row: CountRows(Filter(colSpanEv, StartDate &lt;= we &amp;&amp; EndDate &gt;= ws &amp;&amp; Id &lt; e.Id))
+                                                  }
+                                              )
+                                          )
+                                      )
+                                  ),
+                                  Value
+                              )
+                          )
+                        Size: =14
+                        Width: =210
+                        X: =Parent.Width - 552
+                        Y: =11
+                  - btnSpNext:
+                      Control: Classic/Button@2.2.0
+                      Properties:
+                        BorderColor: =RGBA(255, 255, 255, 0.5)
+                        BorderThickness: =1
+                        Color: =RGBA(255, 255, 255, 1)
+                        Fill: =RGBA(255, 255, 255, 0.16)
+                        FontWeight: =FontWeight.Semibold
+                        Height: =28
+                        HoverColor: =RGBA(255, 255, 255, 1)
+                        HoverFill: =RGBA(255, 255, 255, 0.28)
+                        OnSelect: |-
+                          =Set(varSpFocus, DateAdd(varSpFocus, 1, "Months"));
+                          Set(varSpStart, DateAdd(varSpFocus, -(Weekday(varSpFocus, StartOfWeek.Monday) - 1), "Days"));
+                          ClearCollect(
+                              colSpanBars,
+                              Ungroup(
+                                  ForAll(
+                                      Sequence(6) As w,
+                                      With(
+                                          {ws: DateAdd(varSpStart, (w.Value - 1) * 7, "Days")},
+                                          With(
+                                              {we: DateAdd(ws, 6, "Days")},
+                                              ForAll(
+                                                  Filter(colSpanEv, StartDate &lt;= we &amp;&amp; EndDate &gt;= ws) As e,
+                                                  {
+                                                      Week: w.Value,
+                                                      Col: DateDiff(ws, If(e.StartDate &lt; ws, ws, e.StartDate), "Days") + 1,
+                                                      Span: DateDiff(If(e.StartDate &lt; ws, ws, e.StartDate), If(e.EndDate &gt; we, we, e.EndDate), "Days") + 1,
+                                                      Title: e.Title,
+                                                      Hex: e.Hex,
+                                                      ContL: e.StartDate &lt; ws,
+                                                      ContR: e.EndDate &gt; we,
+                                                      Row: CountRows(Filter(colSpanEv, StartDate &lt;= we &amp;&amp; EndDate &gt;= ws &amp;&amp; Id &lt; e.Id))
+                                                  }
+                                              )
+                                          )
+                                      )
+                                  ),
+                                  Value
+                              )
+                          )
+                        PressedColor: =RGBA(255, 255, 255, 1)
+                        PressedFill: =RGBA(255, 255, 255, 0.28)
+                        RadiusBottomLeft: =14
+                        RadiusBottomRight: =14
+                        RadiusTopLeft: =14
+                        RadiusTopRight: =14
+                        Size: =14
+                        Text: ="&gt;"
+                        Width: =36
+                        X: =Parent.Width - 336
+                        Y: =14
+                  - btnSpToday:
+                      Control: Classic/Button@2.2.0
+                      Properties:
+                        BorderColor: =RGBA(255, 255, 255, 0.5)
+                        BorderThickness: =1
+                        Color: =RGBA(255, 255, 255, 1)
+                        Fill: =RGBA(255, 255, 255, 0.16)
+                        FontWeight: =FontWeight.Semibold
+                        Height: =28
+                        HoverColor: =RGBA(255, 255, 255, 1)
+                        HoverFill: =RGBA(255, 255, 255, 0.28)
+                        OnSelect: |-
+                          =Set(varSpFocus, varSpBase);
+                          Set(varSpStart, DateAdd(varSpFocus, -(Weekday(varSpFocus, StartOfWeek.Monday) - 1), "Days"));
+                          ClearCollect(
+                              colSpanBars,
+                              Ungroup(
+                                  ForAll(
+                                      Sequence(6) As w,
+                                      With(
+                                          {ws: DateAdd(varSpStart, (w.Value - 1) * 7, "Days")},
+                                          With(
+                                              {we: DateAdd(ws, 6, "Days")},
+                                              ForAll(
+                                                  Filter(colSpanEv, StartDate &lt;= we &amp;&amp; EndDate &gt;= ws) As e,
+                                                  {
+                                                      Week: w.Value,
+                                                      Col: DateDiff(ws, If(e.StartDate &lt; ws, ws, e.StartDate), "Days") + 1,
+                                                      Span: DateDiff(If(e.StartDate &lt; ws, ws, e.StartDate), If(e.EndDate &gt; we, we, e.EndDate), "Days") + 1,
+                                                      Title: e.Title,
+                                                      Hex: e.Hex,
+                                                      ContL: e.StartDate &lt; ws,
+                                                      ContR: e.EndDate &gt; we,
+                                                      Row: CountRows(Filter(colSpanEv, StartDate &lt;= we &amp;&amp; EndDate &gt;= ws &amp;&amp; Id &lt; e.Id))
+                                                  }
+                                              )
+                                          )
+                                      )
+                                  ),
+                                  Value
+                              )
+                          )
+                        PressedColor: =RGBA(255, 255, 255, 1)
+                        PressedFill: =RGBA(255, 255, 255, 0.28)
+                        RadiusBottomLeft: =14
+                        RadiusBottomRight: =14
+                        RadiusTopLeft: =14
+                        RadiusTopRight: =14
+                        Size: =11
+                        Text: ="This month"
+                        Width: =90
+                        X: =Parent.Width - 292
+                        Y: =14
+                  - btnSpReload:
+                      Control: Classic/Button@2.2.0
+                      Properties:
+                        BorderColor: =RGBA(255, 255, 255, 0.5)
+                        BorderThickness: =1
+                        Color: =RGBA(255, 255, 255, 1)
+                        Fill: =RGBA(255, 255, 255, 0.16)
+                        FontWeight: =FontWeight.Semibold
+                        Height: =28
+                        HoverColor: =RGBA(255, 255, 255, 1)
+                        HoverFill: =RGBA(255, 255, 255, 0.28)
+                        OnSelect: |-
+                          =Set(varSpBase, DateAdd(Today(), -(Day(Today()) - 1), "Days"));
+                          Set(varSpFocus, varSpBase);
+                          ClearCollect(colSpanMonths, ForAll(Sequence(37, -12), {D: DateAdd(varSpBase, Value, "Months"), T: Text(DateAdd(varSpBase, Value, "Months"), "mmmm yyyy")}));
+                          ClearCollect(
+                              colSpanEv,
+                              Table(
+                                  {Id: 1, Title: "Course A (4 days)", StartDate: DateAdd(varSpBase, 8, "Days"), EndDate: DateAdd(varSpBase, 11, "Days"), Hex: "#1F6B57"},
+                                  {Id: 2, Title: "Course B (5 days, crosses a week)", StartDate: DateAdd(varSpBase, 11, "Days"), EndDate: DateAdd(varSpBase, 15, "Days"), Hex: "#2B4C8C"},
+                                  {Id: 3, Title: "Single day", StartDate: DateAdd(varSpBase, 9, "Days"), EndDate: DateAdd(varSpBase, 9, "Days"), Hex: "#C2410C"},
+                                  {Id: 4, Title: "Two day event", StartDate: DateAdd(varSpBase, 9, "Days"), EndDate: DateAdd(varSpBase, 10, "Days"), Hex: "#B8860B"},
+                                  {Id: 5, Title: "Long event (11 days)", StartDate: DateAdd(varSpBase, 16, "Days"), EndDate: DateAdd(varSpBase, 26, "Days"), Hex: "#7A4B9A"},
+                                  {Id: 6, Title: "Weekend", StartDate: DateAdd(varSpBase, 19, "Days"), EndDate: DateAdd(varSpBase, 20, "Days"), Hex: "#8E1537"},
+                                  {Id: 7, Title: "Short", StartDate: DateAdd(varSpBase, 22, "Days"), EndDate: DateAdd(varSpBase, 22, "Days"), Hex: "#0E7C86"},
+                                  {Id: 8, Title: "Overlaps the long one", StartDate: DateAdd(varSpBase, 20, "Days"), EndDate: DateAdd(varSpBase, 23, "Days"), Hex: "#5C8A1E"},
+                                  {Id: 9, Title: "First week event", StartDate: DateAdd(varSpBase, 2, "Days"), EndDate: DateAdd(varSpBase, 4, "Days"), Hex: "#0B78B8"},
+                                  {Id: 10, Title: "Crosses into next month", StartDate: DateAdd(varSpBase, 27, "Days"), EndDate: DateAdd(varSpBase, 34, "Days"), Hex: "#5B6770"},
+                                  {Id: 11, Title: "Last month event", StartDate: DateAdd(varSpBase, -6, "Days"), EndDate: DateAdd(varSpBase, -2, "Days"), Hex: "#1F6B57"},
+                                  {Id: 12, Title: "Next month course", StartDate: DateAdd(varSpBase, 40, "Days"), EndDate: DateAdd(varSpBase, 43, "Days"), Hex: "#2B4C8C"},
+                                  {Id: 13, Title: "Three week event", StartDate: DateAdd(varSpBase, 45, "Days"), EndDate: DateAdd(varSpBase, 65, "Days"), Hex: "#B8860B"},
+                                  {Id: 14, Title: "Two months away", StartDate: DateAdd(varSpBase, 75, "Days"), EndDate: DateAdd(varSpBase, 77, "Days"), Hex: "#C2410C"}
+                              )
+                          );
+                          Set(varSpStart, DateAdd(varSpFocus, -(Weekday(varSpFocus, StartOfWeek.Monday) - 1), "Days"));
+                          ClearCollect(
+                              colSpanBars,
+                              Ungroup(
+                                  ForAll(
+                                      Sequence(6) As w,
+                                      With(
+                                          {ws: DateAdd(varSpStart, (w.Value - 1) * 7, "Days")},
+                                          With(
+                                              {we: DateAdd(ws, 6, "Days")},
+                                              ForAll(
+                                                  Filter(colSpanEv, StartDate &lt;= we &amp;&amp; EndDate &gt;= ws) As e,
+                                                  {
+                                                      Week: w.Value,
+                                                      Col: DateDiff(ws, If(e.StartDate &lt; ws, ws, e.StartDate), "Days") + 1,
+                                                      Span: DateDiff(If(e.StartDate &lt; ws, ws, e.StartDate), If(e.EndDate &gt; we, we, e.EndDate), "Days") + 1,
+                                                      Title: e.Title,
+                                                      Hex: e.Hex,
+                                                      ContL: e.StartDate &lt; ws,
+                                                      ContR: e.EndDate &gt; we,
+                                                      Row: CountRows(Filter(colSpanEv, StartDate &lt;= we &amp;&amp; EndDate &gt;= ws &amp;&amp; Id &lt; e.Id))
+                                                  }
+                                              )
+                                          )
+                                      )
+                                  ),
+                                  Value
                               )
                           )
                         PressedColor: =RGBA(255, 255, 255, 1)
@@ -11428,7 +11672,7 @@ ClearCollect(colList, Filter(colVisible, false))
                       Control: ModernText@1.0.0
                       Properties:
                         Align: =Align.Right
-                        Color: =RGBA(94, 107, 123, 1)
+                        Color: =If(Month(DateAdd(varSpStart, 0, "Days")) &lt;&gt; Month(varSpFocus), RGBA(170, 160, 168, 1), RGBA(94, 107, 123, 1))
                         Fill: =RGBA(0, 0, 0, 0)
                         Height: =16
                         PaddingBottom: =0
@@ -11460,7 +11704,7 @@ ClearCollect(colList, Filter(colVisible, false))
                       Control: ModernText@1.0.0
                       Properties:
                         Align: =Align.Right
-                        Color: =RGBA(94, 107, 123, 1)
+                        Color: =If(Month(DateAdd(varSpStart, 1, "Days")) &lt;&gt; Month(varSpFocus), RGBA(170, 160, 168, 1), RGBA(94, 107, 123, 1))
                         Fill: =RGBA(0, 0, 0, 0)
                         Height: =16
                         PaddingBottom: =0
@@ -11492,7 +11736,7 @@ ClearCollect(colList, Filter(colVisible, false))
                       Control: ModernText@1.0.0
                       Properties:
                         Align: =Align.Right
-                        Color: =RGBA(94, 107, 123, 1)
+                        Color: =If(Month(DateAdd(varSpStart, 2, "Days")) &lt;&gt; Month(varSpFocus), RGBA(170, 160, 168, 1), RGBA(94, 107, 123, 1))
                         Fill: =RGBA(0, 0, 0, 0)
                         Height: =16
                         PaddingBottom: =0
@@ -11524,7 +11768,7 @@ ClearCollect(colList, Filter(colVisible, false))
                       Control: ModernText@1.0.0
                       Properties:
                         Align: =Align.Right
-                        Color: =RGBA(94, 107, 123, 1)
+                        Color: =If(Month(DateAdd(varSpStart, 3, "Days")) &lt;&gt; Month(varSpFocus), RGBA(170, 160, 168, 1), RGBA(94, 107, 123, 1))
                         Fill: =RGBA(0, 0, 0, 0)
                         Height: =16
                         PaddingBottom: =0
@@ -11556,7 +11800,7 @@ ClearCollect(colList, Filter(colVisible, false))
                       Control: ModernText@1.0.0
                       Properties:
                         Align: =Align.Right
-                        Color: =RGBA(94, 107, 123, 1)
+                        Color: =If(Month(DateAdd(varSpStart, 4, "Days")) &lt;&gt; Month(varSpFocus), RGBA(170, 160, 168, 1), RGBA(94, 107, 123, 1))
                         Fill: =RGBA(0, 0, 0, 0)
                         Height: =16
                         PaddingBottom: =0
@@ -11588,7 +11832,7 @@ ClearCollect(colList, Filter(colVisible, false))
                       Control: ModernText@1.0.0
                       Properties:
                         Align: =Align.Right
-                        Color: =RGBA(94, 107, 123, 1)
+                        Color: =If(Month(DateAdd(varSpStart, 5, "Days")) &lt;&gt; Month(varSpFocus), RGBA(170, 160, 168, 1), RGBA(94, 107, 123, 1))
                         Fill: =RGBA(0, 0, 0, 0)
                         Height: =16
                         PaddingBottom: =0
@@ -11620,7 +11864,7 @@ ClearCollect(colList, Filter(colVisible, false))
                       Control: ModernText@1.0.0
                       Properties:
                         Align: =Align.Right
-                        Color: =RGBA(94, 107, 123, 1)
+                        Color: =If(Month(DateAdd(varSpStart, 6, "Days")) &lt;&gt; Month(varSpFocus), RGBA(170, 160, 168, 1), RGBA(94, 107, 123, 1))
                         Fill: =RGBA(0, 0, 0, 0)
                         Height: =16
                         PaddingBottom: =0
@@ -11712,7 +11956,7 @@ ClearCollect(colList, Filter(colVisible, false))
                       Control: ModernText@1.0.0
                       Properties:
                         Align: =Align.Right
-                        Color: =RGBA(94, 107, 123, 1)
+                        Color: =If(Month(DateAdd(varSpStart, 7, "Days")) &lt;&gt; Month(varSpFocus), RGBA(170, 160, 168, 1), RGBA(94, 107, 123, 1))
                         Fill: =RGBA(0, 0, 0, 0)
                         Height: =16
                         PaddingBottom: =0
@@ -11744,7 +11988,7 @@ ClearCollect(colList, Filter(colVisible, false))
                       Control: ModernText@1.0.0
                       Properties:
                         Align: =Align.Right
-                        Color: =RGBA(94, 107, 123, 1)
+                        Color: =If(Month(DateAdd(varSpStart, 8, "Days")) &lt;&gt; Month(varSpFocus), RGBA(170, 160, 168, 1), RGBA(94, 107, 123, 1))
                         Fill: =RGBA(0, 0, 0, 0)
                         Height: =16
                         PaddingBottom: =0
@@ -11776,7 +12020,7 @@ ClearCollect(colList, Filter(colVisible, false))
                       Control: ModernText@1.0.0
                       Properties:
                         Align: =Align.Right
-                        Color: =RGBA(94, 107, 123, 1)
+                        Color: =If(Month(DateAdd(varSpStart, 9, "Days")) &lt;&gt; Month(varSpFocus), RGBA(170, 160, 168, 1), RGBA(94, 107, 123, 1))
                         Fill: =RGBA(0, 0, 0, 0)
                         Height: =16
                         PaddingBottom: =0
@@ -11808,7 +12052,7 @@ ClearCollect(colList, Filter(colVisible, false))
                       Control: ModernText@1.0.0
                       Properties:
                         Align: =Align.Right
-                        Color: =RGBA(94, 107, 123, 1)
+                        Color: =If(Month(DateAdd(varSpStart, 10, "Days")) &lt;&gt; Month(varSpFocus), RGBA(170, 160, 168, 1), RGBA(94, 107, 123, 1))
                         Fill: =RGBA(0, 0, 0, 0)
                         Height: =16
                         PaddingBottom: =0
@@ -11840,7 +12084,7 @@ ClearCollect(colList, Filter(colVisible, false))
                       Control: ModernText@1.0.0
                       Properties:
                         Align: =Align.Right
-                        Color: =RGBA(94, 107, 123, 1)
+                        Color: =If(Month(DateAdd(varSpStart, 11, "Days")) &lt;&gt; Month(varSpFocus), RGBA(170, 160, 168, 1), RGBA(94, 107, 123, 1))
                         Fill: =RGBA(0, 0, 0, 0)
                         Height: =16
                         PaddingBottom: =0
@@ -11872,7 +12116,7 @@ ClearCollect(colList, Filter(colVisible, false))
                       Control: ModernText@1.0.0
                       Properties:
                         Align: =Align.Right
-                        Color: =RGBA(94, 107, 123, 1)
+                        Color: =If(Month(DateAdd(varSpStart, 12, "Days")) &lt;&gt; Month(varSpFocus), RGBA(170, 160, 168, 1), RGBA(94, 107, 123, 1))
                         Fill: =RGBA(0, 0, 0, 0)
                         Height: =16
                         PaddingBottom: =0
@@ -11904,7 +12148,7 @@ ClearCollect(colList, Filter(colVisible, false))
                       Control: ModernText@1.0.0
                       Properties:
                         Align: =Align.Right
-                        Color: =RGBA(94, 107, 123, 1)
+                        Color: =If(Month(DateAdd(varSpStart, 13, "Days")) &lt;&gt; Month(varSpFocus), RGBA(170, 160, 168, 1), RGBA(94, 107, 123, 1))
                         Fill: =RGBA(0, 0, 0, 0)
                         Height: =16
                         PaddingBottom: =0
@@ -11996,7 +12240,7 @@ ClearCollect(colList, Filter(colVisible, false))
                       Control: ModernText@1.0.0
                       Properties:
                         Align: =Align.Right
-                        Color: =RGBA(94, 107, 123, 1)
+                        Color: =If(Month(DateAdd(varSpStart, 14, "Days")) &lt;&gt; Month(varSpFocus), RGBA(170, 160, 168, 1), RGBA(94, 107, 123, 1))
                         Fill: =RGBA(0, 0, 0, 0)
                         Height: =16
                         PaddingBottom: =0
@@ -12028,7 +12272,7 @@ ClearCollect(colList, Filter(colVisible, false))
                       Control: ModernText@1.0.0
                       Properties:
                         Align: =Align.Right
-                        Color: =RGBA(94, 107, 123, 1)
+                        Color: =If(Month(DateAdd(varSpStart, 15, "Days")) &lt;&gt; Month(varSpFocus), RGBA(170, 160, 168, 1), RGBA(94, 107, 123, 1))
                         Fill: =RGBA(0, 0, 0, 0)
                         Height: =16
                         PaddingBottom: =0
@@ -12060,7 +12304,7 @@ ClearCollect(colList, Filter(colVisible, false))
                       Control: ModernText@1.0.0
                       Properties:
                         Align: =Align.Right
-                        Color: =RGBA(94, 107, 123, 1)
+                        Color: =If(Month(DateAdd(varSpStart, 16, "Days")) &lt;&gt; Month(varSpFocus), RGBA(170, 160, 168, 1), RGBA(94, 107, 123, 1))
                         Fill: =RGBA(0, 0, 0, 0)
                         Height: =16
                         PaddingBottom: =0
@@ -12092,7 +12336,7 @@ ClearCollect(colList, Filter(colVisible, false))
                       Control: ModernText@1.0.0
                       Properties:
                         Align: =Align.Right
-                        Color: =RGBA(94, 107, 123, 1)
+                        Color: =If(Month(DateAdd(varSpStart, 17, "Days")) &lt;&gt; Month(varSpFocus), RGBA(170, 160, 168, 1), RGBA(94, 107, 123, 1))
                         Fill: =RGBA(0, 0, 0, 0)
                         Height: =16
                         PaddingBottom: =0
@@ -12124,7 +12368,7 @@ ClearCollect(colList, Filter(colVisible, false))
                       Control: ModernText@1.0.0
                       Properties:
                         Align: =Align.Right
-                        Color: =RGBA(94, 107, 123, 1)
+                        Color: =If(Month(DateAdd(varSpStart, 18, "Days")) &lt;&gt; Month(varSpFocus), RGBA(170, 160, 168, 1), RGBA(94, 107, 123, 1))
                         Fill: =RGBA(0, 0, 0, 0)
                         Height: =16
                         PaddingBottom: =0
@@ -12156,7 +12400,7 @@ ClearCollect(colList, Filter(colVisible, false))
                       Control: ModernText@1.0.0
                       Properties:
                         Align: =Align.Right
-                        Color: =RGBA(94, 107, 123, 1)
+                        Color: =If(Month(DateAdd(varSpStart, 19, "Days")) &lt;&gt; Month(varSpFocus), RGBA(170, 160, 168, 1), RGBA(94, 107, 123, 1))
                         Fill: =RGBA(0, 0, 0, 0)
                         Height: =16
                         PaddingBottom: =0
@@ -12188,7 +12432,7 @@ ClearCollect(colList, Filter(colVisible, false))
                       Control: ModernText@1.0.0
                       Properties:
                         Align: =Align.Right
-                        Color: =RGBA(94, 107, 123, 1)
+                        Color: =If(Month(DateAdd(varSpStart, 20, "Days")) &lt;&gt; Month(varSpFocus), RGBA(170, 160, 168, 1), RGBA(94, 107, 123, 1))
                         Fill: =RGBA(0, 0, 0, 0)
                         Height: =16
                         PaddingBottom: =0
@@ -12280,7 +12524,7 @@ ClearCollect(colList, Filter(colVisible, false))
                       Control: ModernText@1.0.0
                       Properties:
                         Align: =Align.Right
-                        Color: =RGBA(94, 107, 123, 1)
+                        Color: =If(Month(DateAdd(varSpStart, 21, "Days")) &lt;&gt; Month(varSpFocus), RGBA(170, 160, 168, 1), RGBA(94, 107, 123, 1))
                         Fill: =RGBA(0, 0, 0, 0)
                         Height: =16
                         PaddingBottom: =0
@@ -12312,7 +12556,7 @@ ClearCollect(colList, Filter(colVisible, false))
                       Control: ModernText@1.0.0
                       Properties:
                         Align: =Align.Right
-                        Color: =RGBA(94, 107, 123, 1)
+                        Color: =If(Month(DateAdd(varSpStart, 22, "Days")) &lt;&gt; Month(varSpFocus), RGBA(170, 160, 168, 1), RGBA(94, 107, 123, 1))
                         Fill: =RGBA(0, 0, 0, 0)
                         Height: =16
                         PaddingBottom: =0
@@ -12344,7 +12588,7 @@ ClearCollect(colList, Filter(colVisible, false))
                       Control: ModernText@1.0.0
                       Properties:
                         Align: =Align.Right
-                        Color: =RGBA(94, 107, 123, 1)
+                        Color: =If(Month(DateAdd(varSpStart, 23, "Days")) &lt;&gt; Month(varSpFocus), RGBA(170, 160, 168, 1), RGBA(94, 107, 123, 1))
                         Fill: =RGBA(0, 0, 0, 0)
                         Height: =16
                         PaddingBottom: =0
@@ -12376,7 +12620,7 @@ ClearCollect(colList, Filter(colVisible, false))
                       Control: ModernText@1.0.0
                       Properties:
                         Align: =Align.Right
-                        Color: =RGBA(94, 107, 123, 1)
+                        Color: =If(Month(DateAdd(varSpStart, 24, "Days")) &lt;&gt; Month(varSpFocus), RGBA(170, 160, 168, 1), RGBA(94, 107, 123, 1))
                         Fill: =RGBA(0, 0, 0, 0)
                         Height: =16
                         PaddingBottom: =0
@@ -12408,7 +12652,7 @@ ClearCollect(colList, Filter(colVisible, false))
                       Control: ModernText@1.0.0
                       Properties:
                         Align: =Align.Right
-                        Color: =RGBA(94, 107, 123, 1)
+                        Color: =If(Month(DateAdd(varSpStart, 25, "Days")) &lt;&gt; Month(varSpFocus), RGBA(170, 160, 168, 1), RGBA(94, 107, 123, 1))
                         Fill: =RGBA(0, 0, 0, 0)
                         Height: =16
                         PaddingBottom: =0
@@ -12440,7 +12684,7 @@ ClearCollect(colList, Filter(colVisible, false))
                       Control: ModernText@1.0.0
                       Properties:
                         Align: =Align.Right
-                        Color: =RGBA(94, 107, 123, 1)
+                        Color: =If(Month(DateAdd(varSpStart, 26, "Days")) &lt;&gt; Month(varSpFocus), RGBA(170, 160, 168, 1), RGBA(94, 107, 123, 1))
                         Fill: =RGBA(0, 0, 0, 0)
                         Height: =16
                         PaddingBottom: =0
@@ -12472,7 +12716,7 @@ ClearCollect(colList, Filter(colVisible, false))
                       Control: ModernText@1.0.0
                       Properties:
                         Align: =Align.Right
-                        Color: =RGBA(94, 107, 123, 1)
+                        Color: =If(Month(DateAdd(varSpStart, 27, "Days")) &lt;&gt; Month(varSpFocus), RGBA(170, 160, 168, 1), RGBA(94, 107, 123, 1))
                         Fill: =RGBA(0, 0, 0, 0)
                         Height: =16
                         PaddingBottom: =0
@@ -12564,7 +12808,7 @@ ClearCollect(colList, Filter(colVisible, false))
                       Control: ModernText@1.0.0
                       Properties:
                         Align: =Align.Right
-                        Color: =RGBA(94, 107, 123, 1)
+                        Color: =If(Month(DateAdd(varSpStart, 28, "Days")) &lt;&gt; Month(varSpFocus), RGBA(170, 160, 168, 1), RGBA(94, 107, 123, 1))
                         Fill: =RGBA(0, 0, 0, 0)
                         Height: =16
                         PaddingBottom: =0
@@ -12596,7 +12840,7 @@ ClearCollect(colList, Filter(colVisible, false))
                       Control: ModernText@1.0.0
                       Properties:
                         Align: =Align.Right
-                        Color: =RGBA(94, 107, 123, 1)
+                        Color: =If(Month(DateAdd(varSpStart, 29, "Days")) &lt;&gt; Month(varSpFocus), RGBA(170, 160, 168, 1), RGBA(94, 107, 123, 1))
                         Fill: =RGBA(0, 0, 0, 0)
                         Height: =16
                         PaddingBottom: =0
@@ -12628,7 +12872,7 @@ ClearCollect(colList, Filter(colVisible, false))
                       Control: ModernText@1.0.0
                       Properties:
                         Align: =Align.Right
-                        Color: =RGBA(94, 107, 123, 1)
+                        Color: =If(Month(DateAdd(varSpStart, 30, "Days")) &lt;&gt; Month(varSpFocus), RGBA(170, 160, 168, 1), RGBA(94, 107, 123, 1))
                         Fill: =RGBA(0, 0, 0, 0)
                         Height: =16
                         PaddingBottom: =0
@@ -12660,7 +12904,7 @@ ClearCollect(colList, Filter(colVisible, false))
                       Control: ModernText@1.0.0
                       Properties:
                         Align: =Align.Right
-                        Color: =RGBA(94, 107, 123, 1)
+                        Color: =If(Month(DateAdd(varSpStart, 31, "Days")) &lt;&gt; Month(varSpFocus), RGBA(170, 160, 168, 1), RGBA(94, 107, 123, 1))
                         Fill: =RGBA(0, 0, 0, 0)
                         Height: =16
                         PaddingBottom: =0
@@ -12692,7 +12936,7 @@ ClearCollect(colList, Filter(colVisible, false))
                       Control: ModernText@1.0.0
                       Properties:
                         Align: =Align.Right
-                        Color: =RGBA(94, 107, 123, 1)
+                        Color: =If(Month(DateAdd(varSpStart, 32, "Days")) &lt;&gt; Month(varSpFocus), RGBA(170, 160, 168, 1), RGBA(94, 107, 123, 1))
                         Fill: =RGBA(0, 0, 0, 0)
                         Height: =16
                         PaddingBottom: =0
@@ -12724,7 +12968,7 @@ ClearCollect(colList, Filter(colVisible, false))
                       Control: ModernText@1.0.0
                       Properties:
                         Align: =Align.Right
-                        Color: =RGBA(94, 107, 123, 1)
+                        Color: =If(Month(DateAdd(varSpStart, 33, "Days")) &lt;&gt; Month(varSpFocus), RGBA(170, 160, 168, 1), RGBA(94, 107, 123, 1))
                         Fill: =RGBA(0, 0, 0, 0)
                         Height: =16
                         PaddingBottom: =0
@@ -12756,7 +13000,7 @@ ClearCollect(colList, Filter(colVisible, false))
                       Control: ModernText@1.0.0
                       Properties:
                         Align: =Align.Right
-                        Color: =RGBA(94, 107, 123, 1)
+                        Color: =If(Month(DateAdd(varSpStart, 34, "Days")) &lt;&gt; Month(varSpFocus), RGBA(170, 160, 168, 1), RGBA(94, 107, 123, 1))
                         Fill: =RGBA(0, 0, 0, 0)
                         Height: =16
                         PaddingBottom: =0
@@ -12848,7 +13092,7 @@ ClearCollect(colList, Filter(colVisible, false))
                       Control: ModernText@1.0.0
                       Properties:
                         Align: =Align.Right
-                        Color: =RGBA(94, 107, 123, 1)
+                        Color: =If(Month(DateAdd(varSpStart, 35, "Days")) &lt;&gt; Month(varSpFocus), RGBA(170, 160, 168, 1), RGBA(94, 107, 123, 1))
                         Fill: =RGBA(0, 0, 0, 0)
                         Height: =16
                         PaddingBottom: =0
@@ -12880,7 +13124,7 @@ ClearCollect(colList, Filter(colVisible, false))
                       Control: ModernText@1.0.0
                       Properties:
                         Align: =Align.Right
-                        Color: =RGBA(94, 107, 123, 1)
+                        Color: =If(Month(DateAdd(varSpStart, 36, "Days")) &lt;&gt; Month(varSpFocus), RGBA(170, 160, 168, 1), RGBA(94, 107, 123, 1))
                         Fill: =RGBA(0, 0, 0, 0)
                         Height: =16
                         PaddingBottom: =0
@@ -12912,7 +13156,7 @@ ClearCollect(colList, Filter(colVisible, false))
                       Control: ModernText@1.0.0
                       Properties:
                         Align: =Align.Right
-                        Color: =RGBA(94, 107, 123, 1)
+                        Color: =If(Month(DateAdd(varSpStart, 37, "Days")) &lt;&gt; Month(varSpFocus), RGBA(170, 160, 168, 1), RGBA(94, 107, 123, 1))
                         Fill: =RGBA(0, 0, 0, 0)
                         Height: =16
                         PaddingBottom: =0
@@ -12944,7 +13188,7 @@ ClearCollect(colList, Filter(colVisible, false))
                       Control: ModernText@1.0.0
                       Properties:
                         Align: =Align.Right
-                        Color: =RGBA(94, 107, 123, 1)
+                        Color: =If(Month(DateAdd(varSpStart, 38, "Days")) &lt;&gt; Month(varSpFocus), RGBA(170, 160, 168, 1), RGBA(94, 107, 123, 1))
                         Fill: =RGBA(0, 0, 0, 0)
                         Height: =16
                         PaddingBottom: =0
@@ -12976,7 +13220,7 @@ ClearCollect(colList, Filter(colVisible, false))
                       Control: ModernText@1.0.0
                       Properties:
                         Align: =Align.Right
-                        Color: =RGBA(94, 107, 123, 1)
+                        Color: =If(Month(DateAdd(varSpStart, 39, "Days")) &lt;&gt; Month(varSpFocus), RGBA(170, 160, 168, 1), RGBA(94, 107, 123, 1))
                         Fill: =RGBA(0, 0, 0, 0)
                         Height: =16
                         PaddingBottom: =0
@@ -13008,7 +13252,7 @@ ClearCollect(colList, Filter(colVisible, false))
                       Control: ModernText@1.0.0
                       Properties:
                         Align: =Align.Right
-                        Color: =RGBA(94, 107, 123, 1)
+                        Color: =If(Month(DateAdd(varSpStart, 40, "Days")) &lt;&gt; Month(varSpFocus), RGBA(170, 160, 168, 1), RGBA(94, 107, 123, 1))
                         Fill: =RGBA(0, 0, 0, 0)
                         Height: =16
                         PaddingBottom: =0
@@ -13040,7 +13284,7 @@ ClearCollect(colList, Filter(colVisible, false))
                       Control: ModernText@1.0.0
                       Properties:
                         Align: =Align.Right
-                        Color: =RGBA(94, 107, 123, 1)
+                        Color: =If(Month(DateAdd(varSpStart, 41, "Days")) &lt;&gt; Month(varSpFocus), RGBA(170, 160, 168, 1), RGBA(94, 107, 123, 1))
                         Fill: =RGBA(0, 0, 0, 0)
                         Height: =16
                         PaddingBottom: =0
@@ -13109,7 +13353,7 @@ ClearCollect(colList, Filter(colVisible, false))
                   PaddingBottom: =0
                   PaddingTop: =0
                   Size: =10
-                  Text: '="What to check: each event is ONE unbroken strip across its days. A strip that continues into the next week starts square with &lt; and ends square with &gt;. Only the first three bars per week show; the rest say how many are hidden. Bars in a week are stacked in order, so two short events on different days still use two rows (a known limit of this test)."'
+                  Text: '="What to check: use the arrows or the month box to change month. Each event stays ONE unbroken strip across its days, including across the month boundary and week to week. A strip that continues starts or ends square with &lt; or &gt;. Days outside the chosen month are greyed. Only the first three bars per week show; the rest say how many are hidden."'
                   Width: =Parent.Width - 32
                   X: =16
                   Y: =Parent.Height - 42
