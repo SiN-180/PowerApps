@@ -2081,7 +2081,7 @@ Set(varLightboxGroupID, 0)</pre>
           <div class="code-toolbar">
             <div class="code-meta">
               <span>Screen - scrManageGroups</span>
-              <span class="code-stamp" data-updated="2026-11-24T12:26:30Z">v2.50 &middot; 24/11/2026 12:26 GMT</span>
+              <span class="code-stamp" data-updated="2026-11-25T02:50:31Z">v2.50 &middot; 25/11/2026 02:50 GMT</span>
             </div>
             <button data-copy="bcg-manage" data-crlf="true" type="button">Copy</button>
           </div>
@@ -2282,7 +2282,7 @@ Set(varLightboxGroupID, 0)</pre>
               =ClearCollect(
                   colHealthChecks,
                   Table(
-                      {Severity: If(CountRows(Filter(colMemberships, IsBlank(Trim(Name)))) = 0, "OK", "Fix"), Issue: "Blank Name values", Detail: CountRows(Filter(colMemberships, IsBlank(Trim(Name)))) &amp; " membership row(s) have blank Name. Backfill Name from Title before using v2.34 screens."},
+                      {Severity: If(CountRows(Filter(colMemberships, IsBlank(Trim(Name)))) = 0, "OK", "Fix"), Issue: "Blank Name values", Detail: CountRows(Filter(colMemberships, IsBlank(Trim(Name)))) &amp; " membership row(s) have blank Name. Backfill Name from Title before using these screens."},
                       {Severity: If(CountRows(Filter(colMemberships, IsBlank(Trim(Email)) || !IsMatch(Email, Match.Email))) = 0, "OK", "Fix"), Issue: "Blank or invalid email addresses", Detail: CountRows(Filter(colMemberships, IsBlank(Trim(Email)) || !IsMatch(Email, Match.Email))) &amp; " membership row(s) have a blank or invalid email."},
                       {Severity: If(CountRows(Filter(colMemberships As mem, CountRows(Filter(colGroups As grp, Lower(Trim(grp.Title)) = Lower(Trim(mem.GroupName)))) = 0)) = 0, "OK", "Fix"), Issue: "Memberships pointing at missing groups", Detail: CountRows(Filter(colMemberships As mem, CountRows(Filter(colGroups As grp, Lower(Trim(grp.Title)) = Lower(Trim(mem.GroupName)))) = 0)) &amp; " row(s) have a GroupName that does not match any current group title."}
                   )
