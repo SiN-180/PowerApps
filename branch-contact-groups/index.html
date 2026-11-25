@@ -285,7 +285,7 @@
 
       <div class="topline">
         <span class="pill">v2.50</span>
-        <span class="pill">Last build 25/11/2026 11:42 GMT</span>
+        <span class="pill">Last build 25/11/2026 12:45 GMT</span>
       </div>
       <h1>Branch Contact Groups</h1>
       <div class="replace-all">
@@ -2097,11 +2097,11 @@ Set(varLightboxGroupID, 0)</pre>
           <div class="code-toolbar">
             <div class="code-meta">
               <span>Screen - scrManageGroups</span>
-              <span class="code-stamp" data-updated="2026-11-25T11:42:35Z">25/11/2026 11:42 GMT <span class="code-age"></span></span><span class="code-stamp">Replace all of it</span>
+              <span class="code-stamp" data-updated="2026-11-25T12:45:50Z">25/11/2026 12:45 GMT <span class="code-age"></span></span><span class="code-stamp">Replace all of it</span>
             </div>
             <button data-copy="bcg-manage" data-crlf="true" type="button">Copy</button>
           </div>
-          <details class="code"><summary>Show the code (2,395 lines)</summary>
+          <details class="code"><summary>Show the code (2,478 lines)</summary>
 <pre id="bcg-manage">Screens:
   scrManageGroups:
     Properties:
@@ -2110,6 +2110,7 @@ Set(varLightboxGroupID, 0)</pre>
         =If(
             !varIsMaintainer,
             Back(),
+            Set(varPasteFormat, "csv");
             Set(varRenameBusy, false);
             Set(varRenameTimerOn, false);
             Set(varRenameTotal, 0);
@@ -3193,7 +3194,7 @@ Set(varLightboxGroupID, 0)</pre>
       - btnLbTabPaste:
           Control: ModernButton@1.0.0
           Properties:
-            Text: ="Replace all (paste)"
+            Text: ="Replace all (CSV / Outlook)"
             Visible: =varShowLightbox &amp;&amp; varLightboxMode = "manage"
             BasePaletteColor: =If(varManageSubTab = "paste", RGBA(0,78,66,1), RGBA(46,110,145,1))
             OnSelect: =Set(varManageSubTab, "paste")
@@ -4168,10 +4169,46 @@ Set(varLightboxGroupID, 0)</pre>
             Y: =If(varShowMemberEditDialog, 442, 464)
             Width: =If(varShowMemberEditDialog, 250, 420)
             Height: =48
+      - btnPasteFmtCsv:
+          Control: ModernButton@1.0.0
+          Properties:
+            Text: ="From CSV / Excel"
+            Visible: =varShowLightbox &amp;&amp; varLightboxMode = "manage" &amp;&amp; varManageSubTab = "paste"
+            BasePaletteColor: =If(varPasteFormat = "csv", RGBA(0,78,66,1), RGBA(46,110,145,1))
+            OnSelect: |-
+              =Set(varPasteFormat, "csv");
+              Reset(txtPasteRoster);
+              Clear(colParsedRoster);
+              Clear(colParsedRosterValid);
+              Set(varParsedRosterCount, 0);
+              Set(varParsedRosterSkipped, 0);
+              Set(varConfirmReplaceArmed, false)
+            X: =713
+            Y: =172
+            Width: =230
+            Height: =32
+      - btnPasteFmtOutlook:
+          Control: ModernButton@1.0.0
+          Properties:
+            Text: ="From Outlook"
+            Visible: =varShowLightbox &amp;&amp; varLightboxMode = "manage" &amp;&amp; varManageSubTab = "paste"
+            BasePaletteColor: =If(varPasteFormat = "outlook", RGBA(0,78,66,1), RGBA(46,110,145,1))
+            OnSelect: |-
+              =Set(varPasteFormat, "outlook");
+              Reset(txtPasteRoster);
+              Clear(colParsedRoster);
+              Clear(colParsedRosterValid);
+              Set(varParsedRosterCount, 0);
+              Set(varParsedRosterSkipped, 0);
+              Set(varConfirmReplaceArmed, false)
+            X: =953
+            Y: =172
+            Width: =230
+            Height: =32
       - lblPasteHeading:
           Control: Label@2.5.1
           Properties:
-            Text: ="Replace entire membership (paste from Excel/CSV)"
+            Text: =If(varPasteFormat = "outlook", "Replace everything - from an Outlook list", "Replace everything - from a CSV / Excel sheet")
             Visible: =varShowLightbox &amp;&amp; varLightboxMode = "manage" &amp;&amp; varManageSubTab = "paste"
             Color: =RGBA(31,58,95,1)
             FontWeight: =FontWeight.Bold
@@ -4179,13 +4216,17 @@ Set(varLightboxGroupID, 0)</pre>
             Font: =Font.'Open Sans'
             X: =183
             Y: =176
-            Width: =1000
+            Width: =520
             Height: =24
       - lblPasteHint:
           Control: Label@2.5.1
           Properties:
             Text: |-
-              ="For the weekly refresh: select the roster in Excel (two columns, Name then Email), copy, and paste below. This replaces every current member of this group in one go."
+              =If(
+                  varPasteFormat = "outlook",
+                  "Paste the group as copied from Outlook: names and email addresses separated by semicolons or new lines. Lines ending in a colon (like NAL:) are ignored, so paste one group at a time. This replaces every current member of this group in one go.",
+                  "For the weekly refresh: select the roster in Excel (two columns, Name then Email), copy, and paste below. This replaces every current member of this group in one go."
+              )
             Visible: =varShowLightbox &amp;&amp; varLightboxMode = "manage" &amp;&amp; varManageSubTab = "paste"
             Color: =RGBA(120,120,120,1)
             Size: =12
@@ -4197,7 +4238,7 @@ Set(varLightboxGroupID, 0)</pre>
       - txtPasteRoster:
           Control: Classic/TextInput@2.3.2
           Properties:
-            HintText: ="Paste rows here - either the standard sheet (Bde/Area, County/District, Rank, First Name, Surname, Appointment, Email) or just Name (Tab) Email, one person per line"
+            HintText: =If(varPasteFormat = "outlook", "Paste the Outlook list here, like Name email; Name email; Name email", "Paste rows here - either the standard sheet (Bde/Area, County/District, Rank, First Name, Surname, Appointment, Email) or just Name (Tab) Email, one person per line")
             Mode: =TextMode.MultiLine
             BorderColor: =RGBA(0,18,107,1)
             Font: =Font.'Open Sans'
@@ -4206,6 +4247,32 @@ Set(varLightboxGroupID, 0)</pre>
             Visible: =varShowLightbox &amp;&amp; varLightboxMode = "manage" &amp;&amp; varManageSubTab = "paste"
             OnChange: |-
               =Set(varRosterLines, Filter(Split(txtPasteRoster.Text, Char(10)), Trim(Value) &lt;&gt; ""));
+              If(
+                  varPasteFormat = "outlook",
+                  ClearCollect(
+                      colParsedRoster,
+                      ForAll(
+                          Ungroup(
+                              ForAll(
+                                  Filter(
+                                      ForAll(Split(Substitute(Substitute(txtPasteRoster.Text, Char(13), ""), Char(160), " "), Char(10)) As raw, {Line: Trim(raw.Value)}),
+                                      !IsBlank(Line) &amp;&amp; !(Right(Line, 1) = ":" &amp;&amp; !("@" in Line) &amp;&amp; Len(Line) &lt;= 40)
+                                  ) As ln,
+                                  {Segs: Filter(Split(ln.Line, ";"), !IsBlank(Trim(Value)))}
+                              ),
+                              Segs
+                          ) As sg,
+                          With(
+                              {seg: Trim(sg.Value), em: Last(MatchAll(Trim(sg.Value), "[A-Za-z0-9._%+'\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}")).FullMatch},
+                              {
+                                  Name: If(IsBlank(em), seg, Coalesce(Trim(Substitute(Substitute(Substitute(Substitute(seg, em, ""), "&lt;&gt;", ""), "()", ""), Char(34), "")), em)),
+                                  Email: Lower(em),
+                                  JMC: "",
+                                  County: ""
+                              }
+                          )
+                      )
+                  ),
               ClearCollect(colParsedRoster,
                   ForAll(
                       varRosterLines,
@@ -4234,10 +4301,26 @@ Set(varLightboxGroupID, 0)</pre>
                           )
                       )
                   )
+              )
               );
-              ClearCollect(colParsedRosterValid, Filter(colParsedRoster, IsMatch(Email, Match.Email)));
+              ClearCollect(
+                  colParsedRosterValid,
+                  If(
+                      varPasteFormat = "outlook",
+                      DropColumns(
+                          AddColumns(
+                              GroupBy(Filter(colParsedRoster, IsMatch(Email, Match.Email)), Email, Rows),
+                              Name, First(Rows).Name,
+                              JMC, First(Rows).JMC,
+                              County, First(Rows).County
+                          ),
+                          Rows
+                      ),
+                      Filter(colParsedRoster, IsMatch(Email, Match.Email))
+                  )
+              );
               Set(varParsedRosterCount, CountRows(colParsedRosterValid));
-              Set(varParsedRosterSkipped, CountRows(colParsedRoster) - varParsedRosterCount);
+              Set(varParsedRosterSkipped, CountRows(Filter(colParsedRoster, !IsMatch(Email, Match.Email))));
               Set(varPasteCurrentCount, With({groupTitle: LookUp(colGroups, ID = varManageGroupID).Title}, CountRows(Filter(colMemberships, Lower(Trim(GroupName)) = Lower(Trim(groupTitle))))));
               Set(varPasteAddCount, With({groupTitle: LookUp(colGroups, ID = varManageGroupID).Title}, CountRows(Filter(colParsedRosterValid As pr, CountRows(Filter(colMemberships As mem, Lower(Trim(mem.GroupName)) = Lower(Trim(groupTitle)) &amp;&amp; Lower(mem.Email) = Lower(pr.Email))) = 0))));
               Set(varPasteRemoveCount, With({groupTitle: LookUp(colGroups, ID = varManageGroupID).Title}, CountRows(Filter(colMemberships As mem, Lower(Trim(mem.GroupName)) = Lower(Trim(groupTitle)) &amp;&amp; CountRows(Filter(colParsedRosterValid As pr, Lower(pr.Email) = Lower(mem.Email))) = 0))));
@@ -4299,7 +4382,7 @@ Set(varLightboxGroupID, 0)</pre>
                   RemoveIf(colMemberships, Lower(Trim(GroupName)) = Lower(Trim(varGroupTitle)));
                   ForAll(colParsedRosterValid, Collect(colMemberships, Patch('BM Memberships', Defaults('BM Memberships'), {Title: Name, Name: Name, Email: Email, GroupName: varGroupTitle, JMC: JMC, 'County/Contingent': County})));
                   Patch('BM Groups', LookUp('BM Groups', ID = varManageGroupID), {Title: varGroupTitle});
-                  Patch('BM History', Defaults('BM History'), {Title: "Bulk replace via paste: " &amp; varOldRosterCount &amp; " removed, " &amp; varParsedRosterCount &amp; " added", GroupName: varGroupTitle, EventType: {Value: "Replaced"}});
+                  Patch('BM History', Defaults('BM History'), {Title: "Bulk replace via " &amp; If(varPasteFormat = "outlook", "Outlook paste", "CSV/Excel paste") &amp; ": " &amp; varOldRosterCount &amp; " removed, " &amp; varParsedRosterCount &amp; " added", GroupName: varGroupTitle, EventType: {Value: "Replaced"}});
                   Reset(txtPasteRoster);
                   Set(varParsedRosterCount, 0);
                   Set(varParsedRosterSkipped, 0);
@@ -4509,11 +4592,11 @@ Set(varLightboxGroupID, 0)</pre>
           <div class="code-toolbar">
             <div class="code-meta">
               <span>Screen - scrImport</span>
-              <span class="code-stamp" data-updated="2026-11-25T11:34:40Z">25/11/2026 11:34 GMT <span class="code-age"></span></span><span class="code-stamp">Replace all of it &mdash; new</span>
+              <span class="code-stamp" data-updated="2026-11-25T12:45:50Z">25/11/2026 12:45 GMT <span class="code-age"></span></span><span class="code-stamp">Replace all of it &mdash; new</span>
             </div>
             <button data-copy="bcg-import" data-crlf="true" type="button">Copy</button>
           </div>
-          <details class="code"><summary>Show the code (1,083 lines)</summary>
+          <details class="code"><summary>Show the code (1,151 lines)</summary>
 <pre id="bcg-import">Screens:
   scrImport:
     Properties:
@@ -4528,7 +4611,8 @@ Set(varLightboxGroupID, 0)</pre>
             ClearCollect(colImpParsed, Filter(Table({Tag: "", Email: "", Name: ""}), false));
             ClearCollect(colImpClean, AddColumns(GroupBy(Filter(colImpParsed, false), Tag, Email, Rows), Name, First(Rows).Name, Dups, CountRows(Rows) - 1));
             ClearCollect(colImpTags, Filter(Table({Tag: "", N: 0}), false));
-            ClearCollect(colImpResults, Filter(Table({Group: "", Before: 0, Added: 0, Updated: 0, Removed: 0}), false))
+            ClearCollect(colImpResults, Filter(Table({Group: "", Before: 0, Added: 0, Updated: 0, Removed: 0}), false));
+            ClearCollect(colImpGroupChoices, ForAll(Sort(colGroups, Title, SortOrder.Ascending), Title))
         )
     Children:
       - recHeader:
@@ -4669,12 +4753,19 @@ Set(varLightboxGroupID, 0)</pre>
               );
               ClearCollect(colImpClean, AddColumns(GroupBy(Filter(colImpParsed, !IsBlank(Email)), Tag, Email, Rows), Name, First(Rows).Name, Dups, CountRows(Rows) - 1));
               ClearCollect(colImpTags, ForAll(Distinct(colImpClean, Tag) As t, {Tag: t.Value, N: CountRows(Filter(colImpClean, Tag = t.Value))}));
+              ClearCollect(colImpGroupChoices, ForAll(Sort(colGroups, Title, SortOrder.Ascending), Title));
               Reset(txtImpTitle1);
+              Reset(ddImpGroup1);
               Reset(txtImpTitle2);
+              Reset(ddImpGroup2);
               Reset(txtImpTitle3);
+              Reset(ddImpGroup3);
               Reset(txtImpTitle4);
+              Reset(ddImpGroup4);
               Reset(txtImpTitle5);
+              Reset(ddImpGroup5);
               Reset(txtImpTitle6);
+              Reset(ddImpGroup6);
               If(CountRows(colImpClean) = 0, Notify("No email addresses were found in that paste.", NotificationType.Warning))
             X: =20
             Y: =470
@@ -4705,11 +4796,17 @@ Set(varLightboxGroupID, 0)</pre>
               Clear(colImpResults);
               Set(varImpArmed, false);
               Reset(txtImpTitle1);
+              Reset(ddImpGroup1);
               Reset(txtImpTitle2);
+              Reset(ddImpGroup2);
               Reset(txtImpTitle3);
+              Reset(ddImpGroup3);
               Reset(txtImpTitle4);
+              Reset(ddImpGroup4);
               Reset(txtImpTitle5);
-              Reset(txtImpTitle6)
+              Reset(ddImpGroup5);
+              Reset(txtImpTitle6);
+              Reset(ddImpGroup6)
             X: =204
             Y: =470
             Width: =110
@@ -4862,16 +4959,16 @@ Set(varLightboxGroupID, 0)</pre>
               =Switch(
                   varImpMode,
                   "add", "Use this for a new list. Creates the group if the name is new. If the group already exists, only adds people who are not in it yet. Nobody is removed or changed.",
-                  "update", "Adds new people. If a pasted name matches someone already in the group but with a different email address (for example a new post-holder), the email is changed instead of adding a second entry. Nobody is removed.",
-                  "Makes the group match your paste exactly. New people are added and anyone who is NOT in the paste is REMOVED. You are asked to confirm first. A new group simply gets everyone."
+                  "update", "Pick an existing group from the dropdown. Adds new people. If a pasted name is already in the group with a different email (for example a new post-holder), that email is changed instead of adding a second entry. Nobody is removed.",
+                  "Pick an existing group from the dropdown. It will match your paste exactly: new people are added and anyone who is NOT in the paste is REMOVED. You are asked to confirm first."
               )
             Color: =RGBA(96,105,103,1)
             Size: =11
             Font: =Font.'Open Sans'
             X: =610
-            Y: =164
+            Y: =162
             Width: =736
-            Height: =36
+            Height: =40
       - recImpCard1:
           Control: Classic/Button@2.2.0
           Properties:
@@ -4921,7 +5018,7 @@ Set(varLightboxGroupID, 0)</pre>
           Properties:
             Default: =If(CountRows(colImpTags) &gt;= 1, If(Index(colImpTags, 1).Tag = "Pasted list", "", Index(colImpTags, 1).Tag), "")
             HintText: ="Group name (leave blank to skip)"
-            Visible: =CountRows(colImpTags) &gt;= 1
+            Visible: =CountRows(colImpTags) &gt;= 1 &amp;&amp; varImpMode = "add"
             Font: =Font.'Open Sans'
             Size: =12
             BorderColor: =RGBA(190,201,197,1)
@@ -4932,12 +5029,21 @@ Set(varLightboxGroupID, 0)</pre>
             Y: =213
             Width: =330
             Height: =34
+      - ddImpGroup1:
+          Control: ModernDropdown@1.0.1
+          Properties:
+            Items: =colImpGroupChoices
+            Visible: =CountRows(colImpTags) &gt;= 1 &amp;&amp; varImpMode &lt;&gt; "add"
+            X: =800
+            Y: =213
+            Width: =330
+            Height: =34
       - lblImpStatus1:
           Control: Label@2.5.1
           Properties:
             Text: |-
               =With(
-                  {title: Trim(txtImpTitle1.Text), tag: If(CountRows(colImpTags) &gt;= 1, Index(colImpTags, 1).Tag, "")},
+                  {title: If(varImpMode = "add", Trim(txtImpTitle1.Text), Coalesce(ddImpGroup1.Selected.Value, "")), tag: If(CountRows(colImpTags) &gt;= 1, Index(colImpTags, 1).Tag, "")},
                   With(
                       {
                           ents: Filter(colImpClean, Tag = tag),
@@ -4954,7 +5060,7 @@ Set(varLightboxGroupID, 0)</pre>
                               varImpBusy,
                               "Importing this list. Please wait.",
                               IsBlank(title),
-                              "Type a group name to import this list, or leave it blank to skip it.",
+                              If(varImpMode = "add", "Type a group name to import this list, or leave it blank to skip it.", "Choose which group to " &amp; If(varImpMode = "replace", "replace", "update") &amp; ", or leave it empty to skip this list."),
                               !exists,
                               "NEW group: it will be created with " &amp; CountRows(ents) &amp; " people.",
                               "ALREADY EXISTS (has " &amp; CountRows(cur) &amp; " people): " &amp; (CountRows(ents) - same - byRole) &amp; " to add, " &amp; same &amp; " already in it" &amp;
@@ -4964,7 +5070,7 @@ Set(varLightboxGroupID, 0)</pre>
                   )
               )
             Visible: =CountRows(colImpTags) &gt;= 1
-            Color: =If(!varImpBusy &amp;&amp; !IsBlank(Trim(txtImpTitle1.Text)) &amp;&amp; CountRows(Filter(colGroups, Lower(Trim(Title)) = Lower(Trim(txtImpTitle1.Text)))) &gt; 0, RGBA(150,85,0,1), RGBA(96,105,103,1))
+            Color: =If(!varImpBusy &amp;&amp; !IsBlank(If(varImpMode = "add", Trim(txtImpTitle1.Text), Coalesce(ddImpGroup1.Selected.Value, ""))) &amp;&amp; CountRows(Filter(colGroups, Lower(Trim(Title)) = Lower(If(varImpMode = "add", Trim(txtImpTitle1.Text), Coalesce(ddImpGroup1.Selected.Value, ""))))) &gt; 0, RGBA(150,85,0,1), RGBA(96,105,103,1))
             Size: =11
             Font: =Font.'Open Sans'
             X: =800
@@ -5020,7 +5126,7 @@ Set(varLightboxGroupID, 0)</pre>
           Properties:
             Default: =If(CountRows(colImpTags) &gt;= 2, If(Index(colImpTags, 2).Tag = "Pasted list", "", Index(colImpTags, 2).Tag), "")
             HintText: ="Group name (leave blank to skip)"
-            Visible: =CountRows(colImpTags) &gt;= 2
+            Visible: =CountRows(colImpTags) &gt;= 2 &amp;&amp; varImpMode = "add"
             Font: =Font.'Open Sans'
             Size: =12
             BorderColor: =RGBA(190,201,197,1)
@@ -5031,12 +5137,21 @@ Set(varLightboxGroupID, 0)</pre>
             Y: =285
             Width: =330
             Height: =34
+      - ddImpGroup2:
+          Control: ModernDropdown@1.0.1
+          Properties:
+            Items: =colImpGroupChoices
+            Visible: =CountRows(colImpTags) &gt;= 2 &amp;&amp; varImpMode &lt;&gt; "add"
+            X: =800
+            Y: =285
+            Width: =330
+            Height: =34
       - lblImpStatus2:
           Control: Label@2.5.1
           Properties:
             Text: |-
               =With(
-                  {title: Trim(txtImpTitle2.Text), tag: If(CountRows(colImpTags) &gt;= 2, Index(colImpTags, 2).Tag, "")},
+                  {title: If(varImpMode = "add", Trim(txtImpTitle2.Text), Coalesce(ddImpGroup2.Selected.Value, "")), tag: If(CountRows(colImpTags) &gt;= 2, Index(colImpTags, 2).Tag, "")},
                   With(
                       {
                           ents: Filter(colImpClean, Tag = tag),
@@ -5053,7 +5168,7 @@ Set(varLightboxGroupID, 0)</pre>
                               varImpBusy,
                               "Importing this list. Please wait.",
                               IsBlank(title),
-                              "Type a group name to import this list, or leave it blank to skip it.",
+                              If(varImpMode = "add", "Type a group name to import this list, or leave it blank to skip it.", "Choose which group to " &amp; If(varImpMode = "replace", "replace", "update") &amp; ", or leave it empty to skip this list."),
                               !exists,
                               "NEW group: it will be created with " &amp; CountRows(ents) &amp; " people.",
                               "ALREADY EXISTS (has " &amp; CountRows(cur) &amp; " people): " &amp; (CountRows(ents) - same - byRole) &amp; " to add, " &amp; same &amp; " already in it" &amp;
@@ -5063,7 +5178,7 @@ Set(varLightboxGroupID, 0)</pre>
                   )
               )
             Visible: =CountRows(colImpTags) &gt;= 2
-            Color: =If(!varImpBusy &amp;&amp; !IsBlank(Trim(txtImpTitle2.Text)) &amp;&amp; CountRows(Filter(colGroups, Lower(Trim(Title)) = Lower(Trim(txtImpTitle2.Text)))) &gt; 0, RGBA(150,85,0,1), RGBA(96,105,103,1))
+            Color: =If(!varImpBusy &amp;&amp; !IsBlank(If(varImpMode = "add", Trim(txtImpTitle2.Text), Coalesce(ddImpGroup2.Selected.Value, ""))) &amp;&amp; CountRows(Filter(colGroups, Lower(Trim(Title)) = Lower(If(varImpMode = "add", Trim(txtImpTitle2.Text), Coalesce(ddImpGroup2.Selected.Value, ""))))) &gt; 0, RGBA(150,85,0,1), RGBA(96,105,103,1))
             Size: =11
             Font: =Font.'Open Sans'
             X: =800
@@ -5119,7 +5234,7 @@ Set(varLightboxGroupID, 0)</pre>
           Properties:
             Default: =If(CountRows(colImpTags) &gt;= 3, If(Index(colImpTags, 3).Tag = "Pasted list", "", Index(colImpTags, 3).Tag), "")
             HintText: ="Group name (leave blank to skip)"
-            Visible: =CountRows(colImpTags) &gt;= 3
+            Visible: =CountRows(colImpTags) &gt;= 3 &amp;&amp; varImpMode = "add"
             Font: =Font.'Open Sans'
             Size: =12
             BorderColor: =RGBA(190,201,197,1)
@@ -5130,12 +5245,21 @@ Set(varLightboxGroupID, 0)</pre>
             Y: =357
             Width: =330
             Height: =34
+      - ddImpGroup3:
+          Control: ModernDropdown@1.0.1
+          Properties:
+            Items: =colImpGroupChoices
+            Visible: =CountRows(colImpTags) &gt;= 3 &amp;&amp; varImpMode &lt;&gt; "add"
+            X: =800
+            Y: =357
+            Width: =330
+            Height: =34
       - lblImpStatus3:
           Control: Label@2.5.1
           Properties:
             Text: |-
               =With(
-                  {title: Trim(txtImpTitle3.Text), tag: If(CountRows(colImpTags) &gt;= 3, Index(colImpTags, 3).Tag, "")},
+                  {title: If(varImpMode = "add", Trim(txtImpTitle3.Text), Coalesce(ddImpGroup3.Selected.Value, "")), tag: If(CountRows(colImpTags) &gt;= 3, Index(colImpTags, 3).Tag, "")},
                   With(
                       {
                           ents: Filter(colImpClean, Tag = tag),
@@ -5152,7 +5276,7 @@ Set(varLightboxGroupID, 0)</pre>
                               varImpBusy,
                               "Importing this list. Please wait.",
                               IsBlank(title),
-                              "Type a group name to import this list, or leave it blank to skip it.",
+                              If(varImpMode = "add", "Type a group name to import this list, or leave it blank to skip it.", "Choose which group to " &amp; If(varImpMode = "replace", "replace", "update") &amp; ", or leave it empty to skip this list."),
                               !exists,
                               "NEW group: it will be created with " &amp; CountRows(ents) &amp; " people.",
                               "ALREADY EXISTS (has " &amp; CountRows(cur) &amp; " people): " &amp; (CountRows(ents) - same - byRole) &amp; " to add, " &amp; same &amp; " already in it" &amp;
@@ -5162,7 +5286,7 @@ Set(varLightboxGroupID, 0)</pre>
                   )
               )
             Visible: =CountRows(colImpTags) &gt;= 3
-            Color: =If(!varImpBusy &amp;&amp; !IsBlank(Trim(txtImpTitle3.Text)) &amp;&amp; CountRows(Filter(colGroups, Lower(Trim(Title)) = Lower(Trim(txtImpTitle3.Text)))) &gt; 0, RGBA(150,85,0,1), RGBA(96,105,103,1))
+            Color: =If(!varImpBusy &amp;&amp; !IsBlank(If(varImpMode = "add", Trim(txtImpTitle3.Text), Coalesce(ddImpGroup3.Selected.Value, ""))) &amp;&amp; CountRows(Filter(colGroups, Lower(Trim(Title)) = Lower(If(varImpMode = "add", Trim(txtImpTitle3.Text), Coalesce(ddImpGroup3.Selected.Value, ""))))) &gt; 0, RGBA(150,85,0,1), RGBA(96,105,103,1))
             Size: =11
             Font: =Font.'Open Sans'
             X: =800
@@ -5218,7 +5342,7 @@ Set(varLightboxGroupID, 0)</pre>
           Properties:
             Default: =If(CountRows(colImpTags) &gt;= 4, If(Index(colImpTags, 4).Tag = "Pasted list", "", Index(colImpTags, 4).Tag), "")
             HintText: ="Group name (leave blank to skip)"
-            Visible: =CountRows(colImpTags) &gt;= 4
+            Visible: =CountRows(colImpTags) &gt;= 4 &amp;&amp; varImpMode = "add"
             Font: =Font.'Open Sans'
             Size: =12
             BorderColor: =RGBA(190,201,197,1)
@@ -5229,12 +5353,21 @@ Set(varLightboxGroupID, 0)</pre>
             Y: =429
             Width: =330
             Height: =34
+      - ddImpGroup4:
+          Control: ModernDropdown@1.0.1
+          Properties:
+            Items: =colImpGroupChoices
+            Visible: =CountRows(colImpTags) &gt;= 4 &amp;&amp; varImpMode &lt;&gt; "add"
+            X: =800
+            Y: =429
+            Width: =330
+            Height: =34
       - lblImpStatus4:
           Control: Label@2.5.1
           Properties:
             Text: |-
               =With(
-                  {title: Trim(txtImpTitle4.Text), tag: If(CountRows(colImpTags) &gt;= 4, Index(colImpTags, 4).Tag, "")},
+                  {title: If(varImpMode = "add", Trim(txtImpTitle4.Text), Coalesce(ddImpGroup4.Selected.Value, "")), tag: If(CountRows(colImpTags) &gt;= 4, Index(colImpTags, 4).Tag, "")},
                   With(
                       {
                           ents: Filter(colImpClean, Tag = tag),
@@ -5251,7 +5384,7 @@ Set(varLightboxGroupID, 0)</pre>
                               varImpBusy,
                               "Importing this list. Please wait.",
                               IsBlank(title),
-                              "Type a group name to import this list, or leave it blank to skip it.",
+                              If(varImpMode = "add", "Type a group name to import this list, or leave it blank to skip it.", "Choose which group to " &amp; If(varImpMode = "replace", "replace", "update") &amp; ", or leave it empty to skip this list."),
                               !exists,
                               "NEW group: it will be created with " &amp; CountRows(ents) &amp; " people.",
                               "ALREADY EXISTS (has " &amp; CountRows(cur) &amp; " people): " &amp; (CountRows(ents) - same - byRole) &amp; " to add, " &amp; same &amp; " already in it" &amp;
@@ -5261,7 +5394,7 @@ Set(varLightboxGroupID, 0)</pre>
                   )
               )
             Visible: =CountRows(colImpTags) &gt;= 4
-            Color: =If(!varImpBusy &amp;&amp; !IsBlank(Trim(txtImpTitle4.Text)) &amp;&amp; CountRows(Filter(colGroups, Lower(Trim(Title)) = Lower(Trim(txtImpTitle4.Text)))) &gt; 0, RGBA(150,85,0,1), RGBA(96,105,103,1))
+            Color: =If(!varImpBusy &amp;&amp; !IsBlank(If(varImpMode = "add", Trim(txtImpTitle4.Text), Coalesce(ddImpGroup4.Selected.Value, ""))) &amp;&amp; CountRows(Filter(colGroups, Lower(Trim(Title)) = Lower(If(varImpMode = "add", Trim(txtImpTitle4.Text), Coalesce(ddImpGroup4.Selected.Value, ""))))) &gt; 0, RGBA(150,85,0,1), RGBA(96,105,103,1))
             Size: =11
             Font: =Font.'Open Sans'
             X: =800
@@ -5317,7 +5450,7 @@ Set(varLightboxGroupID, 0)</pre>
           Properties:
             Default: =If(CountRows(colImpTags) &gt;= 5, If(Index(colImpTags, 5).Tag = "Pasted list", "", Index(colImpTags, 5).Tag), "")
             HintText: ="Group name (leave blank to skip)"
-            Visible: =CountRows(colImpTags) &gt;= 5
+            Visible: =CountRows(colImpTags) &gt;= 5 &amp;&amp; varImpMode = "add"
             Font: =Font.'Open Sans'
             Size: =12
             BorderColor: =RGBA(190,201,197,1)
@@ -5328,12 +5461,21 @@ Set(varLightboxGroupID, 0)</pre>
             Y: =501
             Width: =330
             Height: =34
+      - ddImpGroup5:
+          Control: ModernDropdown@1.0.1
+          Properties:
+            Items: =colImpGroupChoices
+            Visible: =CountRows(colImpTags) &gt;= 5 &amp;&amp; varImpMode &lt;&gt; "add"
+            X: =800
+            Y: =501
+            Width: =330
+            Height: =34
       - lblImpStatus5:
           Control: Label@2.5.1
           Properties:
             Text: |-
               =With(
-                  {title: Trim(txtImpTitle5.Text), tag: If(CountRows(colImpTags) &gt;= 5, Index(colImpTags, 5).Tag, "")},
+                  {title: If(varImpMode = "add", Trim(txtImpTitle5.Text), Coalesce(ddImpGroup5.Selected.Value, "")), tag: If(CountRows(colImpTags) &gt;= 5, Index(colImpTags, 5).Tag, "")},
                   With(
                       {
                           ents: Filter(colImpClean, Tag = tag),
@@ -5350,7 +5492,7 @@ Set(varLightboxGroupID, 0)</pre>
                               varImpBusy,
                               "Importing this list. Please wait.",
                               IsBlank(title),
-                              "Type a group name to import this list, or leave it blank to skip it.",
+                              If(varImpMode = "add", "Type a group name to import this list, or leave it blank to skip it.", "Choose which group to " &amp; If(varImpMode = "replace", "replace", "update") &amp; ", or leave it empty to skip this list."),
                               !exists,
                               "NEW group: it will be created with " &amp; CountRows(ents) &amp; " people.",
                               "ALREADY EXISTS (has " &amp; CountRows(cur) &amp; " people): " &amp; (CountRows(ents) - same - byRole) &amp; " to add, " &amp; same &amp; " already in it" &amp;
@@ -5360,7 +5502,7 @@ Set(varLightboxGroupID, 0)</pre>
                   )
               )
             Visible: =CountRows(colImpTags) &gt;= 5
-            Color: =If(!varImpBusy &amp;&amp; !IsBlank(Trim(txtImpTitle5.Text)) &amp;&amp; CountRows(Filter(colGroups, Lower(Trim(Title)) = Lower(Trim(txtImpTitle5.Text)))) &gt; 0, RGBA(150,85,0,1), RGBA(96,105,103,1))
+            Color: =If(!varImpBusy &amp;&amp; !IsBlank(If(varImpMode = "add", Trim(txtImpTitle5.Text), Coalesce(ddImpGroup5.Selected.Value, ""))) &amp;&amp; CountRows(Filter(colGroups, Lower(Trim(Title)) = Lower(If(varImpMode = "add", Trim(txtImpTitle5.Text), Coalesce(ddImpGroup5.Selected.Value, ""))))) &gt; 0, RGBA(150,85,0,1), RGBA(96,105,103,1))
             Size: =11
             Font: =Font.'Open Sans'
             X: =800
@@ -5416,7 +5558,7 @@ Set(varLightboxGroupID, 0)</pre>
           Properties:
             Default: =If(CountRows(colImpTags) &gt;= 6, If(Index(colImpTags, 6).Tag = "Pasted list", "", Index(colImpTags, 6).Tag), "")
             HintText: ="Group name (leave blank to skip)"
-            Visible: =CountRows(colImpTags) &gt;= 6
+            Visible: =CountRows(colImpTags) &gt;= 6 &amp;&amp; varImpMode = "add"
             Font: =Font.'Open Sans'
             Size: =12
             BorderColor: =RGBA(190,201,197,1)
@@ -5427,12 +5569,21 @@ Set(varLightboxGroupID, 0)</pre>
             Y: =573
             Width: =330
             Height: =34
+      - ddImpGroup6:
+          Control: ModernDropdown@1.0.1
+          Properties:
+            Items: =colImpGroupChoices
+            Visible: =CountRows(colImpTags) &gt;= 6 &amp;&amp; varImpMode &lt;&gt; "add"
+            X: =800
+            Y: =573
+            Width: =330
+            Height: =34
       - lblImpStatus6:
           Control: Label@2.5.1
           Properties:
             Text: |-
               =With(
-                  {title: Trim(txtImpTitle6.Text), tag: If(CountRows(colImpTags) &gt;= 6, Index(colImpTags, 6).Tag, "")},
+                  {title: If(varImpMode = "add", Trim(txtImpTitle6.Text), Coalesce(ddImpGroup6.Selected.Value, "")), tag: If(CountRows(colImpTags) &gt;= 6, Index(colImpTags, 6).Tag, "")},
                   With(
                       {
                           ents: Filter(colImpClean, Tag = tag),
@@ -5449,7 +5600,7 @@ Set(varLightboxGroupID, 0)</pre>
                               varImpBusy,
                               "Importing this list. Please wait.",
                               IsBlank(title),
-                              "Type a group name to import this list, or leave it blank to skip it.",
+                              If(varImpMode = "add", "Type a group name to import this list, or leave it blank to skip it.", "Choose which group to " &amp; If(varImpMode = "replace", "replace", "update") &amp; ", or leave it empty to skip this list."),
                               !exists,
                               "NEW group: it will be created with " &amp; CountRows(ents) &amp; " people.",
                               "ALREADY EXISTS (has " &amp; CountRows(cur) &amp; " people): " &amp; (CountRows(ents) - same - byRole) &amp; " to add, " &amp; same &amp; " already in it" &amp;
@@ -5459,7 +5610,7 @@ Set(varLightboxGroupID, 0)</pre>
                   )
               )
             Visible: =CountRows(colImpTags) &gt;= 6
-            Color: =If(!varImpBusy &amp;&amp; !IsBlank(Trim(txtImpTitle6.Text)) &amp;&amp; CountRows(Filter(colGroups, Lower(Trim(Title)) = Lower(Trim(txtImpTitle6.Text)))) &gt; 0, RGBA(150,85,0,1), RGBA(96,105,103,1))
+            Color: =If(!varImpBusy &amp;&amp; !IsBlank(If(varImpMode = "add", Trim(txtImpTitle6.Text), Coalesce(ddImpGroup6.Selected.Value, ""))) &amp;&amp; CountRows(Filter(colGroups, Lower(Trim(Title)) = Lower(If(varImpMode = "add", Trim(txtImpTitle6.Text), Coalesce(ddImpGroup6.Selected.Value, ""))))) &gt; 0, RGBA(150,85,0,1), RGBA(96,105,103,1))
             Size: =11
             Font: =Font.'Open Sans'
             X: =800
@@ -5488,8 +5639,8 @@ Set(varLightboxGroupID, 0)</pre>
             OnSelect: |-
               =With(
                   {
-                      titled: CountRows(Filter(Sequence(CountRows(colImpTags)) As q, q.Value &lt;= 6 &amp;&amp; !IsBlank(Switch(q.Value, 1, Trim(txtImpTitle1.Text), 2, Trim(txtImpTitle2.Text), 3, Trim(txtImpTitle3.Text), 4, Trim(txtImpTitle4.Text), 5, Trim(txtImpTitle5.Text), 6, Trim(txtImpTitle6.Text))))),
-                      titles: Filter(ForAll(Sequence(CountRows(colImpTags)) As q, {T: Lower(Switch(q.Value, 1, Trim(txtImpTitle1.Text), 2, Trim(txtImpTitle2.Text), 3, Trim(txtImpTitle3.Text), 4, Trim(txtImpTitle4.Text), 5, Trim(txtImpTitle5.Text), 6, Trim(txtImpTitle6.Text)))}), !IsBlank(T))
+                      titled: CountRows(Filter(Sequence(CountRows(colImpTags)) As q, q.Value &lt;= 6 &amp;&amp; !IsBlank(Switch(q.Value, 1, If(varImpMode = "add", Trim(txtImpTitle1.Text), Coalesce(ddImpGroup1.Selected.Value, "")), 2, If(varImpMode = "add", Trim(txtImpTitle2.Text), Coalesce(ddImpGroup2.Selected.Value, "")), 3, If(varImpMode = "add", Trim(txtImpTitle3.Text), Coalesce(ddImpGroup3.Selected.Value, "")), 4, If(varImpMode = "add", Trim(txtImpTitle4.Text), Coalesce(ddImpGroup4.Selected.Value, "")), 5, If(varImpMode = "add", Trim(txtImpTitle5.Text), Coalesce(ddImpGroup5.Selected.Value, "")), 6, If(varImpMode = "add", Trim(txtImpTitle6.Text), Coalesce(ddImpGroup6.Selected.Value, "")))))),
+                      titles: Filter(ForAll(Sequence(CountRows(colImpTags)) As q, {T: Lower(Switch(q.Value, 1, If(varImpMode = "add", Trim(txtImpTitle1.Text), Coalesce(ddImpGroup1.Selected.Value, "")), 2, If(varImpMode = "add", Trim(txtImpTitle2.Text), Coalesce(ddImpGroup2.Selected.Value, "")), 3, If(varImpMode = "add", Trim(txtImpTitle3.Text), Coalesce(ddImpGroup3.Selected.Value, "")), 4, If(varImpMode = "add", Trim(txtImpTitle4.Text), Coalesce(ddImpGroup4.Selected.Value, "")), 5, If(varImpMode = "add", Trim(txtImpTitle5.Text), Coalesce(ddImpGroup5.Selected.Value, "")), 6, If(varImpMode = "add", Trim(txtImpTitle6.Text), Coalesce(ddImpGroup6.Selected.Value, ""))))}), !IsBlank(T))
                   },
                   If(
                       varImpBusy,
@@ -5497,7 +5648,7 @@ Set(varLightboxGroupID, 0)</pre>
                       CountRows(colImpClean) = 0,
                       Notify("Check a paste first.", NotificationType.Warning),
                       titled = 0,
-                      Notify("Type a group name for at least one list.", NotificationType.Warning),
+                      Notify(If(varImpMode = "add", "Type a group name for at least one list.", "Choose a group for at least one list."), NotificationType.Warning),
                       CountRows(titles) &lt;&gt; CountRows(Distinct(titles, T)),
                       Notify("Two lists have the same group name. Give each list its own name.", NotificationType.Warning),
                       varImpMode = "replace" &amp;&amp; !varImpArmed,
@@ -5509,7 +5660,7 @@ Set(varLightboxGroupID, 0)</pre>
                       ForAll(
                           Sequence(CountRows(colImpTags)) As s,
                           With(
-                              {title: Trim(Switch(s.Value, 1, Trim(txtImpTitle1.Text), 2, Trim(txtImpTitle2.Text), 3, Trim(txtImpTitle3.Text), 4, Trim(txtImpTitle4.Text), 5, Trim(txtImpTitle5.Text), 6, Trim(txtImpTitle6.Text)))},
+                              {title: Trim(Switch(s.Value, 1, If(varImpMode = "add", Trim(txtImpTitle1.Text), Coalesce(ddImpGroup1.Selected.Value, "")), 2, If(varImpMode = "add", Trim(txtImpTitle2.Text), Coalesce(ddImpGroup2.Selected.Value, "")), 3, If(varImpMode = "add", Trim(txtImpTitle3.Text), Coalesce(ddImpGroup3.Selected.Value, "")), 4, If(varImpMode = "add", Trim(txtImpTitle4.Text), Coalesce(ddImpGroup4.Selected.Value, "")), 5, If(varImpMode = "add", Trim(txtImpTitle5.Text), Coalesce(ddImpGroup5.Selected.Value, "")), 6, If(varImpMode = "add", Trim(txtImpTitle6.Text), Coalesce(ddImpGroup6.Selected.Value, ""))))},
                               If(
                                   s.Value &lt;= 6 &amp;&amp; !IsBlank(title) &amp;&amp; CountRows(Filter(colGroups, Lower(Trim(Title)) = Lower(title))) = 0,
                                   Patch('BM Groups', Defaults('BM Groups'), {Title: title, ThursdayBatch: {Value: "None"}, Private: false, OfficialSensitiveApproved: false, OfficialUseOnly: false});
@@ -5523,7 +5674,7 @@ Set(varLightboxGroupID, 0)</pre>
                           With(
                               {
                                   tag: Index(colImpTags, s.Value).Tag,
-                                  typed: Trim(Switch(s.Value, 1, Trim(txtImpTitle1.Text), 2, Trim(txtImpTitle2.Text), 3, Trim(txtImpTitle3.Text), 4, Trim(txtImpTitle4.Text), 5, Trim(txtImpTitle5.Text), 6, Trim(txtImpTitle6.Text)))
+                                  typed: Trim(Switch(s.Value, 1, If(varImpMode = "add", Trim(txtImpTitle1.Text), Coalesce(ddImpGroup1.Selected.Value, "")), 2, If(varImpMode = "add", Trim(txtImpTitle2.Text), Coalesce(ddImpGroup2.Selected.Value, "")), 3, If(varImpMode = "add", Trim(txtImpTitle3.Text), Coalesce(ddImpGroup3.Selected.Value, "")), 4, If(varImpMode = "add", Trim(txtImpTitle4.Text), Coalesce(ddImpGroup4.Selected.Value, "")), 5, If(varImpMode = "add", Trim(txtImpTitle5.Text), Coalesce(ddImpGroup5.Selected.Value, "")), 6, If(varImpMode = "add", Trim(txtImpTitle6.Text), Coalesce(ddImpGroup6.Selected.Value, ""))))
                               },
                               If(
                                   s.Value &lt;= 6 &amp;&amp; !IsBlank(typed),
@@ -6653,6 +6804,8 @@ Set(varLightboxGroupID, 0)</pre>
           <li><label><input type="checkbox" data-step="t5"> Import: paste 3 or 4 made-up lines (for example <span class="kb">TEST: Role One alex@example.test; Role Two sam@example.test</span>), Check paste, name it, Import. Delete the test group afterwards.</label></li>
           <li><label><input type="checkbox" data-step="t6"> Import: the real lists, only after the test worked.</label></li>
           <li><label><input type="checkbox" data-step="t7"> Manage Groups: edit a group, change its name, Save. A box appears with a progress bar counting up, then a green Saved message. Groups are listed A to Z.</label></li>
+          <li><label><input type="checkbox" data-step="t8"> Import: switch to <strong>Replace whole group</strong> or <strong>Add and correct emails</strong>. Each list now shows a dropdown of your existing groups instead of a text box. Pick the group, check the status line, then Import.</label></li>
+          <li><label><input type="checkbox" data-step="t9"> Manage Groups &rarr; a group &rarr; Manage Members &rarr; <strong>Replace all (CSV / Outlook)</strong>: choose <strong>From Outlook</strong>, paste an Outlook list, check the counts, then Replace. <strong>From CSV / Excel</strong> works as before.</label></li>
         </ul>
       </section>
 
