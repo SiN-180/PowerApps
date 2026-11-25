@@ -285,7 +285,7 @@
 
       <div class="topline">
         <span class="pill">v2.50</span>
-        <span class="pill">Last build 25/11/2026 11:01 GMT</span>
+        <span class="pill">Last build 25/11/2026 11:06 GMT</span>
       </div>
       <h1>Branch Contact Groups</h1>
       <div class="replace-all">
@@ -4320,7 +4320,7 @@ Set(varLightboxGroupID, 0)</pre>
             </div>
             <button data-copy="bcg-import" data-crlf="true" type="button">Copy</button>
           </div>
-          <details class="code"><summary>Show the code (1,067 lines)</summary>
+          <details class="code"><summary>Show the code (1,071 lines)</summary>
 <pre id="bcg-import">Screens:
   scrImport:
     Properties:
@@ -5298,6 +5298,8 @@ Set(varLightboxGroupID, 0)</pre>
                       varImpMode = "replace" &amp;&amp; !varImpArmed,
                       Set(varImpArmed, true),
                       Set(varImpBusy, true);
+                      Notify("Import started. Keep this screen open until the green message appears.", NotificationType.Information);
+                      IfError(
                       Clear(colImpResults);
                       ForAll(
                           Sequence(CountRows(colImpTags)) As s,
@@ -5359,13 +5361,15 @@ Set(varLightboxGroupID, 0)</pre>
                               )
                           )
                       );
-                      Set(varImpBusy, false);
-                      Set(varImpArmed, false);
                       Clear(colImpParsed);
                       Clear(colImpClean);
                       Clear(colImpTags);
                       Reset(txtImportPaste);
-                      Notify("Import finished for " &amp; CountRows(colImpResults) &amp; " group" &amp; If(CountRows(colImpResults) = 1, "", "s") &amp; ".", NotificationType.Success)
+                      Notify("Import finished for " &amp; CountRows(colImpResults) &amp; " group" &amp; If(CountRows(colImpResults) = 1, "", "s") &amp; ".", NotificationType.Success),
+                      Notify("Import stopped: " &amp; FirstError.Message &amp; " Some rows may already be saved, so check the group before trying again.", NotificationType.Error)
+                      );
+                      Set(varImpBusy, false);
+                      Set(varImpArmed, false)
                   )
               )
             X: =610
@@ -5378,7 +5382,7 @@ Set(varLightboxGroupID, 0)</pre>
             Text: |-
               =If(
                   CountRows(colImpResults) = 0,
-                  "",
+                  If(CountRows(colImpClean) &gt; 0, "A large list can take a minute or two. Keep this screen open until the green message appears.", ""),
                   "Last import: " &amp; Concat(colImpResults, Group &amp; " (" &amp; Added &amp; " added, " &amp; Updated &amp; " updated, " &amp; Removed &amp; " removed)", "; ")
               )
             Color: =RGBA(24,45,55,1)
