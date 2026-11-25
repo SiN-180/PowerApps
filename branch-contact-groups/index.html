@@ -241,7 +241,9 @@
     ul.ticks { list-style: none; padding-left: .2rem; line-height: 2; }
     ul.ticks li.is-done { opacity: .55; text-decoration: line-through; }
     section.is-done h2 { opacity: .55; }
-    .skip { opacity: .8; }
+    .replace-all { border: 2px solid var(--primary); border-radius: 12px; padding: 14px 18px; margin: 14px 0 22px; background: var(--primary-soft); }
+    .replace-all h2 { margin-top: 0; }
+    .replace-all ol { margin: 8px 0 0; padding-left: 1.3rem; line-height: 1.7; }
 </style>
 </head>
 <body>
@@ -265,14 +267,15 @@
         <a href="https://powerapps.pages.dev/">Guide library</a>
         <a href="#formulas">Step 1 - App.Formulas</a>
         <a href="#onstart">Step 2 - App.OnStart</a>
-        <a href="#quick">Step 3 - Quick Contacts</a>
-        <a href="#send">Step 4 - Send Email</a>
-        <a href="#manage">Step 5 - Manage Groups</a>
-        <a href="#import">Step 6 - Import (new)</a>
-        <a href="#people">Manage People (unchanged)</a>
-        <a href="#start">Step 7 - Start screen</a>
-        <a href="#test">Step 8 - Test</a>
-        <a href="#vault">Step 9 - Save to the Vault</a>
+        <a href="#delete">Step 3 - Delete all screens</a>
+        <a href="#quick">Step 4 - Quick Contacts</a>
+        <a href="#send">Step 5 - Send Email</a>
+        <a href="#manage">Step 6 - Manage Groups</a>
+        <a href="#import">Step 7 - Import (new)</a>
+        <a href="#people">Step 8 - Manage People</a>
+        <a href="#start">Step 9 - Start screen</a>
+        <a href="#test">Step 10 - Test</a>
+        <a href="#vault">Step 11 - Save to the Vault</a>
         <a href="#lists">SharePoint columns</a>
         <a href="https://branch-contact-groups.pages.dev/yaml.html">Screen YAML Vault</a>
       </nav>
@@ -282,10 +285,18 @@
 
       <div class="topline">
         <span class="pill">v2.50</span>
-        <span class="pill">Last build 24/11/2026 12:26 GMT</span>
+        <span class="pill">Last build 25/11/2026 10:57 GMT</span>
       </div>
       <h1>Branch Contact Groups</h1>
-      <p class="lead">Paste these in order and tick each one off. Use <strong>Show the code</strong> only if you want to read it; Copy works without opening it.</p>
+      <div class="replace-all">
+        <h2>Replace everything</h2>
+        <p>Everything below is new compared with the app in Studio. Do not pick and choose. Work down the page and tick each step off. Copy works without opening the code.</p>
+        <ol>
+          <li>Replace <strong>App.Formulas</strong> and <strong>App.OnStart</strong></li>
+          <li>Delete <strong>all five screens</strong></li>
+          <li>Paste all five back: Quick Contacts, Send Email, Manage Groups, Import, Manage People</li>
+        </ol>
+      </div>
 
       <section id="formulas">
         <h2><span class="step">1</span>App.Formulas <label class="done"><input type="checkbox" data-step="formulas"> Done</label></h2>
@@ -294,7 +305,7 @@
           <div class="code-toolbar">
             <div class="code-meta">
               <span>App - Formulas</span>
-              <span class="code-stamp" data-updated="2026-11-24T12:14:41Z">v2.49 &middot; 24/11/2026 12:14 GMT</span>
+              <span class="code-stamp">Replace all of it</span>
             </div>
             <button data-copy="bcg-formulas" data-crlf="false" type="button">Copy</button>
           </div>
@@ -342,12 +353,12 @@ LoadCache(): Boolean = {
 
       <section id="onstart">
         <h2><span class="step">2</span>App.OnStart <label class="done"><input type="checkbox" data-step="onstart"> Done</label></h2>
-        <p>Select <strong>App</strong> &rarr; <span class="kb">OnStart</span>, replace everything, paste. Optional if you pasted it on 18/11/2026 or later (only one unused line has gone).</p>
+        <p>Select <strong>App</strong> &rarr; <span class="kb">OnStart</span>, replace everything, paste.</p>
         <div class="code-card">
           <div class="code-toolbar">
             <div class="code-meta">
               <span>App - OnStart</span>
-              <span class="code-stamp" data-updated="2026-11-24T12:14:41Z">v2.49 &middot; 24/11/2026 12:14 GMT</span>
+              <span class="code-stamp">Replace all of it</span>
             </div>
             <button data-copy="bcg-onstart" data-crlf="false" type="button">Copy</button>
           </div>
@@ -373,14 +384,19 @@ Set(varLightboxGroupID, 0)</pre>
 
       </section>
 
+      <section id="delete">
+        <h2><span class="step">3</span>Delete all five screens <label class="done"><input type="checkbox" data-step="delete"> Done</label></h2>
+        <p>In the Tree view, delete <span class="kb">scrQuickContacts</span>, <span class="kb">scrSendEmail</span>, <span class="kb">scrManageGroups</span>, <span class="kb">scrManagePeople</span> and <span class="kb">scrImport</span> if it exists. Pasting does not overwrite, so old copies would be duplicated. Red errors on the screens you paste first are normal until all five are in.</p>
+      </section>
+
       <section id="quick">
-        <h2><span class="step">3</span>scrQuickContacts <label class="done"><input type="checkbox" data-step="quick"> Done</label></h2>
-        <p>Delete the old <span class="kb">scrQuickContacts</span>, add a blank screen with exactly that name, then paste.</p>
+        <h2><span class="step">4</span>scrQuickContacts <label class="done"><input type="checkbox" data-step="quick"> Done</label></h2>
+        <p>Add a blank screen named exactly <span class="kb">scrQuickContacts</span>, then paste.</p>
         <div class="code-card">
           <div class="code-toolbar">
             <div class="code-meta">
               <span>Screen - scrQuickContacts</span>
-              <span class="code-stamp" data-updated="2026-11-24T12:14:41Z">v2.49 &middot; 24/11/2026 12:14 GMT</span>
+              <span class="code-stamp">Replace all of it</span>
             </div>
             <button data-copy="bcg-quick" data-crlf="true" type="button">Copy</button>
           </div>
@@ -1125,13 +1141,13 @@ Set(varLightboxGroupID, 0)</pre>
       </section>
 
       <section id="send">
-        <h2><span class="step">4</span>scrSendEmail <label class="done"><input type="checkbox" data-step="send"> Done</label></h2>
-        <p>Delete the old <span class="kb">scrSendEmail</span>, add a blank screen with exactly that name, then paste.</p>
+        <h2><span class="step">5</span>scrSendEmail <label class="done"><input type="checkbox" data-step="send"> Done</label></h2>
+        <p>Add a blank screen named exactly <span class="kb">scrSendEmail</span>, then paste.</p>
         <div class="code-card">
           <div class="code-toolbar">
             <div class="code-meta">
               <span>Screen - scrSendEmail</span>
-              <span class="code-stamp" data-updated="2026-11-24T12:14:41Z">v2.49 &middot; 24/11/2026 12:14 GMT</span>
+              <span class="code-stamp">Replace all of it</span>
             </div>
             <button data-copy="bcg-send" data-crlf="true" type="button">Copy</button>
           </div>
@@ -2075,13 +2091,13 @@ Set(varLightboxGroupID, 0)</pre>
       </section>
 
       <section id="manage">
-        <h2><span class="step">5</span>scrManageGroups <label class="done"><input type="checkbox" data-step="manage"> Done</label></h2>
-        <p>Delete the old <span class="kb">scrManageGroups</span>, add a blank screen with exactly that name, then paste. (New <strong>Import from paste</strong> button.)</p>
+        <h2><span class="step">6</span>scrManageGroups <label class="done"><input type="checkbox" data-step="manage"> Done</label></h2>
+        <p>Add a blank screen named exactly <span class="kb">scrManageGroups</span>, then paste. (It has a new <strong>Import from paste</strong> button.)</p>
         <div class="code-card">
           <div class="code-toolbar">
             <div class="code-meta">
               <span>Screen - scrManageGroups</span>
-              <span class="code-stamp" data-updated="2026-11-25T02:50:31Z">v2.50 &middot; 25/11/2026 02:50 GMT</span>
+              <span class="code-stamp">Replace all of it</span>
             </div>
             <button data-copy="bcg-manage" data-crlf="true" type="button">Copy</button>
           </div>
@@ -4294,13 +4310,13 @@ Set(varLightboxGroupID, 0)</pre>
       </section>
 
       <section id="import">
-        <h2><span class="step">6</span>scrImport (new) <label class="done"><input type="checkbox" data-step="import"> Done</label></h2>
+        <h2><span class="step">7</span>scrImport (new) <label class="done"><input type="checkbox" data-step="import"> Done</label></h2>
         <p>Add a blank screen named exactly <span class="kb">scrImport</span>, then paste. If a <span class="kb">Navigate</span> on Manage Groups shows red until this exists, that is expected.</p>
         <div class="code-card">
           <div class="code-toolbar">
             <div class="code-meta">
               <span>Screen - scrImport</span>
-              <span class="code-stamp" data-updated="2026-11-24T12:26:30Z">v2.50 &middot; 24/11/2026 12:26 GMT &mdash; new</span>
+              <span class="code-stamp">Replace all of it &mdash; new</span>
             </div>
             <button data-copy="bcg-import" data-crlf="true" type="button">Copy</button>
           </div>
@@ -5377,14 +5393,14 @@ Set(varLightboxGroupID, 0)</pre>
 
       </section>
 
-      <section id="people" class="skip">
-        <h2>scrManagePeople (unchanged) <label class="done"><input type="checkbox" data-step="people"> Done</label></h2>
-        <p>No change this round. Paste only if you are rebuilding the app from scratch.</p>
+      <section id="people">
+        <h2><span class="step">8</span>scrManagePeople <label class="done"><input type="checkbox" data-step="people"> Done</label></h2>
+        <p>Add a blank screen named exactly <span class="kb">scrManagePeople</span>, then paste. The code is unchanged apart from the version label being removed.</p>
         <div class="code-card">
           <div class="code-toolbar">
             <div class="code-meta">
               <span>Screen - scrManagePeople</span>
-              <span class="code-stamp" data-updated="2026-11-18T12:02:59Z">v2.48 &middot; 18/11/2026 12:02 GMT</span>
+              <span class="code-stamp">Replace all of it</span>
             </div>
             <button data-copy="bcg-people" data-crlf="true" type="button">Copy</button>
           </div>
@@ -6414,12 +6430,12 @@ Set(varLightboxGroupID, 0)</pre>
       </section>
 
       <section id="start">
-        <h2><span class="step">7</span>Start screen <label class="done"><input type="checkbox" data-step="start"> Done</label></h2>
+        <h2><span class="step">9</span>Start screen <label class="done"><input type="checkbox" data-step="start"> Done</label></h2>
         <p>Select <strong>App</strong>, set <span class="kb">StartScreen</span> to <span class="kb">scrQuickContacts</span>, save.</p>
       </section>
 
       <section id="test">
-        <h2><span class="step">8</span>Test</h2>
+        <h2><span class="step">10</span>Test</h2>
         <ul class="ticks">
           <li><label><input type="checkbox" data-step="t1"> Open the app: a loading screen, then the list. Note how many seconds it takes.</label></li>
           <li><label><input type="checkbox" data-step="t2"> Quick Contacts: <strong>Who's in it</strong> opens a popup with the members, and Copy addresses works.</label></li>
@@ -6431,8 +6447,8 @@ Set(varLightboxGroupID, 0)</pre>
       </section>
 
       <section id="vault">
-        <h2><span class="step">9</span>Save to the Vault <label class="done"><input type="checkbox" data-step="vault"> Done</label></h2>
-        <p>Save the changed screens and App.OnStart back into the <a href="https://branch-contact-groups.pages.dev/yaml.html">Screen YAML Vault</a>, then tell me, so I can check what is really in the app.</p>
+        <h2><span class="step">11</span>Save to the Vault <label class="done"><input type="checkbox" data-step="vault"> Done</label></h2>
+        <p>Save all five screens and App.OnStart back into the <a href="https://branch-contact-groups.pages.dev/yaml.html">Screen YAML Vault</a>, then tell me, so I can check what is really in the app.</p>
       </section>
 
       <details class="ref" id="lists">
@@ -6477,7 +6493,7 @@ Set(varLightboxGroupID, 0)</pre>
 
   <script>
   (function () {
-    var K = 'bcg-guide-done-v2.50';
+    var K = 'bcg-guide-done-v2.50-r2';
     var saved = {};
     try { saved = JSON.parse(localStorage.getItem(K) || '{}'); } catch (e) {}
     document.querySelectorAll('input[data-step]').forEach(function (cb) {
@@ -6522,18 +6538,6 @@ Set(varLightboxGroupID, 0)</pre>
       setActive(visible[0].target.id);
     }, { rootMargin: '-15% 0px -70% 0px', threshold: 0 });
     sections.forEach(function (s) { observer.observe(s); });
-  })();
-  </script>
-  <script>
-  (function () {
-    var WINDOW_MS = 48 * 60 * 60 * 1000, now = Date.now();
-    function age(ms) { var m = Math.round(ms / 60000); if (m < 1) return 'just now'; if (m < 60) return m + 'm ago'; var h = Math.round(m / 60); if (h < 24) return h + 'h ago'; return Math.round(h / 24) + 'd ago'; }
-    document.querySelectorAll('.code-stamp[data-updated]').forEach(function (el) {
-      var t = new Date(el.getAttribute('data-updated')).getTime();
-      if (isNaN(t)) return;
-      var a = now - t;
-      if (a >= 0 && a < WINDOW_MS) { var pill = document.createElement('span'); pill.className = 'update-pill'; pill.textContent = 'Updated ' + age(a); el.after(pill); }
-    });
   })();
   </script>
 
