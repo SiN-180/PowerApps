@@ -285,7 +285,7 @@
 
       <div class="topline">
         <span class="pill">v2.50</span>
-        <span class="pill">Last build 25/11/2026 11:28 GMT</span>
+        <span class="pill">Last build 25/11/2026 11:34 GMT</span>
       </div>
       <h1>Branch Contact Groups</h1>
       <div class="replace-all">
@@ -2097,7 +2097,7 @@ Set(varLightboxGroupID, 0)</pre>
           <div class="code-toolbar">
             <div class="code-meta">
               <span>Screen - scrManageGroups</span>
-              <span class="code-stamp" data-updated="2026-11-25T02:50:31Z">25/11/2026 02:50 GMT <span class="code-age"></span></span><span class="code-stamp">Replace all of it</span>
+              <span class="code-stamp" data-updated="2026-11-25T11:34:40Z">25/11/2026 11:34 GMT <span class="code-age"></span></span><span class="code-stamp">Replace all of it</span>
             </div>
             <button data-copy="bcg-manage" data-crlf="true" type="button">Copy</button>
           </div>
@@ -2344,7 +2344,7 @@ Set(varLightboxGroupID, 0)</pre>
           Control: Gallery@2.15.0
           Variant: Vertical
           Properties:
-            Items: =Filter(colGroups, IsBlank(Trim(txtGroupSearch.Text)) || txtGroupSearch.Text in Title)
+            Items: =Sort(Filter(colGroups, IsBlank(Trim(txtGroupSearch.Text)) || txtGroupSearch.Text in Title), Title, SortOrder.Ascending)
             TemplateSize: =60
             TemplatePadding: =4
             X: =20
@@ -4316,11 +4316,11 @@ Set(varLightboxGroupID, 0)</pre>
           <div class="code-toolbar">
             <div class="code-meta">
               <span>Screen - scrImport</span>
-              <span class="code-stamp" data-updated="2026-11-25T11:28:27Z">25/11/2026 11:28 GMT <span class="code-age"></span></span><span class="code-stamp">Replace all of it &mdash; new</span>
+              <span class="code-stamp" data-updated="2026-11-25T11:34:40Z">25/11/2026 11:34 GMT <span class="code-age"></span></span><span class="code-stamp">Replace all of it &mdash; new</span>
             </div>
             <button data-copy="bcg-import" data-crlf="true" type="button">Copy</button>
           </div>
-          <details class="code"><summary>Show the code (1,071 lines)</summary>
+          <details class="code"><summary>Show the code (1,083 lines)</summary>
 <pre id="bcg-import">Screens:
   scrImport:
     Properties:
@@ -4335,7 +4335,7 @@ Set(varLightboxGroupID, 0)</pre>
             ClearCollect(colImpParsed, Filter(Table({Tag: "", Email: "", Name: ""}), false));
             ClearCollect(colImpClean, AddColumns(GroupBy(Filter(colImpParsed, false), Tag, Email, Rows), Name, First(Rows).Name, Dups, CountRows(Rows) - 1));
             ClearCollect(colImpTags, Filter(Table({Tag: "", N: 0}), false));
-            ClearCollect(colImpResults, Filter(Table({Group: "", Added: 0, Updated: 0, Removed: 0}), false))
+            ClearCollect(colImpResults, Filter(Table({Group: "", Before: 0, Added: 0, Updated: 0, Removed: 0}), false))
         )
     Children:
       - recHeader:
@@ -4602,7 +4602,7 @@ Set(varLightboxGroupID, 0)</pre>
       - btnImpModeAdd:
           Control: Classic/Button@2.2.0
           Properties:
-            Text: ="Add only"
+            Text: ="Create / add new people"
             Fill: =If(varImpMode = "add", RGBA(0,78,66,1), RGBA(232,237,235,1))
             HoverFill: =If(varImpMode = "add", RGBA(0,78,66,1), RGBA(222,229,226,1))
             PressedFill: =Self.HoverFill
@@ -4618,12 +4618,12 @@ Set(varLightboxGroupID, 0)</pre>
             OnSelect: =Set(varImpMode, "add"); Set(varImpArmed, false)
             X: =610
             Y: =122
-            Width: =130
+            Width: =200
             Height: =36
       - btnImpModeUpdate:
           Control: Classic/Button@2.2.0
           Properties:
-            Text: ="Add + update by role"
+            Text: ="Add and correct emails"
             Fill: =If(varImpMode = "update", RGBA(0,78,66,1), RGBA(232,237,235,1))
             HoverFill: =If(varImpMode = "update", RGBA(0,78,66,1), RGBA(222,229,226,1))
             PressedFill: =Self.HoverFill
@@ -4637,14 +4637,14 @@ Set(varLightboxGroupID, 0)</pre>
             FontWeight: =FontWeight.Semibold
             Size: =12
             OnSelect: =Set(varImpMode, "update"); Set(varImpArmed, false)
-            X: =750
+            X: =820
             Y: =122
-            Width: =210
+            Width: =200
             Height: =36
       - btnImpModeReplace:
           Control: Classic/Button@2.2.0
           Properties:
-            Text: ="Replace"
+            Text: ="Replace whole group"
             Fill: =If(varImpMode = "replace", RGBA(0,78,66,1), RGBA(232,237,235,1))
             HoverFill: =If(varImpMode = "replace", RGBA(0,78,66,1), RGBA(222,229,226,1))
             PressedFill: =Self.HoverFill
@@ -4658,9 +4658,9 @@ Set(varLightboxGroupID, 0)</pre>
             FontWeight: =FontWeight.Semibold
             Size: =12
             OnSelect: =Set(varImpMode, "replace"); Set(varImpArmed, false)
-            X: =970
+            X: =1030
             Y: =122
-            Width: =130
+            Width: =200
             Height: =36
       - lblImpModeHint:
           Control: Label@2.5.1
@@ -4668,9 +4668,9 @@ Set(varLightboxGroupID, 0)</pre>
             Text: |-
               =Switch(
                   varImpMode,
-                  "add", "Adds anyone who is not already in the group. Never removes or changes anyone.",
-                  "update", "Adds new people. If a pasted name matches someone already in the group but with a different email, their email is updated instead of adding a second row.",
-                  "Makes each group match the paste exactly: adds new people and removes anyone who is not in the paste."
+                  "add", "Use this for a new list. Creates the group if the name is new. If the group already exists, only adds people who are not in it yet. Nobody is removed or changed.",
+                  "update", "Adds new people. If a pasted name matches someone already in the group but with a different email address (for example a new post-holder), the email is changed instead of adding a second entry. Nobody is removed.",
+                  "Makes the group match your paste exactly. New people are added and anyone who is NOT in the paste is REMOVED. You are asked to confirm first. A new group simply gets everyone."
               )
             Color: =RGBA(96,105,103,1)
             Size: =11
@@ -4758,18 +4758,20 @@ Set(varLightboxGroupID, 0)</pre>
                               gone: If(varImpMode = "replace", CountRows(Filter(cur, !(Email in ents.Email))), 0)
                           },
                           If(
+                              varImpBusy,
+                              "Importing this list. Please wait.",
                               IsBlank(title),
-                              "Leave blank to skip this list.",
+                              "Type a group name to import this list, or leave it blank to skip it.",
                               !exists,
-                              "New group. " &amp; CountRows(ents) &amp; " people will be added.",
-                              "Existing group, " &amp; CountRows(cur) &amp; " now. " &amp; (CountRows(ents) - same - byRole) &amp; " new, " &amp; same &amp; " already there" &amp;
-                              If(byRole &gt; 0, ", " &amp; byRole &amp; " email updates", "") &amp; If(gone &gt; 0, ", " &amp; gone &amp; " to be removed", "") &amp; "."
+                              "NEW group: it will be created with " &amp; CountRows(ents) &amp; " people.",
+                              "ALREADY EXISTS (has " &amp; CountRows(cur) &amp; " people): " &amp; (CountRows(ents) - same - byRole) &amp; " to add, " &amp; same &amp; " already in it" &amp;
+                              If(byRole &gt; 0, ", " &amp; byRole &amp; " emails changed", "") &amp; If(gone &gt; 0, ", " &amp; gone &amp; " to remove", "") &amp; "."
                           )
                       )
                   )
               )
             Visible: =CountRows(colImpTags) &gt;= 1
-            Color: =RGBA(96,105,103,1)
+            Color: =If(!varImpBusy &amp;&amp; !IsBlank(Trim(txtImpTitle1.Text)) &amp;&amp; CountRows(Filter(colGroups, Lower(Trim(Title)) = Lower(Trim(txtImpTitle1.Text)))) &gt; 0, RGBA(150,85,0,1), RGBA(96,105,103,1))
             Size: =11
             Font: =Font.'Open Sans'
             X: =800
@@ -4855,18 +4857,20 @@ Set(varLightboxGroupID, 0)</pre>
                               gone: If(varImpMode = "replace", CountRows(Filter(cur, !(Email in ents.Email))), 0)
                           },
                           If(
+                              varImpBusy,
+                              "Importing this list. Please wait.",
                               IsBlank(title),
-                              "Leave blank to skip this list.",
+                              "Type a group name to import this list, or leave it blank to skip it.",
                               !exists,
-                              "New group. " &amp; CountRows(ents) &amp; " people will be added.",
-                              "Existing group, " &amp; CountRows(cur) &amp; " now. " &amp; (CountRows(ents) - same - byRole) &amp; " new, " &amp; same &amp; " already there" &amp;
-                              If(byRole &gt; 0, ", " &amp; byRole &amp; " email updates", "") &amp; If(gone &gt; 0, ", " &amp; gone &amp; " to be removed", "") &amp; "."
+                              "NEW group: it will be created with " &amp; CountRows(ents) &amp; " people.",
+                              "ALREADY EXISTS (has " &amp; CountRows(cur) &amp; " people): " &amp; (CountRows(ents) - same - byRole) &amp; " to add, " &amp; same &amp; " already in it" &amp;
+                              If(byRole &gt; 0, ", " &amp; byRole &amp; " emails changed", "") &amp; If(gone &gt; 0, ", " &amp; gone &amp; " to remove", "") &amp; "."
                           )
                       )
                   )
               )
             Visible: =CountRows(colImpTags) &gt;= 2
-            Color: =RGBA(96,105,103,1)
+            Color: =If(!varImpBusy &amp;&amp; !IsBlank(Trim(txtImpTitle2.Text)) &amp;&amp; CountRows(Filter(colGroups, Lower(Trim(Title)) = Lower(Trim(txtImpTitle2.Text)))) &gt; 0, RGBA(150,85,0,1), RGBA(96,105,103,1))
             Size: =11
             Font: =Font.'Open Sans'
             X: =800
@@ -4952,18 +4956,20 @@ Set(varLightboxGroupID, 0)</pre>
                               gone: If(varImpMode = "replace", CountRows(Filter(cur, !(Email in ents.Email))), 0)
                           },
                           If(
+                              varImpBusy,
+                              "Importing this list. Please wait.",
                               IsBlank(title),
-                              "Leave blank to skip this list.",
+                              "Type a group name to import this list, or leave it blank to skip it.",
                               !exists,
-                              "New group. " &amp; CountRows(ents) &amp; " people will be added.",
-                              "Existing group, " &amp; CountRows(cur) &amp; " now. " &amp; (CountRows(ents) - same - byRole) &amp; " new, " &amp; same &amp; " already there" &amp;
-                              If(byRole &gt; 0, ", " &amp; byRole &amp; " email updates", "") &amp; If(gone &gt; 0, ", " &amp; gone &amp; " to be removed", "") &amp; "."
+                              "NEW group: it will be created with " &amp; CountRows(ents) &amp; " people.",
+                              "ALREADY EXISTS (has " &amp; CountRows(cur) &amp; " people): " &amp; (CountRows(ents) - same - byRole) &amp; " to add, " &amp; same &amp; " already in it" &amp;
+                              If(byRole &gt; 0, ", " &amp; byRole &amp; " emails changed", "") &amp; If(gone &gt; 0, ", " &amp; gone &amp; " to remove", "") &amp; "."
                           )
                       )
                   )
               )
             Visible: =CountRows(colImpTags) &gt;= 3
-            Color: =RGBA(96,105,103,1)
+            Color: =If(!varImpBusy &amp;&amp; !IsBlank(Trim(txtImpTitle3.Text)) &amp;&amp; CountRows(Filter(colGroups, Lower(Trim(Title)) = Lower(Trim(txtImpTitle3.Text)))) &gt; 0, RGBA(150,85,0,1), RGBA(96,105,103,1))
             Size: =11
             Font: =Font.'Open Sans'
             X: =800
@@ -5049,18 +5055,20 @@ Set(varLightboxGroupID, 0)</pre>
                               gone: If(varImpMode = "replace", CountRows(Filter(cur, !(Email in ents.Email))), 0)
                           },
                           If(
+                              varImpBusy,
+                              "Importing this list. Please wait.",
                               IsBlank(title),
-                              "Leave blank to skip this list.",
+                              "Type a group name to import this list, or leave it blank to skip it.",
                               !exists,
-                              "New group. " &amp; CountRows(ents) &amp; " people will be added.",
-                              "Existing group, " &amp; CountRows(cur) &amp; " now. " &amp; (CountRows(ents) - same - byRole) &amp; " new, " &amp; same &amp; " already there" &amp;
-                              If(byRole &gt; 0, ", " &amp; byRole &amp; " email updates", "") &amp; If(gone &gt; 0, ", " &amp; gone &amp; " to be removed", "") &amp; "."
+                              "NEW group: it will be created with " &amp; CountRows(ents) &amp; " people.",
+                              "ALREADY EXISTS (has " &amp; CountRows(cur) &amp; " people): " &amp; (CountRows(ents) - same - byRole) &amp; " to add, " &amp; same &amp; " already in it" &amp;
+                              If(byRole &gt; 0, ", " &amp; byRole &amp; " emails changed", "") &amp; If(gone &gt; 0, ", " &amp; gone &amp; " to remove", "") &amp; "."
                           )
                       )
                   )
               )
             Visible: =CountRows(colImpTags) &gt;= 4
-            Color: =RGBA(96,105,103,1)
+            Color: =If(!varImpBusy &amp;&amp; !IsBlank(Trim(txtImpTitle4.Text)) &amp;&amp; CountRows(Filter(colGroups, Lower(Trim(Title)) = Lower(Trim(txtImpTitle4.Text)))) &gt; 0, RGBA(150,85,0,1), RGBA(96,105,103,1))
             Size: =11
             Font: =Font.'Open Sans'
             X: =800
@@ -5146,18 +5154,20 @@ Set(varLightboxGroupID, 0)</pre>
                               gone: If(varImpMode = "replace", CountRows(Filter(cur, !(Email in ents.Email))), 0)
                           },
                           If(
+                              varImpBusy,
+                              "Importing this list. Please wait.",
                               IsBlank(title),
-                              "Leave blank to skip this list.",
+                              "Type a group name to import this list, or leave it blank to skip it.",
                               !exists,
-                              "New group. " &amp; CountRows(ents) &amp; " people will be added.",
-                              "Existing group, " &amp; CountRows(cur) &amp; " now. " &amp; (CountRows(ents) - same - byRole) &amp; " new, " &amp; same &amp; " already there" &amp;
-                              If(byRole &gt; 0, ", " &amp; byRole &amp; " email updates", "") &amp; If(gone &gt; 0, ", " &amp; gone &amp; " to be removed", "") &amp; "."
+                              "NEW group: it will be created with " &amp; CountRows(ents) &amp; " people.",
+                              "ALREADY EXISTS (has " &amp; CountRows(cur) &amp; " people): " &amp; (CountRows(ents) - same - byRole) &amp; " to add, " &amp; same &amp; " already in it" &amp;
+                              If(byRole &gt; 0, ", " &amp; byRole &amp; " emails changed", "") &amp; If(gone &gt; 0, ", " &amp; gone &amp; " to remove", "") &amp; "."
                           )
                       )
                   )
               )
             Visible: =CountRows(colImpTags) &gt;= 5
-            Color: =RGBA(96,105,103,1)
+            Color: =If(!varImpBusy &amp;&amp; !IsBlank(Trim(txtImpTitle5.Text)) &amp;&amp; CountRows(Filter(colGroups, Lower(Trim(Title)) = Lower(Trim(txtImpTitle5.Text)))) &gt; 0, RGBA(150,85,0,1), RGBA(96,105,103,1))
             Size: =11
             Font: =Font.'Open Sans'
             X: =800
@@ -5243,18 +5253,20 @@ Set(varLightboxGroupID, 0)</pre>
                               gone: If(varImpMode = "replace", CountRows(Filter(cur, !(Email in ents.Email))), 0)
                           },
                           If(
+                              varImpBusy,
+                              "Importing this list. Please wait.",
                               IsBlank(title),
-                              "Leave blank to skip this list.",
+                              "Type a group name to import this list, or leave it blank to skip it.",
                               !exists,
-                              "New group. " &amp; CountRows(ents) &amp; " people will be added.",
-                              "Existing group, " &amp; CountRows(cur) &amp; " now. " &amp; (CountRows(ents) - same - byRole) &amp; " new, " &amp; same &amp; " already there" &amp;
-                              If(byRole &gt; 0, ", " &amp; byRole &amp; " email updates", "") &amp; If(gone &gt; 0, ", " &amp; gone &amp; " to be removed", "") &amp; "."
+                              "NEW group: it will be created with " &amp; CountRows(ents) &amp; " people.",
+                              "ALREADY EXISTS (has " &amp; CountRows(cur) &amp; " people): " &amp; (CountRows(ents) - same - byRole) &amp; " to add, " &amp; same &amp; " already in it" &amp;
+                              If(byRole &gt; 0, ", " &amp; byRole &amp; " emails changed", "") &amp; If(gone &gt; 0, ", " &amp; gone &amp; " to remove", "") &amp; "."
                           )
                       )
                   )
               )
             Visible: =CountRows(colImpTags) &gt;= 6
-            Color: =RGBA(96,105,103,1)
+            Color: =If(!varImpBusy &amp;&amp; !IsBlank(Trim(txtImpTitle6.Text)) &amp;&amp; CountRows(Filter(colGroups, Lower(Trim(Title)) = Lower(Trim(txtImpTitle6.Text)))) &gt; 0, RGBA(150,85,0,1), RGBA(96,105,103,1))
             Size: =11
             Font: =Font.'Open Sans'
             X: =800
@@ -5335,7 +5347,7 @@ Set(varLightboxGroupID, 0)</pre>
                                                   toUpd: If(varImpMode = "update", Filter(ents, !(Email in cur.Email) &amp;&amp; Lower(Trim(Name)) in cur.NameKey), Filter(ents, false)),
                                                   toRem: If(varImpMode = "replace", Filter(cur, !(Email in ents.Email)), Filter(cur, false))
                                               },
-                                              Collect(colImpResults, {Group: gTitle, Added: CountRows(toAdd), Updated: CountRows(toUpd), Removed: CountRows(toRem)});
+                                              Collect(colImpResults, {Group: gTitle, Before: CountRows(cur), Added: CountRows(toAdd), Updated: CountRows(toUpd), Removed: CountRows(toRem)});
                                               ForAll(
                                                   toRem As r,
                                                   Remove('BM Memberships', LookUp('BM Memberships', ID = r.ID));
@@ -5365,7 +5377,7 @@ Set(varLightboxGroupID, 0)</pre>
                       Clear(colImpClean);
                       Clear(colImpTags);
                       Reset(txtImportPaste);
-                      Notify("Import finished for " &amp; CountRows(colImpResults) &amp; " group" &amp; If(CountRows(colImpResults) = 1, "", "s") &amp; ".", NotificationType.Success),
+                      Notify("Import finished: " &amp; CountRows(colImpResults) &amp; " group" &amp; If(CountRows(colImpResults) = 1, "", "s") &amp; " saved. The summary is under the button.", NotificationType.Success),
                       Notify("Import stopped: " &amp; FirstError.Message &amp; " Some rows may already be saved, so check the group before trying again.", NotificationType.Error)
                       );
                       Set(varImpBusy, false);
@@ -5383,7 +5395,7 @@ Set(varLightboxGroupID, 0)</pre>
               =If(
                   CountRows(colImpResults) = 0,
                   If(CountRows(colImpClean) &gt; 0, "A large list can take a minute or two. Keep this screen open until the green message appears.", ""),
-                  "Last import: " &amp; Concat(colImpResults, Group &amp; " (" &amp; Added &amp; " added, " &amp; Updated &amp; " updated, " &amp; Removed &amp; " removed)", "; ")
+                  "Finished. " &amp; Concat(colImpResults, Group &amp; ": " &amp; If(Before = 0, "created as a new group with " &amp; Added &amp; " people", "already existed (" &amp; Before &amp; " people before), " &amp; Added &amp; " added" &amp; If(Updated &gt; 0, ", " &amp; Updated &amp; " emails changed", "") &amp; If(Removed &gt; 0, ", " &amp; Removed &amp; " removed", "")), "; ")
               )
             Color: =RGBA(24,45,55,1)
             Size: =11
