@@ -285,7 +285,7 @@
 
       <div class="topline">
         <span class="pill">v2.50</span>
-        <span class="pill">Last build 25/11/2026 11:09 GMT</span>
+        <span class="pill">Last build 25/11/2026 11:17 GMT</span>
       </div>
       <h1>Branch Contact Groups</h1>
       <div class="replace-all">
@@ -5284,8 +5284,8 @@ Set(varLightboxGroupID, 0)</pre>
               =Notify("Import button pressed.", NotificationType.Information);
               With(
                   {
-                      titled: CountRows(Filter(Sequence(CountRows(colImpTags)) As q, q.Value &lt;= 6 &amp;&amp; !IsBlank(Choose(q.Value, Trim(txtImpTitle1.Text), Trim(txtImpTitle2.Text), Trim(txtImpTitle3.Text), Trim(txtImpTitle4.Text), Trim(txtImpTitle5.Text), Trim(txtImpTitle6.Text))))),
-                      titles: Filter(ForAll(Sequence(CountRows(colImpTags)) As q, {T: Lower(Choose(q.Value, Trim(txtImpTitle1.Text), Trim(txtImpTitle2.Text), Trim(txtImpTitle3.Text), Trim(txtImpTitle4.Text), Trim(txtImpTitle5.Text), Trim(txtImpTitle6.Text)))}), !IsBlank(T))
+                      titled: CountRows(Filter(Sequence(CountRows(colImpTags)) As q, q.Value &lt;= 6 &amp;&amp; !IsBlank(Switch(q.Value, 1, Trim(txtImpTitle1.Text), 2, Trim(txtImpTitle2.Text), 3, Trim(txtImpTitle3.Text), 4, Trim(txtImpTitle4.Text), 5, Trim(txtImpTitle5.Text), 6, Trim(txtImpTitle6.Text))))),
+                      titles: Filter(ForAll(Sequence(CountRows(colImpTags)) As q, {T: Lower(Switch(q.Value, 1, Trim(txtImpTitle1.Text), 2, Trim(txtImpTitle2.Text), 3, Trim(txtImpTitle3.Text), 4, Trim(txtImpTitle4.Text), 5, Trim(txtImpTitle5.Text), 6, Trim(txtImpTitle6.Text)))}), !IsBlank(T))
                   },
                   If(
                       varImpBusy,
@@ -5305,7 +5305,7 @@ Set(varLightboxGroupID, 0)</pre>
                       ForAll(
                           Sequence(CountRows(colImpTags)) As s,
                           With(
-                              {title: Trim(Choose(s.Value, Trim(txtImpTitle1.Text), Trim(txtImpTitle2.Text), Trim(txtImpTitle3.Text), Trim(txtImpTitle4.Text), Trim(txtImpTitle5.Text), Trim(txtImpTitle6.Text)))},
+                              {title: Trim(Switch(s.Value, 1, Trim(txtImpTitle1.Text), 2, Trim(txtImpTitle2.Text), 3, Trim(txtImpTitle3.Text), 4, Trim(txtImpTitle4.Text), 5, Trim(txtImpTitle5.Text), 6, Trim(txtImpTitle6.Text)))},
                               If(
                                   s.Value &lt;= 6 &amp;&amp; !IsBlank(title) &amp;&amp; CountRows(Filter(colGroups, Lower(Trim(Title)) = Lower(title))) = 0,
                                   Patch('BM Groups', Defaults('BM Groups'), {Title: title, ThursdayBatch: {Value: "None"}, Private: false, OfficialSensitiveApproved: false, OfficialUseOnly: false});
@@ -5319,7 +5319,7 @@ Set(varLightboxGroupID, 0)</pre>
                           With(
                               {
                                   tag: Index(colImpTags, s.Value).Tag,
-                                  typed: Trim(Choose(s.Value, Trim(txtImpTitle1.Text), Trim(txtImpTitle2.Text), Trim(txtImpTitle3.Text), Trim(txtImpTitle4.Text), Trim(txtImpTitle5.Text), Trim(txtImpTitle6.Text)))
+                                  typed: Trim(Switch(s.Value, 1, Trim(txtImpTitle1.Text), 2, Trim(txtImpTitle2.Text), 3, Trim(txtImpTitle3.Text), 4, Trim(txtImpTitle4.Text), 5, Trim(txtImpTitle5.Text), 6, Trim(txtImpTitle6.Text)))
                               },
                               If(
                                   s.Value &lt;= 6 &amp;&amp; !IsBlank(typed),
