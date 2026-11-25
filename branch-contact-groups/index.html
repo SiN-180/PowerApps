@@ -285,7 +285,7 @@
 
       <div class="topline">
         <span class="pill">v2.50</span>
-        <span class="pill">Last build 25/11/2026 11:17 GMT</span>
+        <span class="pill">Last build 25/11/2026 11:19 GMT</span>
       </div>
       <h1>Branch Contact Groups</h1>
       <div class="replace-all">
@@ -305,7 +305,7 @@
           <div class="code-toolbar">
             <div class="code-meta">
               <span>App - Formulas</span>
-              <span class="code-stamp">Replace all of it</span>
+              <span class="code-stamp" data-updated="2026-11-24T12:14:41Z">24/11/2026 12:14 GMT <span class="code-age"></span></span><span class="code-stamp">Replace all of it</span>
             </div>
             <button data-copy="bcg-formulas" data-crlf="false" type="button">Copy</button>
           </div>
@@ -358,7 +358,7 @@ LoadCache(): Boolean = {
           <div class="code-toolbar">
             <div class="code-meta">
               <span>App - OnStart</span>
-              <span class="code-stamp">Replace all of it</span>
+              <span class="code-stamp" data-updated="2026-11-24T12:14:41Z">24/11/2026 12:14 GMT <span class="code-age"></span></span><span class="code-stamp">Replace all of it</span>
             </div>
             <button data-copy="bcg-onstart" data-crlf="false" type="button">Copy</button>
           </div>
@@ -396,7 +396,7 @@ Set(varLightboxGroupID, 0)</pre>
           <div class="code-toolbar">
             <div class="code-meta">
               <span>Screen - scrQuickContacts</span>
-              <span class="code-stamp">Replace all of it</span>
+              <span class="code-stamp" data-updated="2026-11-24T12:14:41Z">24/11/2026 12:14 GMT <span class="code-age"></span></span><span class="code-stamp">Replace all of it</span>
             </div>
             <button data-copy="bcg-quick" data-crlf="true" type="button">Copy</button>
           </div>
@@ -1147,7 +1147,7 @@ Set(varLightboxGroupID, 0)</pre>
           <div class="code-toolbar">
             <div class="code-meta">
               <span>Screen - scrSendEmail</span>
-              <span class="code-stamp">Replace all of it</span>
+              <span class="code-stamp" data-updated="2026-11-24T12:14:41Z">24/11/2026 12:14 GMT <span class="code-age"></span></span><span class="code-stamp">Replace all of it</span>
             </div>
             <button data-copy="bcg-send" data-crlf="true" type="button">Copy</button>
           </div>
@@ -2097,7 +2097,7 @@ Set(varLightboxGroupID, 0)</pre>
           <div class="code-toolbar">
             <div class="code-meta">
               <span>Screen - scrManageGroups</span>
-              <span class="code-stamp">Replace all of it</span>
+              <span class="code-stamp" data-updated="2026-11-25T02:50:31Z">25/11/2026 02:50 GMT <span class="code-age"></span></span><span class="code-stamp">Replace all of it</span>
             </div>
             <button data-copy="bcg-manage" data-crlf="true" type="button">Copy</button>
           </div>
@@ -4316,7 +4316,7 @@ Set(varLightboxGroupID, 0)</pre>
           <div class="code-toolbar">
             <div class="code-meta">
               <span>Screen - scrImport</span>
-              <span class="code-stamp">Replace all of it &mdash; new</span>
+              <span class="code-stamp" data-updated="2026-11-25T11:16:59Z">25/11/2026 11:16 GMT <span class="code-age"></span></span><span class="code-stamp">Replace all of it &mdash; new</span>
             </div>
             <button data-copy="bcg-import" data-crlf="true" type="button">Copy</button>
           </div>
@@ -5405,7 +5405,7 @@ Set(varLightboxGroupID, 0)</pre>
           <div class="code-toolbar">
             <div class="code-meta">
               <span>Screen - scrManagePeople</span>
-              <span class="code-stamp">Replace all of it</span>
+              <span class="code-stamp" data-updated="2026-11-18T12:02:59Z">18/11/2026 12:02 GMT <span class="code-age"></span></span><span class="code-stamp">Replace all of it</span>
             </div>
             <button data-copy="bcg-people" data-crlf="true" type="button">Copy</button>
           </div>
@@ -6543,6 +6543,29 @@ Set(varLightboxGroupID, 0)</pre>
       setActive(visible[0].target.id);
     }, { rootMargin: '-15% 0px -70% 0px', threshold: 0 });
     sections.forEach(function (s) { observer.observe(s); });
+  })();
+  </script>
+  <script>
+  (function () {
+    function age(ms) {
+      var m = Math.floor(ms / 60000);
+      if (m < 1) return 'just now';
+      if (m < 120) return m + ' minute' + (m === 1 ? '' : 's') + ' ago';
+      var h = Math.floor(m / 60);
+      if (h < 48) return h + ' hours ago';
+      return Math.floor(h / 24) + ' days ago';
+    }
+    function refresh() {
+      var now = Date.now();
+      document.querySelectorAll('.code-stamp[data-updated]').forEach(function (el) {
+        var t = new Date(el.getAttribute('data-updated')).getTime();
+        var out = el.querySelector('.code-age');
+        if (isNaN(t) || !out) return;
+        out.textContent = '(' + age(Math.max(0, now - t)) + ')';
+      });
+    }
+    refresh();
+    setInterval(refresh, 30000);
   })();
   </script>
 
