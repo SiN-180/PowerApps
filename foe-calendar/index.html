@@ -279,11 +279,11 @@
       <div class="topline">
         <span class="pill">Forecast of Events</span>
         <span class="pill">Dummy data</span>
-        <span class="pill">v2 &middot; 25/11/2026 02:46 GMT</span>
+        <span class="pill">v2 &middot; 25/11/2026 02:50 GMT</span>
       </div>
       <h1>FOE Calendar</h1>
       <p class="lead">Steps and code for the FOE app. Dummy data only: nothing is saved and nothing is connected to a list yet.</p>
-      <div class="callout warn"><strong>Update 25/11/2026:</strong> Step 2 (App.OnStart) now also builds the month list, and the Calendar, Admin, Home and Bars test files changed (month picker, colour dropdown, two formula fixes, and taller big-number labels to remove the little scroll bars). Redo Steps 2, 3, 4, 5 and 8 (the scroll-bar fix is in Calendar and Home). If Studio shows "Pasting the YAML code for screen isn't supported yet", that is the co-authoring lock: Save, refresh the page, then paste again.</div>
+      <div class="callout warn"><strong>Update 25/11/2026:</strong> Home (Step 5) now shows the whole Brigadier message with no scroll bars: each section wraps and grows to fit its text. Paste Step 5 again. Step 2 (App.OnStart) now also builds the month list, and the Calendar, Admin, Home and Bars test files changed (month picker, colour dropdown, two formula fixes, and taller big-number labels to remove the little scroll bars). Redo Steps 2, 3, 4, 5 and 8 (the scroll-bar fix is in Calendar and Home). If Studio shows "Pasting the YAML code for screen isn't supported yet", that is the co-authoring lock: Save, refresh the page, then paste again.</div>
       <div class="callout warn"><strong>Stages 6 and 7 (24/11/2026):</strong> every file changed, so redo Steps 2 to 6 in order. For each screen: paste the new code over the old screen (or delete the old screen first) and keep the same screen name. The Calendar is now about 350 KB; if Studio refuses the paste, tell me and I will split the forms out.</div>
 
       <section id="app">
@@ -302,7 +302,7 @@
           <div class="code-toolbar">
             <div class="code-meta">
               <span>App - OnStart</span>
-              <span class="code-stamp" data-updated="2026-11-25T02:46:05Z">v2 &middot; 25/11/2026 02:46 GMT</span>
+              <span class="code-stamp" data-updated="2026-11-25T02:50:08Z">v2 &middot; 25/11/2026 02:50 GMT</span>
             </div>
             <button data-copy="foe-onstart" type="button">Copy</button>
           </div>
@@ -588,7 +588,7 @@ ClearCollect(colList, Filter(colVisible, false))
           <div class="code-toolbar">
             <div class="code-meta">
               <span>Screen - scrCalendar</span>
-              <span class="code-stamp" data-updated="2026-11-25T02:46:05Z">v2 &middot; 25/11/2026 02:46 GMT &mdash; Stage 7</span>
+              <span class="code-stamp" data-updated="2026-11-25T02:50:08Z">v2 &middot; 25/11/2026 02:50 GMT &mdash; Stage 7</span>
             </div>
             <button data-copy="foe-stage5" type="button">Copy</button>
           </div>
@@ -7203,7 +7203,7 @@ ClearCollect(colList, Filter(colVisible, false))
           <div class="code-toolbar">
             <div class="code-meta">
               <span>Screen - scrAdmin</span>
-              <span class="code-stamp" data-updated="2026-11-25T02:46:05Z">v2 &middot; 25/11/2026 02:46 GMT</span>
+              <span class="code-stamp" data-updated="2026-11-25T02:50:08Z">v2 &middot; 25/11/2026 02:50 GMT</span>
             </div>
             <button data-copy="foe-admin" type="button">Copy</button>
           </div>
@@ -8181,11 +8181,11 @@ ClearCollect(colList, Filter(colVisible, false))
           <div class="code-toolbar">
             <div class="code-meta">
               <span>Screen - scrHome</span>
-              <span class="code-stamp" data-updated="2026-11-25T02:46:05Z">v2 &middot; 25/11/2026 02:46 GMT &mdash; Stage 6</span>
+              <span class="code-stamp" data-updated="2026-11-25T02:50:08Z">v2 &middot; 25/11/2026 02:50 GMT &mdash; Stage 6</span>
             </div>
             <button data-copy="foe-home" type="button">Copy</button>
           </div>
-          <details class="code"><summary>Show the code (2,408 lines)</summary>
+          <details class="code"><summary>Show the code (2,603 lines)</summary>
 <pre id="foe-home">Screens:
   scrHome:
     Properties:
@@ -8239,7 +8239,11 @@ ClearCollect(colList, Filter(colVisible, false))
                     )
                 )
             )
-        )
+        );
+        Set(varMsgDense, false);
+        ClearCollect(colMsgLay, ForAll(colMsg As m, {Order: m.Order, H: If(IsBlank(m.Heading) &amp;&amp; IsBlank(m.Body), 0, 34 + Sum(ForAll(Filter(Split(Substitute(m.Body, Char(13), ""), Char(10)), !IsBlank(Trim(Value))) As b, RoundUp((Len(Trim(b.Value)) + 2) * 6.6 / ((scrHome.Width - 48) * 0.44 - 52), 0)), Value) * 17 + 10)}));
+        If(Sum(colMsgLay, H) &gt; scrHome.Height - 262 - 8 - 100 - 68, Set(varMsgDense, true);
+        ClearCollect(colMsgLay, ForAll(colMsg As m, {Order: m.Order, H: If(IsBlank(m.Heading) &amp;&amp; IsBlank(m.Body), 0, 34 + Sum(ForAll(Filter(Split(Substitute(m.Body, Char(13), ""), Char(10)), !IsBlank(Trim(Value))) As b, RoundUp((Len(Trim(b.Value)) + 2) * 6 / ((scrHome.Width - 48) * 0.44 - 52), 0)), Value) * 15 + 10)})))
     Children:
       - conHRoot:
           Control: GroupContainer@1.5.0
@@ -9330,83 +9334,274 @@ ClearCollect(colList, Filter(colVisible, false))
                         Width: =28
                         X: =Parent.Width - 46
                         Y: =12
-                  - galHMsg:
-                      Control: Gallery@2.15.0
-                      Variant: Vertical
+                  - recHMsgRow1:
+                      Control: Classic/Button@2.2.0
                       Properties:
-                        Height: =Parent.Height - 68
-                        Items: =Filter(colMsg, !IsBlank(Heading) || !IsBlank(Body))
-                        LoadingSpinner: =LoadingSpinner.None
-                        ShowScrollbar: =true
-                        TemplatePadding: =0
-                        TemplateSize: =Max(64, (Parent.Height - 68) / Max(1, CountRows(Filter(colMsg, !IsBlank(Heading) || !IsBlank(Body)))))
+                        BorderColor: =RGBA(208, 196, 204, 1)
+                        BorderThickness: =1
+                        DisplayMode: =DisplayMode.View
+                        Fill: =RGBA(251, 249, 251, 1)
+                        Height: =Coalesce(LookUp(colMsgLay, Order = 1).H, 0) - 8
+                        HoverFill: =RGBA(251, 249, 251, 1)
+                        PressedFill: =RGBA(251, 249, 251, 1)
+                        RadiusBottomLeft: =10
+                        RadiusBottomRight: =10
+                        RadiusTopLeft: =10
+                        RadiusTopRight: =10
+                        Text: =""
+                        Visible: =Coalesce(LookUp(colMsgLay, Order = 1).H, 0) &gt; 0
                         Width: =Parent.Width - 24
                         X: =12
-                        Y: =58
-                      Children:
-                        - recHMsgRow:
-                            Control: Classic/Button@2.2.0
-                            Properties:
-                              BorderColor: =RGBA(208, 196, 204, 1)
-                              BorderThickness: =1
-                              DisplayMode: =DisplayMode.View
-                              Fill: =RGBA(251, 249, 251, 1)
-                              Height: =Parent.TemplateHeight - 8
-                              HoverFill: =RGBA(251, 249, 251, 1)
-                              PressedFill: =RGBA(251, 249, 251, 1)
-                              RadiusBottomLeft: =10
-                              RadiusBottomRight: =10
-                              RadiusTopLeft: =10
-                              RadiusTopRight: =10
-                              Text: =""
-                              Width: =Parent.TemplateWidth
-                              X: =0
-                              Y: =0
-                        - recHMsgBar:
-                            Control: Classic/Button@2.2.0
-                            Properties:
-                              BorderColor: =RGBA(208, 196, 204, 1)
-                              BorderThickness: =0
-                              DisplayMode: =DisplayMode.View
-                              Fill: =RGBA(83, 42, 69, 1)
-                              Height: =Parent.TemplateHeight - 24
-                              HoverFill: =RGBA(83, 42, 69, 1)
-                              PressedFill: =RGBA(83, 42, 69, 1)
-                              RadiusBottomLeft: =3
-                              RadiusBottomRight: =3
-                              RadiusTopLeft: =3
-                              RadiusTopRight: =3
-                              Text: =""
-                              Width: =5
-                              X: =0
-                              Y: =8
-                        - lblHMsgHead:
-                            Control: ModernText@1.0.0
-                            Properties:
-                              Color: =RGBA(83, 42, 69, 1)
-                              Fill: =RGBA(0, 0, 0, 0)
-                              FontWeight: =FontWeight.Semibold
-                              Height: =20
-                              PaddingBottom: =0
-                              PaddingTop: =0
-                              Size: =13
-                              Text: =ThisItem.Heading
-                              Width: =Parent.TemplateWidth - 28
-                              X: =16
-                              Y: =6
-                        - lblHMsgBody:
-                            Control: ModernText@1.0.0
-                            Properties:
-                              Color: =RGBA(30, 24, 34, 1)
-                              Fill: =RGBA(0, 0, 0, 0)
-                              Height: =Parent.TemplateHeight - 40
-                              PaddingBottom: =0
-                              PaddingTop: =0
-                              Size: =11
-                              Text: =Concat(Filter(Split(Substitute(ThisItem.Body, Char(13), ""), Char(10)), !IsBlank(Trim(Value))), UniChar(8226) &amp; " " &amp; Trim(Value), Char(10))
-                              Width: =Parent.TemplateWidth - 28
-                              X: =16
-                              Y: =28
+                        Y: =(58 + Sum(Filter(colMsgLay, Order &lt; 1), H))
+                  - recHMsgBar1:
+                      Control: Classic/Button@2.2.0
+                      Properties:
+                        BorderColor: =RGBA(208, 196, 204, 1)
+                        BorderThickness: =0
+                        DisplayMode: =DisplayMode.View
+                        Fill: =RGBA(83, 42, 69, 1)
+                        Height: =Coalesce(LookUp(colMsgLay, Order = 1).H, 0) - 24
+                        HoverFill: =RGBA(83, 42, 69, 1)
+                        PressedFill: =RGBA(83, 42, 69, 1)
+                        RadiusBottomLeft: =3
+                        RadiusBottomRight: =3
+                        RadiusTopLeft: =3
+                        RadiusTopRight: =3
+                        Text: =""
+                        Visible: =Coalesce(LookUp(colMsgLay, Order = 1).H, 0) &gt; 0
+                        Width: =5
+                        X: =12
+                        Y: =(58 + Sum(Filter(colMsgLay, Order &lt; 1), H)) + 8
+                  - lblHMsgHead1:
+                      Control: ModernText@1.0.0
+                      Properties:
+                        Color: =RGBA(83, 42, 69, 1)
+                        Fill: =RGBA(0, 0, 0, 0)
+                        FontWeight: =FontWeight.Semibold
+                        Height: =24
+                        PaddingBottom: =0
+                        PaddingTop: =0
+                        Size: =13
+                        Text: =LookUp(colMsg, Order = 1).Heading
+                        Visible: =Coalesce(LookUp(colMsgLay, Order = 1).H, 0) &gt; 0
+                        Width: =Parent.Width - 52
+                        X: =28
+                        Y: =(58 + Sum(Filter(colMsgLay, Order &lt; 1), H)) + 6
+                  - lblHMsgBody1:
+                      Control: ModernText@1.0.0
+                      Properties:
+                        Color: =RGBA(30, 24, 34, 1)
+                        Fill: =RGBA(0, 0, 0, 0)
+                        Height: =Coalesce(LookUp(colMsgLay, Order = 1).H, 0) - 42
+                        PaddingBottom: =0
+                        PaddingTop: =0
+                        Size: =If(varMsgDense, 10, 11)
+                        Text: =Concat(Filter(Split(Substitute(LookUp(colMsg, Order = 1).Body, Char(13), ""), Char(10)), !IsBlank(Trim(Value))), UniChar(8226) &amp; " " &amp; Trim(Value), Char(10))
+                        Visible: =Coalesce(LookUp(colMsgLay, Order = 1).H, 0) &gt; 0
+                        Width: =Parent.Width - 52
+                        X: =28
+                        Y: =(58 + Sum(Filter(colMsgLay, Order &lt; 1), H)) + 32
+                  - recHMsgRow2:
+                      Control: Classic/Button@2.2.0
+                      Properties:
+                        BorderColor: =RGBA(208, 196, 204, 1)
+                        BorderThickness: =1
+                        DisplayMode: =DisplayMode.View
+                        Fill: =RGBA(251, 249, 251, 1)
+                        Height: =Coalesce(LookUp(colMsgLay, Order = 2).H, 0) - 8
+                        HoverFill: =RGBA(251, 249, 251, 1)
+                        PressedFill: =RGBA(251, 249, 251, 1)
+                        RadiusBottomLeft: =10
+                        RadiusBottomRight: =10
+                        RadiusTopLeft: =10
+                        RadiusTopRight: =10
+                        Text: =""
+                        Visible: =Coalesce(LookUp(colMsgLay, Order = 2).H, 0) &gt; 0
+                        Width: =Parent.Width - 24
+                        X: =12
+                        Y: =(58 + Sum(Filter(colMsgLay, Order &lt; 2), H))
+                  - recHMsgBar2:
+                      Control: Classic/Button@2.2.0
+                      Properties:
+                        BorderColor: =RGBA(208, 196, 204, 1)
+                        BorderThickness: =0
+                        DisplayMode: =DisplayMode.View
+                        Fill: =RGBA(83, 42, 69, 1)
+                        Height: =Coalesce(LookUp(colMsgLay, Order = 2).H, 0) - 24
+                        HoverFill: =RGBA(83, 42, 69, 1)
+                        PressedFill: =RGBA(83, 42, 69, 1)
+                        RadiusBottomLeft: =3
+                        RadiusBottomRight: =3
+                        RadiusTopLeft: =3
+                        RadiusTopRight: =3
+                        Text: =""
+                        Visible: =Coalesce(LookUp(colMsgLay, Order = 2).H, 0) &gt; 0
+                        Width: =5
+                        X: =12
+                        Y: =(58 + Sum(Filter(colMsgLay, Order &lt; 2), H)) + 8
+                  - lblHMsgHead2:
+                      Control: ModernText@1.0.0
+                      Properties:
+                        Color: =RGBA(83, 42, 69, 1)
+                        Fill: =RGBA(0, 0, 0, 0)
+                        FontWeight: =FontWeight.Semibold
+                        Height: =24
+                        PaddingBottom: =0
+                        PaddingTop: =0
+                        Size: =13
+                        Text: =LookUp(colMsg, Order = 2).Heading
+                        Visible: =Coalesce(LookUp(colMsgLay, Order = 2).H, 0) &gt; 0
+                        Width: =Parent.Width - 52
+                        X: =28
+                        Y: =(58 + Sum(Filter(colMsgLay, Order &lt; 2), H)) + 6
+                  - lblHMsgBody2:
+                      Control: ModernText@1.0.0
+                      Properties:
+                        Color: =RGBA(30, 24, 34, 1)
+                        Fill: =RGBA(0, 0, 0, 0)
+                        Height: =Coalesce(LookUp(colMsgLay, Order = 2).H, 0) - 42
+                        PaddingBottom: =0
+                        PaddingTop: =0
+                        Size: =If(varMsgDense, 10, 11)
+                        Text: =Concat(Filter(Split(Substitute(LookUp(colMsg, Order = 2).Body, Char(13), ""), Char(10)), !IsBlank(Trim(Value))), UniChar(8226) &amp; " " &amp; Trim(Value), Char(10))
+                        Visible: =Coalesce(LookUp(colMsgLay, Order = 2).H, 0) &gt; 0
+                        Width: =Parent.Width - 52
+                        X: =28
+                        Y: =(58 + Sum(Filter(colMsgLay, Order &lt; 2), H)) + 32
+                  - recHMsgRow3:
+                      Control: Classic/Button@2.2.0
+                      Properties:
+                        BorderColor: =RGBA(208, 196, 204, 1)
+                        BorderThickness: =1
+                        DisplayMode: =DisplayMode.View
+                        Fill: =RGBA(251, 249, 251, 1)
+                        Height: =Coalesce(LookUp(colMsgLay, Order = 3).H, 0) - 8
+                        HoverFill: =RGBA(251, 249, 251, 1)
+                        PressedFill: =RGBA(251, 249, 251, 1)
+                        RadiusBottomLeft: =10
+                        RadiusBottomRight: =10
+                        RadiusTopLeft: =10
+                        RadiusTopRight: =10
+                        Text: =""
+                        Visible: =Coalesce(LookUp(colMsgLay, Order = 3).H, 0) &gt; 0
+                        Width: =Parent.Width - 24
+                        X: =12
+                        Y: =(58 + Sum(Filter(colMsgLay, Order &lt; 3), H))
+                  - recHMsgBar3:
+                      Control: Classic/Button@2.2.0
+                      Properties:
+                        BorderColor: =RGBA(208, 196, 204, 1)
+                        BorderThickness: =0
+                        DisplayMode: =DisplayMode.View
+                        Fill: =RGBA(83, 42, 69, 1)
+                        Height: =Coalesce(LookUp(colMsgLay, Order = 3).H, 0) - 24
+                        HoverFill: =RGBA(83, 42, 69, 1)
+                        PressedFill: =RGBA(83, 42, 69, 1)
+                        RadiusBottomLeft: =3
+                        RadiusBottomRight: =3
+                        RadiusTopLeft: =3
+                        RadiusTopRight: =3
+                        Text: =""
+                        Visible: =Coalesce(LookUp(colMsgLay, Order = 3).H, 0) &gt; 0
+                        Width: =5
+                        X: =12
+                        Y: =(58 + Sum(Filter(colMsgLay, Order &lt; 3), H)) + 8
+                  - lblHMsgHead3:
+                      Control: ModernText@1.0.0
+                      Properties:
+                        Color: =RGBA(83, 42, 69, 1)
+                        Fill: =RGBA(0, 0, 0, 0)
+                        FontWeight: =FontWeight.Semibold
+                        Height: =24
+                        PaddingBottom: =0
+                        PaddingTop: =0
+                        Size: =13
+                        Text: =LookUp(colMsg, Order = 3).Heading
+                        Visible: =Coalesce(LookUp(colMsgLay, Order = 3).H, 0) &gt; 0
+                        Width: =Parent.Width - 52
+                        X: =28
+                        Y: =(58 + Sum(Filter(colMsgLay, Order &lt; 3), H)) + 6
+                  - lblHMsgBody3:
+                      Control: ModernText@1.0.0
+                      Properties:
+                        Color: =RGBA(30, 24, 34, 1)
+                        Fill: =RGBA(0, 0, 0, 0)
+                        Height: =Coalesce(LookUp(colMsgLay, Order = 3).H, 0) - 42
+                        PaddingBottom: =0
+                        PaddingTop: =0
+                        Size: =If(varMsgDense, 10, 11)
+                        Text: =Concat(Filter(Split(Substitute(LookUp(colMsg, Order = 3).Body, Char(13), ""), Char(10)), !IsBlank(Trim(Value))), UniChar(8226) &amp; " " &amp; Trim(Value), Char(10))
+                        Visible: =Coalesce(LookUp(colMsgLay, Order = 3).H, 0) &gt; 0
+                        Width: =Parent.Width - 52
+                        X: =28
+                        Y: =(58 + Sum(Filter(colMsgLay, Order &lt; 3), H)) + 32
+                  - recHMsgRow4:
+                      Control: Classic/Button@2.2.0
+                      Properties:
+                        BorderColor: =RGBA(208, 196, 204, 1)
+                        BorderThickness: =1
+                        DisplayMode: =DisplayMode.View
+                        Fill: =RGBA(251, 249, 251, 1)
+                        Height: =Coalesce(LookUp(colMsgLay, Order = 4).H, 0) - 8
+                        HoverFill: =RGBA(251, 249, 251, 1)
+                        PressedFill: =RGBA(251, 249, 251, 1)
+                        RadiusBottomLeft: =10
+                        RadiusBottomRight: =10
+                        RadiusTopLeft: =10
+                        RadiusTopRight: =10
+                        Text: =""
+                        Visible: =Coalesce(LookUp(colMsgLay, Order = 4).H, 0) &gt; 0
+                        Width: =Parent.Width - 24
+                        X: =12
+                        Y: =(58 + Sum(Filter(colMsgLay, Order &lt; 4), H))
+                  - recHMsgBar4:
+                      Control: Classic/Button@2.2.0
+                      Properties:
+                        BorderColor: =RGBA(208, 196, 204, 1)
+                        BorderThickness: =0
+                        DisplayMode: =DisplayMode.View
+                        Fill: =RGBA(83, 42, 69, 1)
+                        Height: =Coalesce(LookUp(colMsgLay, Order = 4).H, 0) - 24
+                        HoverFill: =RGBA(83, 42, 69, 1)
+                        PressedFill: =RGBA(83, 42, 69, 1)
+                        RadiusBottomLeft: =3
+                        RadiusBottomRight: =3
+                        RadiusTopLeft: =3
+                        RadiusTopRight: =3
+                        Text: =""
+                        Visible: =Coalesce(LookUp(colMsgLay, Order = 4).H, 0) &gt; 0
+                        Width: =5
+                        X: =12
+                        Y: =(58 + Sum(Filter(colMsgLay, Order &lt; 4), H)) + 8
+                  - lblHMsgHead4:
+                      Control: ModernText@1.0.0
+                      Properties:
+                        Color: =RGBA(83, 42, 69, 1)
+                        Fill: =RGBA(0, 0, 0, 0)
+                        FontWeight: =FontWeight.Semibold
+                        Height: =24
+                        PaddingBottom: =0
+                        PaddingTop: =0
+                        Size: =13
+                        Text: =LookUp(colMsg, Order = 4).Heading
+                        Visible: =Coalesce(LookUp(colMsgLay, Order = 4).H, 0) &gt; 0
+                        Width: =Parent.Width - 52
+                        X: =28
+                        Y: =(58 + Sum(Filter(colMsgLay, Order &lt; 4), H)) + 6
+                  - lblHMsgBody4:
+                      Control: ModernText@1.0.0
+                      Properties:
+                        Color: =RGBA(30, 24, 34, 1)
+                        Fill: =RGBA(0, 0, 0, 0)
+                        Height: =Coalesce(LookUp(colMsgLay, Order = 4).H, 0) - 42
+                        PaddingBottom: =0
+                        PaddingTop: =0
+                        Size: =If(varMsgDense, 10, 11)
+                        Text: =Concat(Filter(Split(Substitute(LookUp(colMsg, Order = 4).Body, Char(13), ""), Char(10)), !IsBlank(Trim(Value))), UniChar(8226) &amp; " " &amp; Trim(Value), Char(10))
+                        Visible: =Coalesce(LookUp(colMsgLay, Order = 4).H, 0) &gt; 0
+                        Width: =Parent.Width - 52
+                        X: =28
+                        Y: =(58 + Sum(Filter(colMsgLay, Order &lt; 4), H)) + 32
                   - lblHMsgEmpty:
                       Control: ModernText@1.0.0
                       Properties:
@@ -10607,7 +10802,7 @@ ClearCollect(colList, Filter(colVisible, false))
           <div class="code-toolbar">
             <div class="code-meta">
               <span>Screen - scrBrigadier</span>
-              <span class="code-stamp" data-updated="2026-11-25T02:46:05Z">v2 &middot; 25/11/2026 02:46 GMT &mdash; new</span>
+              <span class="code-stamp" data-updated="2026-11-25T02:50:08Z">v2 &middot; 25/11/2026 02:50 GMT &mdash; new</span>
             </div>
             <button data-copy="foe-brig" type="button">Copy</button>
           </div>
@@ -11139,7 +11334,7 @@ ClearCollect(colList, Filter(colVisible, false))
           <div class="code-toolbar">
             <div class="code-meta">
               <span>Screen - scrSpanTest (test only)</span>
-              <span class="code-stamp" data-updated="2026-11-25T02:46:05Z">v2 &middot; 25/11/2026 02:46 GMT &mdash; test</span>
+              <span class="code-stamp" data-updated="2026-11-25T02:50:08Z">v2 &middot; 25/11/2026 02:50 GMT &mdash; test</span>
             </div>
             <button data-copy="foe-span" type="button">Copy</button>
           </div>
