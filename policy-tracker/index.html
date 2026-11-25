@@ -280,12 +280,12 @@
 
       <div class="topline">
         <span class="pill">v1.00</span>
-        <span class="pill">Last build 25/11/2026 13:21 GMT</span>
+        <span class="pill">Last build 25/11/2026 13:23 GMT</span>
       </div>
       <h1>Policy Tracker</h1>
       <div class="replace-all">
         <h2>Replace three things</h2>
-        <p>This build adds a <strong>stand-down period</strong>: you give the app a start date and an end date, and nobody can plan a release on any Thursday between them (both dates included). Only <strong>App.Formulas</strong>, <strong>App.OnStart</strong> and the <strong>ViewItem</strong> screen change. StartScreen, Main, Overview, Historic and NewsletterPack stay exactly as they are in Studio today. Work down the page and tick each step off. Copy works without opening the code.</p>
+        <p>This build adds a <strong>stand-down period</strong>: you give the app a start date and an end date, and nobody can plan a release on any Thursday between them (both dates included). The same ViewItem paste also carries the <strong>Newsletter Title and Audience required</strong> rule, which had been prepared earlier but was not yet in your live app. Only <strong>App.Formulas</strong>, <strong>App.OnStart</strong> and the <strong>ViewItem</strong> screen change. StartScreen, Main, Overview, Historic and NewsletterPack stay exactly as they are in Studio today. Work down the page and tick each step off. Copy works without opening the code.</p>
         <ol>
           <li>Check the new SharePoint list and add it to the app</li>
           <li>Replace <strong>App.Formulas</strong> and <strong>App.OnStart</strong></li>
@@ -315,7 +315,7 @@
           <div class="code-toolbar">
             <div class="code-meta">
               <span>App - Formulas</span>
-              <span class="code-stamp" data-updated="2026-11-25T13:21:24Z">25/11/2026 13:21 GMT <span class="code-age"></span></span><span class="code-stamp">Replace all of it</span>
+              <span class="code-stamp" data-updated="2026-11-25T13:23:48Z">25/11/2026 13:23 GMT <span class="code-age"></span></span><span class="code-stamp">Replace all of it</span>
             </div>
             <button data-copy="pt-formulas" data-crlf="false" type="button">Copy</button>
           </div>
@@ -571,7 +571,7 @@ CleanDocumentUrl(RawUrl: Text): Text = With(
           <div class="code-toolbar">
             <div class="code-meta">
               <span>App - OnStart</span>
-              <span class="code-stamp" data-updated="2026-11-25T13:21:24Z">25/11/2026 13:21 GMT <span class="code-age"></span></span><span class="code-stamp">Replace all of it</span>
+              <span class="code-stamp" data-updated="2026-11-25T13:23:48Z">25/11/2026 13:23 GMT <span class="code-age"></span></span><span class="code-stamp">Replace all of it</span>
             </div>
             <button data-copy="pt-onstart" data-crlf="false" type="button">Copy</button>
           </div>
@@ -718,17 +718,18 @@ LoadStandDown()</pre>
             <li>High Priority does <strong>not</strong> override a stand-down. It is a hard lock.</li>
             <li>In the <strong>Duplicate</strong> dialog, stand-down Thursdays are simply left out of the list.</li>
             <li>A new item no longer starts on a stand-down Thursday. It starts on the first Thursday that is open.</li>
+            <li><strong>Newsletter Title and Audience are now required.</strong> Save, Save &amp; Close and Add Document Link are greyed out until both are filled in, and an amber banner under the top bar says which one is missing. Items ticked <em>External consultation required</em> or <em>Published</em> are exempt.</li>
           </ul>
         </div>
         <div class="code-card">
           <div class="code-toolbar">
             <div class="code-meta">
               <span>Screen - ViewItem</span>
-              <span class="code-stamp" data-updated="2026-11-25T13:21:24Z">25/11/2026 13:21 GMT <span class="code-age"></span></span><span class="code-stamp">Replace all of it</span>
+              <span class="code-stamp" data-updated="2026-11-25T13:23:48Z">25/11/2026 13:23 GMT <span class="code-age"></span></span><span class="code-stamp">Replace all of it</span>
             </div>
             <button data-copy="pt-viewitem" data-crlf="true" type="button">Copy</button>
           </div>
-          <details class="code"><summary>Show the code (3721 lines)</summary>
+          <details class="code"><summary>Show the code (3759 lines)</summary>
 <pre id="pt-viewitem">Screens:
   ViewItem:
     Properties:
@@ -945,7 +946,7 @@ LoadStandDown()</pre>
                         DisabledBorderColor: =RGBA(100, 120, 100, 1)
                         DisabledColor: =RGBA(180, 200, 180, 1)
                         DisabledFill: =RGBA(38, 80, 55, 1)
-                        DisplayMode: =If(varSaving, DisplayMode.Disabled, DisplayMode.Edit)
+                        DisplayMode: =If(varSaving || (!ckbExtConsult1.Value &amp;&amp; !ckbPublished1.Value &amp;&amp; (IsBlank(Trim(txtNewsletterTitle1.Text)) || IsBlank(Trim(txtAudience1.Text)))), DisplayMode.Disabled, DisplayMode.Edit)
                         Fill: =RGBA(11, 74, 54, 1)
                         Font: =Font.'Open Sans'
                         FontWeight: =FontWeight.Bold
@@ -1044,7 +1045,7 @@ LoadStandDown()</pre>
                         Color: =RGBA(11, 74, 54, 1)
                         DisabledBorderColor: =RGBA(180, 200, 180, 1)
                         DisabledColor: =RGBA(180, 200, 180, 1)
-                        DisplayMode: =If(varSaving, DisplayMode.Disabled, DisplayMode.Edit)
+                        DisplayMode: =If(varSaving || (!ckbExtConsult1.Value &amp;&amp; !ckbPublished1.Value &amp;&amp; (IsBlank(Trim(txtNewsletterTitle1.Text)) || IsBlank(Trim(txtAudience1.Text)))), DisplayMode.Disabled, DisplayMode.Edit)
                         Fill: =RGBA(0, 0, 0, 0)
                         Font: =Font.'Open Sans'
                         FontWeight: =FontWeight.Bold
@@ -1456,6 +1457,44 @@ LoadStandDown()</pre>
                         Height: =Parent.Height
                         Size: =11
                         Text: ="CONSULTATION ONLY — NOT FOR RELEASE"
+                        Width: =Parent.Width
+            - conNewsletterBanner1:
+                Control: GroupContainer@1.5.0
+                Variant: ManualLayout
+                Properties:
+                  DropShadow: =DropShadow.None
+                  Fill: =RGBA(255, 248, 225, 1)
+                  FillPortions: =0
+                  Height: =44
+                  RadiusBottomLeft: =12
+                  RadiusBottomRight: =12
+                  RadiusTopLeft: =12
+                  RadiusTopRight: =12
+                  Visible: =!ckbExtConsult1.Value &amp;&amp; !ckbPublished1.Value &amp;&amp; (IsBlank(Trim(txtNewsletterTitle1.Text)) || IsBlank(Trim(txtAudience1.Text)))
+                Children:
+                  - lblNewsletterBanner1:
+                      Control: Label@2.5.1
+                      Properties:
+                        Align: =Align.Center
+                        Color: =RGBA(130, 80, 0, 1)
+                        Font: =Font.'Open Sans'
+                        FontWeight: =FontWeight.Bold
+                        Height: =Parent.Height
+                        Size: =11
+                        Text: |-
+                          ="To save, fill in " &amp;
+                          Concat(
+                              Filter(
+                                  Table(
+                                      {n: "Newsletter Title", missing: IsBlank(Trim(txtNewsletterTitle1.Text))},
+                                      {n: "Audience", missing: IsBlank(Trim(txtAudience1.Text))}
+                                  ),
+                                  missing
+                              ),
+                              n,
+                              " and "
+                          ) &amp;
+                          " in the Newsletter Details box below (needed for the weekly newsletter)."
                         Width: =Parent.Width
             - conBody1:
                 Control: GroupContainer@1.5.0
@@ -2725,7 +2764,7 @@ LoadStandDown()</pre>
                                     BorderColor: =RGBA(122, 138, 143, 1)
                                     BorderStyle: =BorderStyle.Solid
                                     BorderThickness: =1
-                                    DisplayMode: =If(varSaving, DisplayMode.Disabled, DisplayMode.Edit)
+                                    DisplayMode: =If(varSaving || (!ckbExtConsult1.Value &amp;&amp; !ckbPublished1.Value &amp;&amp; (IsBlank(Trim(txtNewsletterTitle1.Text)) || IsBlank(Trim(txtAudience1.Text)))), DisplayMode.Disabled, DisplayMode.Edit)
                                     Font: =Font.Lato
                                     FontWeight: =""
                                     Height: =39
@@ -4471,6 +4510,7 @@ LoadStandDown()</pre>
           <li><label><input type="checkbox" data-step="t6"> Edit the test row so the window includes next Thursday, then open a brand new item: it starts on the first Thursday after the window, not on next Thursday.</label></li>
           <li><label><input type="checkbox" data-step="t7"> Set the test row to Active No (or delete it), reopen an item: every Thursday is selectable again.</label></li>
           <li><label><input type="checkbox" data-step="t8"> Delete the test row before you finish.</label></li>
+          <li><label><input type="checkbox" data-step="t9"> New item: an amber banner shows under the top bar and Save, Save &amp; Close and Add Document Link are grey. Fill in only the Newsletter Title and the banner now says just Audience. Fill in both and the banner goes and the buttons turn on. Tick <strong>External consultation required</strong> and both the banner and the lock go away.</label></li>
         </ul>
       </section>
 
