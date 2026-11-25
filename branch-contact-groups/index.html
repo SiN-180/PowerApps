@@ -285,7 +285,7 @@
 
       <div class="topline">
         <span class="pill">v2.50</span>
-        <span class="pill">Last build 25/11/2026 10:57 GMT</span>
+        <span class="pill">Last build 25/11/2026 11:01 GMT</span>
       </div>
       <h1>Branch Contact Groups</h1>
       <div class="replace-all">
@@ -4701,7 +4701,7 @@ Set(varLightboxGroupID, 0)</pre>
       - lblImpTag1:
           Control: Label@2.5.1
           Properties:
-            Text: =Index(colImpTags, 1).Tag
+            Text: =If(CountRows(colImpTags) &gt;= 1, Index(colImpTags, 1).Tag, "")
             Visible: =CountRows(colImpTags) &gt;= 1
             Color: =RGBA(24,45,55,1)
             FontWeight: =FontWeight.Bold
@@ -4714,7 +4714,7 @@ Set(varLightboxGroupID, 0)</pre>
       - lblImpCount1:
           Control: Label@2.5.1
           Properties:
-            Text: =Index(colImpTags, 1).N &amp; " address" &amp; If(Index(colImpTags, 1).N = 1, "", "es")
+            Text: =If(CountRows(colImpTags) &gt;= 1, Index(colImpTags, 1).N &amp; " address" &amp; If(Index(colImpTags, 1).N = 1, "", "es"), "")
             Visible: =CountRows(colImpTags) &gt;= 1
             Color: =RGBA(96,105,103,1)
             Size: =11
@@ -4798,7 +4798,7 @@ Set(varLightboxGroupID, 0)</pre>
       - lblImpTag2:
           Control: Label@2.5.1
           Properties:
-            Text: =Index(colImpTags, 2).Tag
+            Text: =If(CountRows(colImpTags) &gt;= 2, Index(colImpTags, 2).Tag, "")
             Visible: =CountRows(colImpTags) &gt;= 2
             Color: =RGBA(24,45,55,1)
             FontWeight: =FontWeight.Bold
@@ -4811,7 +4811,7 @@ Set(varLightboxGroupID, 0)</pre>
       - lblImpCount2:
           Control: Label@2.5.1
           Properties:
-            Text: =Index(colImpTags, 2).N &amp; " address" &amp; If(Index(colImpTags, 2).N = 1, "", "es")
+            Text: =If(CountRows(colImpTags) &gt;= 2, Index(colImpTags, 2).N &amp; " address" &amp; If(Index(colImpTags, 2).N = 1, "", "es"), "")
             Visible: =CountRows(colImpTags) &gt;= 2
             Color: =RGBA(96,105,103,1)
             Size: =11
@@ -4895,7 +4895,7 @@ Set(varLightboxGroupID, 0)</pre>
       - lblImpTag3:
           Control: Label@2.5.1
           Properties:
-            Text: =Index(colImpTags, 3).Tag
+            Text: =If(CountRows(colImpTags) &gt;= 3, Index(colImpTags, 3).Tag, "")
             Visible: =CountRows(colImpTags) &gt;= 3
             Color: =RGBA(24,45,55,1)
             FontWeight: =FontWeight.Bold
@@ -4908,7 +4908,7 @@ Set(varLightboxGroupID, 0)</pre>
       - lblImpCount3:
           Control: Label@2.5.1
           Properties:
-            Text: =Index(colImpTags, 3).N &amp; " address" &amp; If(Index(colImpTags, 3).N = 1, "", "es")
+            Text: =If(CountRows(colImpTags) &gt;= 3, Index(colImpTags, 3).N &amp; " address" &amp; If(Index(colImpTags, 3).N = 1, "", "es"), "")
             Visible: =CountRows(colImpTags) &gt;= 3
             Color: =RGBA(96,105,103,1)
             Size: =11
@@ -4992,7 +4992,7 @@ Set(varLightboxGroupID, 0)</pre>
       - lblImpTag4:
           Control: Label@2.5.1
           Properties:
-            Text: =Index(colImpTags, 4).Tag
+            Text: =If(CountRows(colImpTags) &gt;= 4, Index(colImpTags, 4).Tag, "")
             Visible: =CountRows(colImpTags) &gt;= 4
             Color: =RGBA(24,45,55,1)
             FontWeight: =FontWeight.Bold
@@ -5005,7 +5005,7 @@ Set(varLightboxGroupID, 0)</pre>
       - lblImpCount4:
           Control: Label@2.5.1
           Properties:
-            Text: =Index(colImpTags, 4).N &amp; " address" &amp; If(Index(colImpTags, 4).N = 1, "", "es")
+            Text: =If(CountRows(colImpTags) &gt;= 4, Index(colImpTags, 4).N &amp; " address" &amp; If(Index(colImpTags, 4).N = 1, "", "es"), "")
             Visible: =CountRows(colImpTags) &gt;= 4
             Color: =RGBA(96,105,103,1)
             Size: =11
@@ -5089,7 +5089,7 @@ Set(varLightboxGroupID, 0)</pre>
       - lblImpTag5:
           Control: Label@2.5.1
           Properties:
-            Text: =Index(colImpTags, 5).Tag
+            Text: =If(CountRows(colImpTags) &gt;= 5, Index(colImpTags, 5).Tag, "")
             Visible: =CountRows(colImpTags) &gt;= 5
             Color: =RGBA(24,45,55,1)
             FontWeight: =FontWeight.Bold
@@ -5102,7 +5102,7 @@ Set(varLightboxGroupID, 0)</pre>
       - lblImpCount5:
           Control: Label@2.5.1
           Properties:
-            Text: =Index(colImpTags, 5).N &amp; " address" &amp; If(Index(colImpTags, 5).N = 1, "", "es")
+            Text: =If(CountRows(colImpTags) &gt;= 5, Index(colImpTags, 5).N &amp; " address" &amp; If(Index(colImpTags, 5).N = 1, "", "es"), "")
             Visible: =CountRows(colImpTags) &gt;= 5
             Color: =RGBA(96,105,103,1)
             Size: =11
@@ -5186,7 +5186,7 @@ Set(varLightboxGroupID, 0)</pre>
       - lblImpTag6:
           Control: Label@2.5.1
           Properties:
-            Text: =Index(colImpTags, 6).Tag
+            Text: =If(CountRows(colImpTags) &gt;= 6, Index(colImpTags, 6).Tag, "")
             Visible: =CountRows(colImpTags) &gt;= 6
             Color: =RGBA(24,45,55,1)
             FontWeight: =FontWeight.Bold
@@ -5199,7 +5199,7 @@ Set(varLightboxGroupID, 0)</pre>
       - lblImpCount6:
           Control: Label@2.5.1
           Properties:
-            Text: =Index(colImpTags, 6).N &amp; " address" &amp; If(Index(colImpTags, 6).N = 1, "", "es")
+            Text: =If(CountRows(colImpTags) &gt;= 6, Index(colImpTags, 6).N &amp; " address" &amp; If(Index(colImpTags, 6).N = 1, "", "es"), "")
             Visible: =CountRows(colImpTags) &gt;= 6
             Color: =RGBA(96,105,103,1)
             Size: =11
