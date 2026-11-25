@@ -279,7 +279,7 @@
       <div class="topline">
         <span class="pill">Forecast of Events</span>
         <span class="pill">Dummy data</span>
-        <span class="pill">v2 &middot; 25/11/2026 02:24 GMT</span>
+        <span class="pill">v2 &middot; 25/11/2026 02:46 GMT</span>
       </div>
       <h1>FOE Calendar</h1>
       <p class="lead">Steps and code for the FOE app. Dummy data only: nothing is saved and nothing is connected to a list yet.</p>
@@ -302,7 +302,7 @@
           <div class="code-toolbar">
             <div class="code-meta">
               <span>App - OnStart</span>
-              <span class="code-stamp" data-updated="2026-11-25T02:24:14Z">v2 &middot; 25/11/2026 02:24 GMT</span>
+              <span class="code-stamp" data-updated="2026-11-25T02:46:05Z">v2 &middot; 25/11/2026 02:46 GMT</span>
             </div>
             <button data-copy="foe-onstart" type="button">Copy</button>
           </div>
@@ -588,7 +588,7 @@ ClearCollect(colList, Filter(colVisible, false))
           <div class="code-toolbar">
             <div class="code-meta">
               <span>Screen - scrCalendar</span>
-              <span class="code-stamp" data-updated="2026-11-25T02:24:14Z">v2 &middot; 25/11/2026 02:24 GMT &mdash; Stage 7</span>
+              <span class="code-stamp" data-updated="2026-11-25T02:46:05Z">v2 &middot; 25/11/2026 02:46 GMT &mdash; Stage 7</span>
             </div>
             <button data-copy="foe-stage5" type="button">Copy</button>
           </div>
@@ -7203,7 +7203,7 @@ ClearCollect(colList, Filter(colVisible, false))
           <div class="code-toolbar">
             <div class="code-meta">
               <span>Screen - scrAdmin</span>
-              <span class="code-stamp" data-updated="2026-11-25T02:24:14Z">v2 &middot; 25/11/2026 02:24 GMT</span>
+              <span class="code-stamp" data-updated="2026-11-25T02:46:05Z">v2 &middot; 25/11/2026 02:46 GMT</span>
             </div>
             <button data-copy="foe-admin" type="button">Copy</button>
           </div>
@@ -8181,7 +8181,7 @@ ClearCollect(colList, Filter(colVisible, false))
           <div class="code-toolbar">
             <div class="code-meta">
               <span>Screen - scrHome</span>
-              <span class="code-stamp" data-updated="2026-11-25T02:24:14Z">v2 &middot; 25/11/2026 02:24 GMT &mdash; Stage 6</span>
+              <span class="code-stamp" data-updated="2026-11-25T02:46:05Z">v2 &middot; 25/11/2026 02:46 GMT &mdash; Stage 6</span>
             </div>
             <button data-copy="foe-home" type="button">Copy</button>
           </div>
@@ -10607,7 +10607,7 @@ ClearCollect(colList, Filter(colVisible, false))
           <div class="code-toolbar">
             <div class="code-meta">
               <span>Screen - scrBrigadier</span>
-              <span class="code-stamp" data-updated="2026-11-25T02:24:14Z">v2 &middot; 25/11/2026 02:24 GMT &mdash; new</span>
+              <span class="code-stamp" data-updated="2026-11-25T02:46:05Z">v2 &middot; 25/11/2026 02:46 GMT &mdash; new</span>
             </div>
             <button data-copy="foe-brig" type="button">Copy</button>
           </div>
@@ -11139,11 +11139,11 @@ ClearCollect(colList, Filter(colVisible, false))
           <div class="code-toolbar">
             <div class="code-meta">
               <span>Screen - scrSpanTest (test only)</span>
-              <span class="code-stamp" data-updated="2026-11-25T02:24:14Z">v2 &middot; 25/11/2026 02:24 GMT &mdash; test</span>
+              <span class="code-stamp" data-updated="2026-11-25T02:46:05Z">v2 &middot; 25/11/2026 02:46 GMT &mdash; test</span>
             </div>
             <button data-copy="foe-span" type="button">Copy</button>
           </div>
-          <details class="code"><summary>Show the code (2,213 lines)</summary>
+          <details class="code"><summary>Show the code (2,219 lines)</summary>
 <pre id="foe-span">Screens:
   scrSpanTest:
     Properties:
@@ -11878,8 +11878,8 @@ ClearCollect(colList, Filter(colVisible, false))
                       Control: Gallery@2.15.0
                       Variant: Vertical
                       Properties:
-                        Height: =Parent.Height - 20
-                        Items: =Sort(Filter(colSpanBars, Week = 1), Row, SortOrder.Ascending)
+                        Height: =68
+                        Items: =Sort(Filter(colSpanBars, Week = 1, Row &lt; 3), Row, SortOrder.Ascending)
                         LoadingSpinner: =LoadingSpinner.None
                         ShowScrollbar: =false
                         TemplatePadding: =0
@@ -11906,7 +11906,7 @@ ClearCollect(colList, Filter(colVisible, false))
                               RadiusTopLeft: =If(ThisItem.ContL, 0, 6)
                               RadiusTopRight: =If(ThisItem.ContR, 0, 6)
                               Size: =10
-                              Text: =If(ThisItem.ContL, "&lt; ", "") &amp; ThisItem.Title &amp; If(ThisItem.ContR, " &gt;", "")
+                              Text: =If(ThisItem.ContL, "&lt; ", "") &amp; ThisItem.Title &amp; If(ThisItem.ContR, " &gt;", "") &amp; "  [col " &amp; ThisItem.Col &amp; ", span " &amp; ThisItem.Span &amp; "]"
                               Width: =ThisItem.Span * (Parent.TemplateWidth / 7) - 4
                               X: =(ThisItem.Col - 1) * (Parent.TemplateWidth / 7) + 2
                               Y: =1
@@ -11915,15 +11915,16 @@ ClearCollect(colList, Filter(colVisible, false))
                       Properties:
                         Color: =RGBA(83, 42, 69, 1)
                         Fill: =RGBA(0, 0, 0, 0)
-                        Height: =14
+                        FontWeight: =FontWeight.Semibold
+                        Height: =16
                         PaddingBottom: =0
                         PaddingTop: =0
-                        Size: =9
-                        Text: ="+" &amp; (CountRows(Sort(Filter(colSpanBars, Week = 1), Row, SortOrder.Ascending)) - 3) &amp; " more bars hidden"
-                        Visible: =CountRows(Sort(Filter(colSpanBars, Week = 1), Row, SortOrder.Ascending)) &gt; 3
+                        Size: =10
+                        Text: ="+" &amp; CountRows(Filter(colSpanBars, Week = 1, Row &gt;= 3)) &amp; " more"
+                        Visible: =CountRows(Filter(colSpanBars, Week = 1, Row &gt;= 3)) &gt; 0
                         Width: =240
                         X: =6
-                        Y: =Parent.Height - 14
+                        Y: =Parent.Height - 18
             - conSpRow1:
                 Control: GroupContainer@1.5.0
                 Variant: ManualLayout
@@ -12162,8 +12163,8 @@ ClearCollect(colList, Filter(colVisible, false))
                       Control: Gallery@2.15.0
                       Variant: Vertical
                       Properties:
-                        Height: =Parent.Height - 20
-                        Items: =Sort(Filter(colSpanBars, Week = 2), Row, SortOrder.Ascending)
+                        Height: =68
+                        Items: =Sort(Filter(colSpanBars, Week = 2, Row &lt; 3), Row, SortOrder.Ascending)
                         LoadingSpinner: =LoadingSpinner.None
                         ShowScrollbar: =false
                         TemplatePadding: =0
@@ -12190,7 +12191,7 @@ ClearCollect(colList, Filter(colVisible, false))
                               RadiusTopLeft: =If(ThisItem.ContL, 0, 6)
                               RadiusTopRight: =If(ThisItem.ContR, 0, 6)
                               Size: =10
-                              Text: =If(ThisItem.ContL, "&lt; ", "") &amp; ThisItem.Title &amp; If(ThisItem.ContR, " &gt;", "")
+                              Text: =If(ThisItem.ContL, "&lt; ", "") &amp; ThisItem.Title &amp; If(ThisItem.ContR, " &gt;", "") &amp; "  [col " &amp; ThisItem.Col &amp; ", span " &amp; ThisItem.Span &amp; "]"
                               Width: =ThisItem.Span * (Parent.TemplateWidth / 7) - 4
                               X: =(ThisItem.Col - 1) * (Parent.TemplateWidth / 7) + 2
                               Y: =1
@@ -12199,15 +12200,16 @@ ClearCollect(colList, Filter(colVisible, false))
                       Properties:
                         Color: =RGBA(83, 42, 69, 1)
                         Fill: =RGBA(0, 0, 0, 0)
-                        Height: =14
+                        FontWeight: =FontWeight.Semibold
+                        Height: =16
                         PaddingBottom: =0
                         PaddingTop: =0
-                        Size: =9
-                        Text: ="+" &amp; (CountRows(Sort(Filter(colSpanBars, Week = 2), Row, SortOrder.Ascending)) - 3) &amp; " more bars hidden"
-                        Visible: =CountRows(Sort(Filter(colSpanBars, Week = 2), Row, SortOrder.Ascending)) &gt; 3
+                        Size: =10
+                        Text: ="+" &amp; CountRows(Filter(colSpanBars, Week = 2, Row &gt;= 3)) &amp; " more"
+                        Visible: =CountRows(Filter(colSpanBars, Week = 2, Row &gt;= 3)) &gt; 0
                         Width: =240
                         X: =6
-                        Y: =Parent.Height - 14
+                        Y: =Parent.Height - 18
             - conSpRow2:
                 Control: GroupContainer@1.5.0
                 Variant: ManualLayout
@@ -12446,8 +12448,8 @@ ClearCollect(colList, Filter(colVisible, false))
                       Control: Gallery@2.15.0
                       Variant: Vertical
                       Properties:
-                        Height: =Parent.Height - 20
-                        Items: =Sort(Filter(colSpanBars, Week = 3), Row, SortOrder.Ascending)
+                        Height: =68
+                        Items: =Sort(Filter(colSpanBars, Week = 3, Row &lt; 3), Row, SortOrder.Ascending)
                         LoadingSpinner: =LoadingSpinner.None
                         ShowScrollbar: =false
                         TemplatePadding: =0
@@ -12474,7 +12476,7 @@ ClearCollect(colList, Filter(colVisible, false))
                               RadiusTopLeft: =If(ThisItem.ContL, 0, 6)
                               RadiusTopRight: =If(ThisItem.ContR, 0, 6)
                               Size: =10
-                              Text: =If(ThisItem.ContL, "&lt; ", "") &amp; ThisItem.Title &amp; If(ThisItem.ContR, " &gt;", "")
+                              Text: =If(ThisItem.ContL, "&lt; ", "") &amp; ThisItem.Title &amp; If(ThisItem.ContR, " &gt;", "") &amp; "  [col " &amp; ThisItem.Col &amp; ", span " &amp; ThisItem.Span &amp; "]"
                               Width: =ThisItem.Span * (Parent.TemplateWidth / 7) - 4
                               X: =(ThisItem.Col - 1) * (Parent.TemplateWidth / 7) + 2
                               Y: =1
@@ -12483,15 +12485,16 @@ ClearCollect(colList, Filter(colVisible, false))
                       Properties:
                         Color: =RGBA(83, 42, 69, 1)
                         Fill: =RGBA(0, 0, 0, 0)
-                        Height: =14
+                        FontWeight: =FontWeight.Semibold
+                        Height: =16
                         PaddingBottom: =0
                         PaddingTop: =0
-                        Size: =9
-                        Text: ="+" &amp; (CountRows(Sort(Filter(colSpanBars, Week = 3), Row, SortOrder.Ascending)) - 3) &amp; " more bars hidden"
-                        Visible: =CountRows(Sort(Filter(colSpanBars, Week = 3), Row, SortOrder.Ascending)) &gt; 3
+                        Size: =10
+                        Text: ="+" &amp; CountRows(Filter(colSpanBars, Week = 3, Row &gt;= 3)) &amp; " more"
+                        Visible: =CountRows(Filter(colSpanBars, Week = 3, Row &gt;= 3)) &gt; 0
                         Width: =240
                         X: =6
-                        Y: =Parent.Height - 14
+                        Y: =Parent.Height - 18
             - conSpRow3:
                 Control: GroupContainer@1.5.0
                 Variant: ManualLayout
@@ -12730,8 +12733,8 @@ ClearCollect(colList, Filter(colVisible, false))
                       Control: Gallery@2.15.0
                       Variant: Vertical
                       Properties:
-                        Height: =Parent.Height - 20
-                        Items: =Sort(Filter(colSpanBars, Week = 4), Row, SortOrder.Ascending)
+                        Height: =68
+                        Items: =Sort(Filter(colSpanBars, Week = 4, Row &lt; 3), Row, SortOrder.Ascending)
                         LoadingSpinner: =LoadingSpinner.None
                         ShowScrollbar: =false
                         TemplatePadding: =0
@@ -12758,7 +12761,7 @@ ClearCollect(colList, Filter(colVisible, false))
                               RadiusTopLeft: =If(ThisItem.ContL, 0, 6)
                               RadiusTopRight: =If(ThisItem.ContR, 0, 6)
                               Size: =10
-                              Text: =If(ThisItem.ContL, "&lt; ", "") &amp; ThisItem.Title &amp; If(ThisItem.ContR, " &gt;", "")
+                              Text: =If(ThisItem.ContL, "&lt; ", "") &amp; ThisItem.Title &amp; If(ThisItem.ContR, " &gt;", "") &amp; "  [col " &amp; ThisItem.Col &amp; ", span " &amp; ThisItem.Span &amp; "]"
                               Width: =ThisItem.Span * (Parent.TemplateWidth / 7) - 4
                               X: =(ThisItem.Col - 1) * (Parent.TemplateWidth / 7) + 2
                               Y: =1
@@ -12767,15 +12770,16 @@ ClearCollect(colList, Filter(colVisible, false))
                       Properties:
                         Color: =RGBA(83, 42, 69, 1)
                         Fill: =RGBA(0, 0, 0, 0)
-                        Height: =14
+                        FontWeight: =FontWeight.Semibold
+                        Height: =16
                         PaddingBottom: =0
                         PaddingTop: =0
-                        Size: =9
-                        Text: ="+" &amp; (CountRows(Sort(Filter(colSpanBars, Week = 4), Row, SortOrder.Ascending)) - 3) &amp; " more bars hidden"
-                        Visible: =CountRows(Sort(Filter(colSpanBars, Week = 4), Row, SortOrder.Ascending)) &gt; 3
+                        Size: =10
+                        Text: ="+" &amp; CountRows(Filter(colSpanBars, Week = 4, Row &gt;= 3)) &amp; " more"
+                        Visible: =CountRows(Filter(colSpanBars, Week = 4, Row &gt;= 3)) &gt; 0
                         Width: =240
                         X: =6
-                        Y: =Parent.Height - 14
+                        Y: =Parent.Height - 18
             - conSpRow4:
                 Control: GroupContainer@1.5.0
                 Variant: ManualLayout
@@ -13014,8 +13018,8 @@ ClearCollect(colList, Filter(colVisible, false))
                       Control: Gallery@2.15.0
                       Variant: Vertical
                       Properties:
-                        Height: =Parent.Height - 20
-                        Items: =Sort(Filter(colSpanBars, Week = 5), Row, SortOrder.Ascending)
+                        Height: =68
+                        Items: =Sort(Filter(colSpanBars, Week = 5, Row &lt; 3), Row, SortOrder.Ascending)
                         LoadingSpinner: =LoadingSpinner.None
                         ShowScrollbar: =false
                         TemplatePadding: =0
@@ -13042,7 +13046,7 @@ ClearCollect(colList, Filter(colVisible, false))
                               RadiusTopLeft: =If(ThisItem.ContL, 0, 6)
                               RadiusTopRight: =If(ThisItem.ContR, 0, 6)
                               Size: =10
-                              Text: =If(ThisItem.ContL, "&lt; ", "") &amp; ThisItem.Title &amp; If(ThisItem.ContR, " &gt;", "")
+                              Text: =If(ThisItem.ContL, "&lt; ", "") &amp; ThisItem.Title &amp; If(ThisItem.ContR, " &gt;", "") &amp; "  [col " &amp; ThisItem.Col &amp; ", span " &amp; ThisItem.Span &amp; "]"
                               Width: =ThisItem.Span * (Parent.TemplateWidth / 7) - 4
                               X: =(ThisItem.Col - 1) * (Parent.TemplateWidth / 7) + 2
                               Y: =1
@@ -13051,15 +13055,16 @@ ClearCollect(colList, Filter(colVisible, false))
                       Properties:
                         Color: =RGBA(83, 42, 69, 1)
                         Fill: =RGBA(0, 0, 0, 0)
-                        Height: =14
+                        FontWeight: =FontWeight.Semibold
+                        Height: =16
                         PaddingBottom: =0
                         PaddingTop: =0
-                        Size: =9
-                        Text: ="+" &amp; (CountRows(Sort(Filter(colSpanBars, Week = 5), Row, SortOrder.Ascending)) - 3) &amp; " more bars hidden"
-                        Visible: =CountRows(Sort(Filter(colSpanBars, Week = 5), Row, SortOrder.Ascending)) &gt; 3
+                        Size: =10
+                        Text: ="+" &amp; CountRows(Filter(colSpanBars, Week = 5, Row &gt;= 3)) &amp; " more"
+                        Visible: =CountRows(Filter(colSpanBars, Week = 5, Row &gt;= 3)) &gt; 0
                         Width: =240
                         X: =6
-                        Y: =Parent.Height - 14
+                        Y: =Parent.Height - 18
             - conSpRow5:
                 Control: GroupContainer@1.5.0
                 Variant: ManualLayout
@@ -13298,8 +13303,8 @@ ClearCollect(colList, Filter(colVisible, false))
                       Control: Gallery@2.15.0
                       Variant: Vertical
                       Properties:
-                        Height: =Parent.Height - 20
-                        Items: =Sort(Filter(colSpanBars, Week = 6), Row, SortOrder.Ascending)
+                        Height: =68
+                        Items: =Sort(Filter(colSpanBars, Week = 6, Row &lt; 3), Row, SortOrder.Ascending)
                         LoadingSpinner: =LoadingSpinner.None
                         ShowScrollbar: =false
                         TemplatePadding: =0
@@ -13326,7 +13331,7 @@ ClearCollect(colList, Filter(colVisible, false))
                               RadiusTopLeft: =If(ThisItem.ContL, 0, 6)
                               RadiusTopRight: =If(ThisItem.ContR, 0, 6)
                               Size: =10
-                              Text: =If(ThisItem.ContL, "&lt; ", "") &amp; ThisItem.Title &amp; If(ThisItem.ContR, " &gt;", "")
+                              Text: =If(ThisItem.ContL, "&lt; ", "") &amp; ThisItem.Title &amp; If(ThisItem.ContR, " &gt;", "") &amp; "  [col " &amp; ThisItem.Col &amp; ", span " &amp; ThisItem.Span &amp; "]"
                               Width: =ThisItem.Span * (Parent.TemplateWidth / 7) - 4
                               X: =(ThisItem.Col - 1) * (Parent.TemplateWidth / 7) + 2
                               Y: =1
@@ -13335,15 +13340,16 @@ ClearCollect(colList, Filter(colVisible, false))
                       Properties:
                         Color: =RGBA(83, 42, 69, 1)
                         Fill: =RGBA(0, 0, 0, 0)
-                        Height: =14
+                        FontWeight: =FontWeight.Semibold
+                        Height: =16
                         PaddingBottom: =0
                         PaddingTop: =0
-                        Size: =9
-                        Text: ="+" &amp; (CountRows(Sort(Filter(colSpanBars, Week = 6), Row, SortOrder.Ascending)) - 3) &amp; " more bars hidden"
-                        Visible: =CountRows(Sort(Filter(colSpanBars, Week = 6), Row, SortOrder.Ascending)) &gt; 3
+                        Size: =10
+                        Text: ="+" &amp; CountRows(Filter(colSpanBars, Week = 6, Row &gt;= 3)) &amp; " more"
+                        Visible: =CountRows(Filter(colSpanBars, Week = 6, Row &gt;= 3)) &gt; 0
                         Width: =240
                         X: =6
-                        Y: =Parent.Height - 14
+                        Y: =Parent.Height - 18
             - lblSpNote:
                 Control: ModernText@1.0.0
                 Properties:
