@@ -285,7 +285,7 @@
 
       <div class="topline">
         <span class="pill">v2.50</span>
-        <span class="pill">Last build 25/11/2026 11:06 GMT</span>
+        <span class="pill">Last build 25/11/2026 11:09 GMT</span>
       </div>
       <h1>Branch Contact Groups</h1>
       <div class="replace-all">
@@ -4320,7 +4320,7 @@ Set(varLightboxGroupID, 0)</pre>
             </div>
             <button data-copy="bcg-import" data-crlf="true" type="button">Copy</button>
           </div>
-          <details class="code"><summary>Show the code (1,071 lines)</summary>
+          <details class="code"><summary>Show the code (1,072 lines)</summary>
 <pre id="bcg-import">Screens:
   scrImport:
     Properties:
@@ -5281,7 +5281,8 @@ Set(varLightboxGroupID, 0)</pre>
             BasePaletteColor: =If(varImpMode = "replace", RGBA(163,45,45,1), RGBA(0,78,66,1))
             DisplayMode: =If(varImpBusy || CountRows(colImpClean) = 0, DisplayMode.Disabled, DisplayMode.Edit)
             OnSelect: |-
-              =With(
+              =Notify("Import button pressed.", NotificationType.Information);
+              With(
                   {
                       titled: CountRows(Filter(Sequence(CountRows(colImpTags)) As q, q.Value &lt;= 6 &amp;&amp; !IsBlank(Choose(q.Value, Trim(txtImpTitle1.Text), Trim(txtImpTitle2.Text), Trim(txtImpTitle3.Text), Trim(txtImpTitle4.Text), Trim(txtImpTitle5.Text), Trim(txtImpTitle6.Text))))),
                       titles: Filter(ForAll(Sequence(CountRows(colImpTags)) As q, {T: Lower(Choose(q.Value, Trim(txtImpTitle1.Text), Trim(txtImpTitle2.Text), Trim(txtImpTitle3.Text), Trim(txtImpTitle4.Text), Trim(txtImpTitle5.Text), Trim(txtImpTitle6.Text)))}), !IsBlank(T))
