@@ -285,7 +285,7 @@
 
       <div class="topline">
         <span class="pill">v2.50</span>
-        <span class="pill">Last build 26/11/2026 04:29 GMT</span>
+        <span class="pill">Last build 26/11/2026 04:30 GMT</span>
       </div>
       <h1>Branch Contact Groups</h1>
       <div class="replace-all">
@@ -2097,7 +2097,7 @@ Set(varLightboxGroupID, 0)</pre>
           <div class="code-toolbar">
             <div class="code-meta">
               <span>Screen - scrManageGroups</span>
-              <span class="code-stamp" data-updated="2026-11-26T03:37:46Z">26/11/2026 03:37 GMT <span class="code-age"></span></span><span class="code-stamp">Replace all of it</span>
+              <span class="code-stamp" data-updated="2026-11-26T04:30:33Z">26/11/2026 04:30 GMT <span class="code-age"></span></span><span class="code-stamp">Replace all of it</span>
             </div>
             <button data-copy="bcg-manage" data-crlf="true" type="button">Copy</button>
           </div>
@@ -2351,7 +2351,7 @@ Set(varLightboxGroupID, 0)</pre>
           Variant: Vertical
           Properties:
             Items: =Sort(Filter(colGroups, IsBlank(Trim(txtGroupSearch.Text)) || txtGroupSearch.Text in Title), Title, SortOrder.Ascending)
-            TemplateSize: =60
+            TemplateSize: =88
             TemplatePadding: =4
             X: =20
             Y: =182
@@ -2375,21 +2375,21 @@ Set(varLightboxGroupID, 0)</pre>
                   X: =0
                   Y: =0
                   Width: =1320
-                  Height: =56
+                  Height: =84
             - lblRowTitle:
                 Control: Label@2.5.1
                 Properties:
-                  Text: =If(Len(ThisItem.Title) &gt; 50, Left(ThisItem.Title, 50) &amp; "...", ThisItem.Title)
+                  Text: =ThisItem.Title
                   Tooltip: =ThisItem.Title
                   Wrap: =false
                   Color: =RGBA(31,58,95,1)
                   FontWeight: =FontWeight.Semibold
-                  Size: =14
+                  Size: =15
                   Font: =Font.'Open Sans'
                   X: =16
-                  Y: =16
-                  Width: =440
-                  Height: =26
+                  Y: =9
+                  Width: =1288
+                  Height: =30
             - pilSensitive:
                 Control: Classic/Button@2.2.0
                 Properties:
@@ -2408,8 +2408,8 @@ Set(varLightboxGroupID, 0)</pre>
                   RadiusTopRight: =12
                   RadiusBottomLeft: =12
                   RadiusBottomRight: =12
-                  X: =470
-                  Y: =17
+                  X: =16
+                  Y: =50
                   Width: =190
                   Height: =24
             - pilOfficialUse:
@@ -2430,8 +2430,8 @@ Set(varLightboxGroupID, 0)</pre>
                   RadiusTopRight: =12
                   RadiusBottomLeft: =12
                   RadiusBottomRight: =12
-                  X: =670
-                  Y: =17
+                  X: =16 + If(ThisItem.OfficialSensitiveApproved, 198, 0)
+                  Y: =50
                   Width: =150
                   Height: =24
             - pilPrivate:
@@ -2452,8 +2452,8 @@ Set(varLightboxGroupID, 0)</pre>
                   RadiusTopRight: =12
                   RadiusBottomLeft: =12
                   RadiusBottomRight: =12
-                  X: =830
-                  Y: =17
+                  X: =16 + If(ThisItem.OfficialSensitiveApproved, 198, 0) + If(ThisItem.OfficialUseOnly, 158, 0)
+                  Y: =50
                   Width: =90
                   Height: =24
             - lblRowMeta:
@@ -2468,9 +2468,9 @@ Set(varLightboxGroupID, 0)</pre>
                   Color: =RGBA(120,120,120,1)
                   Size: =11
                   Font: =Font.'Open Sans'
-                  X: =930
-                  Y: =18
-                  Width: =220
+                  X: =520
+                  Y: =51
+                  Width: =360
                   Height: =22
             - recRowClickCatcher:
                 Control: Classic/Button@2.2.0
@@ -2496,7 +2496,7 @@ Set(varLightboxGroupID, 0)</pre>
                   X: =0
                   Y: =0
                   Width: =1320
-                  Height: =56
+                  Height: =84
             - recRowManageMembersChip:
                 Control: Classic/Button@2.2.0
                 Properties:
@@ -2511,7 +2511,7 @@ Set(varLightboxGroupID, 0)</pre>
                   RadiusBottomLeft: =17
                   RadiusBottomRight: =17
                   X: =1177
-                  Y: =13
+                  Y: =25
                   Width: =34
                   Height: =34
             - icoRowManageMembers:
@@ -2534,7 +2534,7 @@ Set(varLightboxGroupID, 0)</pre>
                     Set(varConfirmReplaceArmed, false);
                     Set(varShowLightbox, true)
                   X: =1180
-                  Y: =16
+                  Y: =28
                   Width: =28
                   Height: =28
             - recRowHistoryChip:
@@ -2551,7 +2551,7 @@ Set(varLightboxGroupID, 0)</pre>
                   RadiusBottomLeft: =17
                   RadiusBottomRight: =17
                   X: =1217
-                  Y: =13
+                  Y: =25
                   Width: =34
                   Height: =34
             - icoRowHistory:
@@ -2567,7 +2567,7 @@ Set(varLightboxGroupID, 0)</pre>
                     Set(varShowLightbox, true);
                     ClearCollect(colHistoryView, Sort(Filter('BM History', GroupName = ThisItem.Title), Created, SortOrder.Descending))
                   X: =1220
-                  Y: =16
+                  Y: =28
                   Width: =28
                   Height: =28
             - recRowEditChip:
@@ -2584,7 +2584,7 @@ Set(varLightboxGroupID, 0)</pre>
                   RadiusBottomLeft: =17
                   RadiusBottomRight: =17
                   X: =1257
-                  Y: =13
+                  Y: =25
                   Width: =34
                   Height: =34
             - icoRowEdit:
@@ -2607,7 +2607,7 @@ Set(varLightboxGroupID, 0)</pre>
                     Set(varConfirmDeleteGroupArmed, false);
                     Set(varShowLightbox, true)
                   X: =1260
-                  Y: =16
+                  Y: =28
                   Width: =28
                   Height: =28
       - recLightboxBackdrop:
