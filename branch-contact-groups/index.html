@@ -285,7 +285,7 @@
 
       <div class="topline">
         <span class="pill">v2.50</span>
-        <span class="pill">Last build 26/11/2026 04:30 GMT</span>
+        <span class="pill">Last build 26/11/2026 04:51 GMT</span>
       </div>
       <h1>Branch Contact Groups</h1>
       <div class="replace-all">
@@ -2097,11 +2097,11 @@ Set(varLightboxGroupID, 0)</pre>
           <div class="code-toolbar">
             <div class="code-meta">
               <span>Screen - scrManageGroups</span>
-              <span class="code-stamp" data-updated="2026-11-26T04:30:33Z">26/11/2026 04:30 GMT <span class="code-age"></span></span><span class="code-stamp">Replace all of it</span>
+              <span class="code-stamp" data-updated="2026-11-26T04:51:22Z">26/11/2026 04:51 GMT <span class="code-age"></span></span><span class="code-stamp">Replace all of it</span>
             </div>
             <button data-copy="bcg-manage" data-crlf="true" type="button">Copy</button>
           </div>
-          <details class="code"><summary>Show the code (2,478 lines)</summary>
+          <details class="code"><summary>Show the code (2,611 lines)</summary>
 <pre id="bcg-manage">Screens:
   scrManageGroups:
     Properties:
@@ -2110,6 +2110,7 @@ Set(varLightboxGroupID, 0)</pre>
         =If(
             !varIsMaintainer,
             Back(),
+            Set(varNotePreviewID, 0);
             Set(varPasteFormat, "csv");
             Set(varRenameBusy, false);
             Set(varRenameTimerOn, false);
@@ -2610,6 +2611,29 @@ Set(varLightboxGroupID, 0)</pre>
                   Y: =28
                   Width: =28
                   Height: =28
+            - btnRowNote:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Text: ="Note"
+                  Tooltip: =ThisItem.Notes
+                  Visible: =!IsBlank(Trim(ThisItem.Notes))
+                  Fill: =RGBA(255,243,205,1)
+                  HoverFill: =RGBA(255,232,160,1)
+                  PressedFill: =RGBA(255,222,120,1)
+                  Color: =RGBA(120,80,0,1)
+                  BorderThickness: =0
+                  Font: =Font.'Open Sans'
+                  FontWeight: =FontWeight.Semibold
+                  Size: =11
+                  RadiusTopLeft: =12
+                  RadiusTopRight: =12
+                  RadiusBottomLeft: =12
+                  RadiusBottomRight: =12
+                  OnSelect: =Set(varNotePreviewID, ThisItem.ID)
+                  X: =1097
+                  Y: =30
+                  Width: =66
+                  Height: =26
       - recLightboxBackdrop:
           Control: Classic/Button@2.2.0
           Properties:
@@ -2965,15 +2989,19 @@ Set(varLightboxGroupID, 0)</pre>
             Width: =1000
             Height: =42
       - txtEditNotes:
-          Control: ModernTextInput@1.1.0
+          Control: Classic/TextInput@2.3.2
           Properties:
             Default: =If(varManageGroupID = 0, "", LookUp(colGroups, ID = varManageGroupID).Notes)
-            Placeholder: ="Notes (optional)"
+            HintText: ="Notes (optional). Press Enter for a new line."
+            Mode: =TextMode.MultiLine
+            Font: =Font.'Open Sans'
+            Size: =13
+            BorderColor: =RGBA(190,201,197,1)
             Visible: =varShowLightbox &amp;&amp; varLightboxMode = "edit"
             X: =183
             Y: =176
             Width: =1000
-            Height: =42
+            Height: =92
       - drpEditThursdayBatch:
           Control: ModernDropdown@1.0.1
           Properties:
@@ -2981,7 +3009,7 @@ Set(varLightboxGroupID, 0)</pre>
             Default: =LookUp(colThursdayBatchOptions, Lower(Trim(Value)) = Lower(Trim(Coalesce(LookUp(colGroups, ID = varManageGroupID).ThursdayBatch.Value, "None"))))
             Visible: =varShowLightbox &amp;&amp; varLightboxMode = "edit"
             X: =183
-            Y: =228
+            Y: =278
             Width: =200
             Height: =42
       - chkEditPrivate:
@@ -2993,7 +3021,7 @@ Set(varLightboxGroupID, 0)</pre>
             Checked: =If(varManageGroupID = 0, false, LookUp(colGroups, ID = varManageGroupID).Private)
             Visible: =varShowLightbox &amp;&amp; varLightboxMode = "edit"
             X: =183
-            Y: =282
+            Y: =332
             Width: =420
             Height: =32
       - chkEditSensitive:
@@ -3005,7 +3033,7 @@ Set(varLightboxGroupID, 0)</pre>
             Checked: =If(varManageGroupID = 0, false, LookUp(colGroups, ID = varManageGroupID).OfficialSensitiveApproved)
             Visible: =varShowLightbox &amp;&amp; varLightboxMode = "edit"
             X: =183
-            Y: =322
+            Y: =372
             Width: =420
             Height: =32
       - chkEditOfficialUse:
@@ -3017,7 +3045,7 @@ Set(varLightboxGroupID, 0)</pre>
             Checked: =If(varManageGroupID = 0, false, LookUp(colGroups, ID = varManageGroupID).OfficialUseOnly)
             Visible: =varShowLightbox &amp;&amp; varLightboxMode = "edit"
             X: =183
-            Y: =362
+            Y: =412
             Width: =420
             Height: =32
       - chkOverrideDate:
@@ -3029,7 +3057,7 @@ Set(varLightboxGroupID, 0)</pre>
             Checked: =If(varManageGroupID = 0, false, !IsBlank(LookUp(colGroups, ID = varManageGroupID).ManuallySetModified))
             Visible: =varShowLightbox &amp;&amp; varLightboxMode = "edit"
             X: =183
-            Y: =402
+            Y: =452
             Width: =420
             Height: =32
       - datEditManualDate:
@@ -3038,7 +3066,7 @@ Set(varLightboxGroupID, 0)</pre>
             DefaultDate: =If(varManageGroupID = 0 || IsBlank(LookUp(colGroups, ID = varManageGroupID).ManuallySetModified), Today(), LookUp(colGroups, ID = varManageGroupID).ManuallySetModified)
             Visible: =varShowLightbox &amp;&amp; varLightboxMode = "edit" &amp;&amp; chkOverrideDate.Checked
             X: =603
-            Y: =398
+            Y: =448
             Width: =220
             Height: =40
       - btnSaveGroupEdit:
@@ -3099,7 +3127,7 @@ Set(varLightboxGroupID, 0)</pre>
                   )
               )
             X: =183
-            Y: =466
+            Y: =516
             Width: =160
             Height: =44
       - btnCancelGroupEdit:
@@ -3120,7 +3148,7 @@ Set(varLightboxGroupID, 0)</pre>
               Reset(txtManualJMC);
               Reset(txtManualCounty)
             X: =353
-            Y: =466
+            Y: =516
             Width: =160
             Height: =44
       - btnDeleteGroup:
@@ -3152,7 +3180,7 @@ Set(varLightboxGroupID, 0)</pre>
                   )
               )
             X: =523
-            Y: =466
+            Y: =516
             Width: =300
             Height: =44
       - btnLbTabMembers:
@@ -4579,7 +4607,112 @@ Set(varLightboxGroupID, 0)</pre>
             X: =0
             Y: =0
             Width: =2
-            Height: =2</pre>
+            Height: =2
+      - recNoteShade:
+          Control: Classic/Button@2.2.0
+          Properties:
+            Text: =""
+            Visible: =varNotePreviewID &lt;&gt; 0
+            Fill: =RGBA(15,25,20,0.5)
+            HoverFill: =Self.Fill
+            PressedFill: =Self.Fill
+            BorderThickness: =0
+            OnSelect: =Set(varNotePreviewID, 0)
+            X: =0
+            Y: =0
+            Width: =1366
+            Height: =768
+      - recNotePanel:
+          Control: Classic/Button@2.2.0
+          Properties:
+            Text: =""
+            DisplayMode: =DisplayMode.View
+            Visible: =varNotePreviewID &lt;&gt; 0
+            Fill: =RGBA(255,255,255,1)
+            HoverFill: =Self.Fill
+            PressedFill: =Self.Fill
+            BorderThickness: =0
+            RadiusTopLeft: =14
+            RadiusTopRight: =14
+            RadiusBottomLeft: =14
+            RadiusBottomRight: =14
+            X: =383
+            Y: =170
+            Width: =600
+            Height: =430
+      - lblNoteTitle:
+          Control: Label@2.5.1
+          Properties:
+            Text: =Coalesce(LookUp(colGroups, ID = varNotePreviewID).Title, "")
+            Visible: =varNotePreviewID &lt;&gt; 0
+            Color: =RGBA(31,58,95,1)
+            FontWeight: =FontWeight.Bold
+            Size: =15
+            Font: =Font.'Open Sans'
+            X: =413
+            Y: =188
+            Width: =540
+            Height: =48
+      - lblNoteHeading:
+          Control: Label@2.5.1
+          Properties:
+            Text: ="Note"
+            Visible: =varNotePreviewID &lt;&gt; 0
+            Color: =RGBA(120,80,0,1)
+            FontWeight: =FontWeight.Semibold
+            Size: =12
+            Font: =Font.'Open Sans'
+            X: =413
+            Y: =240
+            Width: =200
+            Height: =22
+      - lblNoteBody:
+          Control: Label@2.5.1
+          Properties:
+            Text: =Coalesce(LookUp(colGroups, ID = varNotePreviewID).Notes, "")
+            Visible: =varNotePreviewID &lt;&gt; 0
+            Color: =RGBA(45,58,64,1)
+            Size: =13
+            Font: =Font.'Open Sans'
+            X: =413
+            Y: =264
+            Width: =540
+            Height: =262
+      - btnNoteEdit:
+          Control: ModernButton@1.0.0
+          Properties:
+            Text: ="Edit group"
+            Visible: =varNotePreviewID &lt;&gt; 0
+            BasePaletteColor: =RGBA(46,110,145,1)
+            OnSelect: |-
+              =Set(varManageGroupID, varNotePreviewID);
+              Set(varNotePreviewID, 0);
+              Set(varLightboxMode, "edit");
+              Reset(txtEditTitle);
+              Reset(txtEditNotes);
+              Reset(drpEditThursdayBatch);
+              Reset(chkEditPrivate);
+              Reset(chkEditSensitive);
+              Reset(chkEditOfficialUse);
+              Reset(chkOverrideDate);
+              Reset(datEditManualDate);
+              Set(varConfirmDeleteGroupArmed, false);
+              Set(varShowLightbox, true)
+            X: =683
+            Y: =540
+            Width: =140
+            Height: =40
+      - btnNoteClose:
+          Control: ModernButton@1.0.0
+          Properties:
+            Text: ="Close"
+            Visible: =varNotePreviewID &lt;&gt; 0
+            BasePaletteColor: =RGBA(120,120,120,1)
+            OnSelect: =Set(varNotePreviewID, 0)
+            X: =833
+            Y: =540
+            Width: =120
+            Height: =40</pre>
           </details>
         </div>
 
@@ -6813,6 +6946,7 @@ Set(varLightboxGroupID, 0)</pre>
           <li><label><input type="checkbox" data-step="t7"> Manage Groups: edit a group, change its name, Save. A box appears with a progress bar counting up, then a green Saved message. Groups are listed A to Z.</label></li>
           <li><label><input type="checkbox" data-step="t8"> Import: switch to <strong>Replace whole group</strong> or <strong>Add and correct emails</strong>. Each list now shows a dropdown of your existing groups instead of a text box. Pick the group, check the status line, then Import.</label></li>
           <li><label><input type="checkbox" data-step="t9"> Manage Groups &rarr; a group &rarr; Manage Members &rarr; <strong>Replace all (CSV / Outlook)</strong>: choose <strong>From Outlook</strong>, paste an Outlook list, check the counts, then Replace. <strong>From CSV / Excel</strong> works as before.</label></li>
+          <li><label><input type="checkbox" data-step="t10"> Manage Groups: Edit group, type a note over several lines (Enter for a new line), Save. That group card now shows an amber <strong>Note</strong> chip. Hover shows the note; click opens a popup with Edit group and Close.</label></li>
         </ul>
       </section>
 
