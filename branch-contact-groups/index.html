@@ -285,7 +285,7 @@
 
       <div class="topline">
         <span class="pill">v2.50</span>
-        <span class="pill">Last build 25/11/2026 12:45 GMT</span>
+        <span class="pill">Last build 26/11/2026 03:37 GMT</span>
       </div>
       <h1>Branch Contact Groups</h1>
       <div class="replace-all">
@@ -2097,7 +2097,7 @@ Set(varLightboxGroupID, 0)</pre>
           <div class="code-toolbar">
             <div class="code-meta">
               <span>Screen - scrManageGroups</span>
-              <span class="code-stamp" data-updated="2026-11-25T12:45:50Z">25/11/2026 12:45 GMT <span class="code-age"></span></span><span class="code-stamp">Replace all of it</span>
+              <span class="code-stamp" data-updated="2026-11-26T03:37:46Z">26/11/2026 03:37 GMT <span class="code-age"></span></span><span class="code-stamp">Replace all of it</span>
             </div>
             <button data-copy="bcg-manage" data-crlf="true" type="button">Copy</button>
           </div>
@@ -4256,7 +4256,7 @@ Set(varLightboxGroupID, 0)</pre>
                               ForAll(
                                   Filter(
                                       ForAll(Split(Substitute(Substitute(txtPasteRoster.Text, Char(13), ""), Char(160), " "), Char(10)) As raw, {Line: Trim(raw.Value)}),
-                                      !IsBlank(Line) &amp;&amp; !(Right(Line, 1) = ":" &amp;&amp; !("@" in Line) &amp;&amp; Len(Line) &lt;= 40)
+                                      !IsBlank(Line) &amp;&amp; !(Right(Line, 1) = ":" &amp;&amp; !("@" in Line) &amp;&amp; Len(Line) &lt;= 150)
                                   ) As ln,
                                   {Segs: Filter(Split(ln.Line, ";"), !IsBlank(Trim(Value)))}
                               ),
@@ -4592,7 +4592,7 @@ Set(varLightboxGroupID, 0)</pre>
           <div class="code-toolbar">
             <div class="code-meta">
               <span>Screen - scrImport</span>
-              <span class="code-stamp" data-updated="2026-11-25T12:45:50Z">25/11/2026 12:45 GMT <span class="code-age"></span></span><span class="code-stamp">Replace all of it &mdash; new</span>
+              <span class="code-stamp" data-updated="2026-11-26T03:37:46Z">26/11/2026 03:37 GMT <span class="code-age"></span></span><span class="code-stamp">Replace all of it &mdash; new</span>
             </div>
             <button data-copy="bcg-import" data-crlf="true" type="button">Copy</button>
           </div>
@@ -4722,7 +4722,7 @@ Set(varLightboxGroupID, 0)</pre>
                   With(
                       {
                           heads: ForAll(
-                              Filter(lines, !IsBlank(Line) &amp;&amp; Right(Line, 1) = ":" &amp;&amp; !("@" in Line) &amp;&amp; Len(Line) &lt;= 40) As h,
+                              Filter(lines, !IsBlank(Line) &amp;&amp; Right(Line, 1) = ":" &amp;&amp; !("@" in Line) &amp;&amp; Len(Line) &lt;= 150) As h,
                               {HIdx: h.Idx, Tag: Trim(Left(h.Line, Len(h.Line) - 1))}
                           )
                       },
@@ -4731,7 +4731,7 @@ Set(varLightboxGroupID, 0)</pre>
                           ForAll(
                               Ungroup(
                                   ForAll(
-                                      Filter(lines, !IsBlank(Line) &amp;&amp; !(Right(Line, 1) = ":" &amp;&amp; !("@" in Line) &amp;&amp; Len(Line) &lt;= 40)) As ln,
+                                      Filter(lines, !IsBlank(Line) &amp;&amp; !(Right(Line, 1) = ":" &amp;&amp; !("@" in Line) &amp;&amp; Len(Line) &lt;= 150)) As ln,
                                       {
                                           Tag: If(CountRows(Filter(heads, HIdx &lt; ln.Idx)) = 0, "Pasted list", Last(Filter(heads, HIdx &lt; ln.Idx)).Tag),
                                           Segs: Filter(Split(ln.Line, ";"), !IsBlank(Trim(Value)))
