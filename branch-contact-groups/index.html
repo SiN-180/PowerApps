@@ -285,7 +285,7 @@
 
       <div class="topline">
         <span class="pill">v2.50</span>
-        <span class="pill">Last build 26/11/2026 04:52 GMT</span>
+        <span class="pill">Last build 26/11/2026 04:58 GMT</span>
       </div>
       <h1>Branch Contact Groups</h1>
       <div class="replace-all">
@@ -2097,11 +2097,11 @@ Set(varLightboxGroupID, 0)</pre>
           <div class="code-toolbar">
             <div class="code-meta">
               <span>Screen - scrManageGroups</span>
-              <span class="code-stamp" data-updated="2026-11-26T04:52:39Z">26/11/2026 04:52 GMT <span class="code-age"></span></span><span class="code-stamp">Replace all of it</span>
+              <span class="code-stamp" data-updated="2026-11-26T04:58:21Z">26/11/2026 04:58 GMT <span class="code-age"></span></span><span class="code-stamp">Replace all of it</span>
             </div>
             <button data-copy="bcg-manage" data-crlf="true" type="button">Copy</button>
           </div>
-          <details class="code"><summary>Show the code (2,611 lines)</summary>
+          <details class="code"><summary>Show the code (2,633 lines)</summary>
 <pre id="bcg-manage">Screens:
   scrManageGroups:
     Properties:
@@ -4409,7 +4409,8 @@ Set(varLightboxGroupID, 0)</pre>
                   RemoveIf('BM Memberships', Lower(Trim(GroupName)) = Lower(Trim(varGroupTitle)));
                   RemoveIf(colMemberships, Lower(Trim(GroupName)) = Lower(Trim(varGroupTitle)));
                   ForAll(colParsedRosterValid, Collect(colMemberships, Patch('BM Memberships', Defaults('BM Memberships'), {Title: Name, Name: Name, Email: Email, GroupName: varGroupTitle, JMC: JMC, 'County/Contingent': County})));
-                  Patch('BM Groups', LookUp('BM Groups', ID = varManageGroupID), {Title: varGroupTitle});
+                  Set(varPasteDateText, If(chkPasteSetDate.Checked, " Last-updated date set to " &amp; Text(datPasteDate.SelectedDate, "dd/mm/yyyy") &amp; ".", " Last-updated date left as it was."));
+                  If(chkPasteSetDate.Checked, Patch('BM Groups', LookUp('BM Groups', ID = varManageGroupID), {ManuallySetModified: datPasteDate.SelectedDate}));
                   Patch('BM History', Defaults('BM History'), {Title: "Bulk replace via " &amp; If(varPasteFormat = "outlook", "Outlook paste", "CSV/Excel paste") &amp; ": " &amp; varOldRosterCount &amp; " removed, " &amp; varParsedRosterCount &amp; " added", GroupName: varGroupTitle, EventType: {Value: "Replaced"}});
                   Reset(txtPasteRoster);
                   Set(varParsedRosterCount, 0);
@@ -4419,12 +4420,33 @@ Set(varLightboxGroupID, 0)</pre>
                   Set(varPasteRemoveCount, 0);
                   Set(varPasteUnchangedCount, 0);
                   Set(varConfirmReplaceArmed, false);
-                  Notify("Replaced membership of " &amp; varGroupTitle &amp; ".", NotificationType.Success)
+                  Notify("Replaced membership of " &amp; varGroupTitle &amp; "." &amp; varPasteDateText, NotificationType.Success);
+                  Reset(chkPasteSetDate)
               )
             X: =183
             Y: =522
             Width: =1000
             Height: =44
+      - chkPasteSetDate:
+          Control: CheckBox@0.0.30
+          Properties:
+            BasePaletteColor: =RGBA(156, 220, 79, 1)
+            CheckboxSize: =22
+            Label: ="Set the last-updated date (otherwise it is left as it is)"
+            Visible: =varShowLightbox &amp;&amp; varLightboxMode = "manage" &amp;&amp; varManageSubTab = "paste"
+            X: =183
+            Y: =578
+            Width: =470
+            Height: =32
+      - datPasteDate:
+          Control: Classic/DatePicker@2.6.0
+          Properties:
+            DefaultDate: =Today()
+            Visible: =varShowLightbox &amp;&amp; varLightboxMode = "manage" &amp;&amp; varManageSubTab = "paste" &amp;&amp; chkPasteSetDate.Checked
+            X: =663
+            Y: =574
+            Width: =220
+            Height: =40
       - recRenameShade:
           Control: Classic/Button@2.2.0
           Properties:
@@ -4725,11 +4747,11 @@ Set(varLightboxGroupID, 0)</pre>
           <div class="code-toolbar">
             <div class="code-meta">
               <span>Screen - scrImport</span>
-              <span class="code-stamp" data-updated="2026-11-26T04:28:58Z">26/11/2026 04:28 GMT <span class="code-age"></span></span><span class="code-stamp">Replace all of it &mdash; new</span>
+              <span class="code-stamp" data-updated="2026-11-26T04:58:21Z">26/11/2026 04:58 GMT <span class="code-age"></span></span><span class="code-stamp">Replace all of it &mdash; new</span>
             </div>
             <button data-copy="bcg-import" data-crlf="true" type="button">Copy</button>
           </div>
-          <details class="code"><summary>Show the code (1,158 lines)</summary>
+          <details class="code"><summary>Show the code (1,179 lines)</summary>
 <pre id="bcg-import">Screens:
   scrImport:
     Properties:
@@ -4741,6 +4763,7 @@ Set(varLightboxGroupID, 0)</pre>
             Set(varImpMode, "add");
             Set(varImpArmed, false);
             Set(varImpBusy, false);
+            Reset(chkImpSetDate);
             ClearCollect(colImpParsed, Filter(Table({Tag: "", Email: "", Name: ""}), false));
             ClearCollect(colImpClean, AddColumns(GroupBy(Filter(colImpParsed, false), Tag, Email, Rows), Name, First(Rows).Name, Dups, CountRows(Rows) - 1));
             ClearCollect(colImpTags, Filter(Table({Tag: "", N: 0}), false));
@@ -5763,6 +5786,25 @@ Set(varLightboxGroupID, 0)</pre>
             Y: =640
             Width: =736
             Height: =22
+      - chkImpSetDate:
+          Control: CheckBox@0.0.30
+          Properties:
+            BasePaletteColor: =RGBA(156, 220, 79, 1)
+            CheckboxSize: =22
+            Label: ="Set the last-updated date"
+            X: =930
+            Y: =654
+            Width: =250
+            Height: =32
+      - datImpDate:
+          Control: Classic/DatePicker@2.6.0
+          Properties:
+            DefaultDate: =Today()
+            Visible: =chkImpSetDate.Checked
+            X: =1190
+            Y: =650
+            Width: =156
+            Height: =40
       - btnImpGo:
           Control: ModernButton@1.0.0
           Properties:
@@ -5790,6 +5832,7 @@ Set(varLightboxGroupID, 0)</pre>
                       Set(varImpTotal, titled);
                       Set(varImpDone, 0);
                       Set(varImpName, "");
+                      Set(varImpDateText, If(chkImpSetDate.Checked, "Last-updated date set to " &amp; Text(datImpDate.SelectedDate, "dd/mm/yyyy") &amp; ". ", "Last-updated dates left as they were. "));
                       Notify("Import started. Keep this screen open until the green message appears.", NotificationType.Information);
                       IfError(
                       Clear(colImpResults);
@@ -5848,7 +5891,7 @@ Set(varLightboxGroupID, 0)</pre>
                                                   Collect(colMemberships, Patch('BM Memberships', Defaults('BM Memberships'), {Title: e.Name, Name: e.Name, Email: e.Email, GroupName: gTitle}))
                                               );
                                               Patch('BM History', Defaults('BM History'), {Title: "Import via paste: " &amp; CountRows(toAdd) &amp; " added, " &amp; CountRows(toUpd) &amp; " updated, " &amp; CountRows(toRem) &amp; " removed", GroupName: gTitle, EventType: {Value: Switch(varImpMode, "replace", "Replaced", "update", "Edited", "Added")}});
-                                              Patch('BM Groups', LookUp('BM Groups', Title = gTitle), {Title: gTitle})
+                                              If(chkImpSetDate.Checked, Patch('BM Groups', LookUp('BM Groups', Title = gTitle), {ManuallySetModified: datImpDate.SelectedDate}))
                                           )
                                       )
                                   )
@@ -5879,7 +5922,7 @@ Set(varLightboxGroupID, 0)</pre>
                   If(varImpDone = 0, "Starting: creating any new groups and getting ready. Please wait.", "Importing list " &amp; varImpDone &amp; " of " &amp; varImpTotal &amp; ": " &amp; varImpName &amp; ". Not finished yet, please wait. A large list can take a minute or two."),
                   CountRows(colImpResults) = 0,
                   If(CountRows(colImpClean) &gt; 0, "A large list can take a minute or two. Keep this screen open until the green message appears.", ""),
-                  "Finished. " &amp; Concat(colImpResults, Group &amp; ": " &amp; If(Before = 0, "created as a new group with " &amp; Added &amp; " people", "already existed (" &amp; Before &amp; " people before), " &amp; Added &amp; " added" &amp; If(Updated &gt; 0, ", " &amp; Updated &amp; " emails changed", "") &amp; If(Removed &gt; 0, ", " &amp; Removed &amp; " removed", "")), "; ")
+                  "Finished. " &amp; varImpDateText &amp; Concat(colImpResults, Group &amp; ": " &amp; If(Before = 0, "created as a new group with " &amp; Added &amp; " people", "already existed (" &amp; Before &amp; " people before), " &amp; Added &amp; " added" &amp; If(Updated &gt; 0, ", " &amp; Updated &amp; " emails changed", "") &amp; If(Removed &gt; 0, ", " &amp; Removed &amp; " removed", "")), "; ")
               )
             Color: =RGBA(24,45,55,1)
             Size: =11
@@ -6947,6 +6990,7 @@ Set(varLightboxGroupID, 0)</pre>
           <li><label><input type="checkbox" data-step="t8"> Import: switch to <strong>Replace whole group</strong> or <strong>Add and correct emails</strong>. Each list now shows a dropdown of your existing groups instead of a text box. Pick the group, check the status line, then Import.</label></li>
           <li><label><input type="checkbox" data-step="t9"> Manage Groups &rarr; a group &rarr; Manage Members &rarr; <strong>Replace all (CSV / Outlook)</strong>: choose <strong>From Outlook</strong>, paste an Outlook list, check the counts, then Replace. <strong>From CSV / Excel</strong> works as before.</label></li>
           <li><label><input type="checkbox" data-step="t10"> Manage Groups: Edit group, type a note over several lines (Enter for a new line), Save. That group card now shows an amber <strong>Note</strong> chip. Hover shows the note; click opens a popup with Edit group and Close.</label></li>
+          <li><label><input type="checkbox" data-step="t11"> Last-updated date: on Import (next to Import now) and on Manage Members &rarr; Replace all, tick <strong>Set the last-updated date</strong>, pick a date, run it. The group card then shows that date. Left unticked, the date is not touched.</label></li>
         </ul>
       </section>
 
