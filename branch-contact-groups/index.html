@@ -285,7 +285,7 @@
 
       <div class="topline">
         <span class="pill">v2.50</span>
-        <span class="pill">Last build 26/11/2026 04:58 GMT</span>
+        <span class="pill">Last build 26/11/2026 05:59 GMT</span>
       </div>
       <h1>Branch Contact Groups</h1>
       <div class="replace-all">
@@ -2097,11 +2097,11 @@ Set(varLightboxGroupID, 0)</pre>
           <div class="code-toolbar">
             <div class="code-meta">
               <span>Screen - scrManageGroups</span>
-              <span class="code-stamp" data-updated="2026-11-26T04:58:21Z">26/11/2026 04:58 GMT <span class="code-age"></span></span><span class="code-stamp">Replace all of it</span>
+              <span class="code-stamp" data-updated="2026-11-26T05:59:44Z">26/11/2026 05:59 GMT <span class="code-age"></span></span><span class="code-stamp">Replace all of it</span>
             </div>
             <button data-copy="bcg-manage" data-crlf="true" type="button">Copy</button>
           </div>
-          <details class="code"><summary>Show the code (2,633 lines)</summary>
+          <details class="code"><summary>Show the code (2,636 lines)</summary>
 <pre id="bcg-manage">Screens:
   scrManageGroups:
     Properties:
@@ -4411,6 +4411,7 @@ Set(varLightboxGroupID, 0)</pre>
                   ForAll(colParsedRosterValid, Collect(colMemberships, Patch('BM Memberships', Defaults('BM Memberships'), {Title: Name, Name: Name, Email: Email, GroupName: varGroupTitle, JMC: JMC, 'County/Contingent': County})));
                   Set(varPasteDateText, If(chkPasteSetDate.Checked, " Last-updated date set to " &amp; Text(datPasteDate.SelectedDate, "dd/mm/yyyy") &amp; ".", " Last-updated date left as it was."));
                   If(chkPasteSetDate.Checked, Patch('BM Groups', LookUp('BM Groups', ID = varManageGroupID), {ManuallySetModified: datPasteDate.SelectedDate}));
+                  ClearCollect(colGroups, AddColumns(Sort('BM Groups', SortOrder, SortOrder.Ascending), Ticked, false));
                   Patch('BM History', Defaults('BM History'), {Title: "Bulk replace via " &amp; If(varPasteFormat = "outlook", "Outlook paste", "CSV/Excel paste") &amp; ": " &amp; varOldRosterCount &amp; " removed, " &amp; varParsedRosterCount &amp; " added", GroupName: varGroupTitle, EventType: {Value: "Replaced"}});
                   Reset(txtPasteRoster);
                   Set(varParsedRosterCount, 0);
@@ -4420,8 +4421,10 @@ Set(varLightboxGroupID, 0)</pre>
                   Set(varPasteRemoveCount, 0);
                   Set(varPasteUnchangedCount, 0);
                   Set(varConfirmReplaceArmed, false);
-                  Notify("Replaced membership of " &amp; varGroupTitle &amp; "." &amp; varPasteDateText, NotificationType.Success);
-                  Reset(chkPasteSetDate)
+                  Reset(chkPasteSetDate);
+                  Set(varShowLightbox, false);
+                  Set(varManageGroupID, 0);
+                  Notify("Saved. Replaced membership of " &amp; varGroupTitle &amp; "." &amp; varPasteDateText, NotificationType.Success)
               )
             X: =183
             Y: =522
