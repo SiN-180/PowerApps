@@ -285,7 +285,7 @@
 
       <div class="topline">
         <span class="pill">v2.50</span>
-        <span class="pill">Last build 26/11/2026 04:51 GMT</span>
+        <span class="pill">Last build 26/11/2026 04:52 GMT</span>
       </div>
       <h1>Branch Contact Groups</h1>
       <div class="replace-all">
@@ -2097,7 +2097,7 @@ Set(varLightboxGroupID, 0)</pre>
           <div class="code-toolbar">
             <div class="code-meta">
               <span>Screen - scrManageGroups</span>
-              <span class="code-stamp" data-updated="2026-11-26T04:51:22Z">26/11/2026 04:51 GMT <span class="code-age"></span></span><span class="code-stamp">Replace all of it</span>
+              <span class="code-stamp" data-updated="2026-11-26T04:52:39Z">26/11/2026 04:52 GMT <span class="code-age"></span></span><span class="code-stamp">Replace all of it</span>
             </div>
             <button data-copy="bcg-manage" data-crlf="true" type="button">Copy</button>
           </div>
@@ -4521,12 +4521,12 @@ Set(varLightboxGroupID, 0)</pre>
             RadiusBottomRight: =10
             X: =413
             Y: =364
-            Width: =If(varRenameTotal = 0, 540, Round(540 * varRenameDone / varRenameTotal, 0))
+            Width: =If(varRenameTotal = 0, 540, Round(540 * Coalesce(varRenameDone, 0) / Max(Coalesce(varRenameTotal, 1), 1), 0))
             Height: =20
       - lblRenameCount:
           Control: Label@2.5.1
           Properties:
-            Text: =varRenameDone &amp; " of " &amp; varRenameTotal &amp; " done" &amp; If(varRenameTotal &gt; 0, " (" &amp; Round(100 * varRenameDone / varRenameTotal, 0) &amp; " percent)", "")
+            Text: =varRenameDone &amp; " of " &amp; varRenameTotal &amp; " done" &amp; If(varRenameTotal &gt; 0, " (" &amp; Round(100 * Coalesce(varRenameDone, 0) / Max(Coalesce(varRenameTotal, 1), 1), 0) &amp; " percent)", "")
             Visible: =varRenameBusy
             Color: =RGBA(45,58,64,1)
             Size: =13
