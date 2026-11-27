@@ -107,7 +107,7 @@ table.t th { background: var(--soft); }
   <div class="wrap">
     <h1>Branch Contact Groups: update guide</h1>
     <p>Do the steps in order, top to bottom. Tick each one off when it is done.</p>
-    <p class="built">This page was built on <strong>27/11/2026 09:38 GMT</strong> (v3.0)</p>
+    <p class="built">This page was built on <strong>27/11/2026 09:48 GMT</strong> (v3.0)</p>
     <div class="links"><a href="https://powerapps.pages.dev/">Guide library</a><a href="https://branch-contact-groups.pages.dev/yaml.html">Screen YAML Vault</a></div>
   </div>
 </div>
@@ -320,13 +320,13 @@ Set(varLightboxGroupID, 0)</pre>
         <button class="donebtn" type="button" data-done>I have done this step</button>
       </article>
 
-      <article class="step" id="delete" data-id="delete" data-kind="change" data-changed="2026-11-27T09:38:13Z">
+      <article class="step" id="delete" data-id="delete" data-kind="change" data-changed="2026-11-27T09:48:44Z">
         <header>
           <div class="num">6</div>
           <div class="title"><h3>Delete all five old screens</h3><div class="where">Power Apps Studio, Tree view</div></div>
           <div class="pill" data-pill>&nbsp;</div>
         </header>
-        <div class="changed">Last changed <strong>27/11/2026 09:38 GMT</strong> <span class="age"></span></div>
+        <div class="changed">Last changed <strong>27/11/2026 09:48 GMT</strong> <span class="age"></span></div>
         
         <div class="body">
           <p class="lead">Pasting adds screens, it never replaces them. If the old ones stay you get duplicates.</p>
@@ -339,13 +339,13 @@ Set(varLightboxGroupID, 0)</pre>
         <button class="donebtn" type="button" data-done>I have done this step</button>
       </article>
 
-      <article class="step" id="s_quick" data-id="s_quick" data-kind="change" data-changed="2026-11-27T09:38:13Z">
+      <article class="step" id="s_quick" data-id="s_quick" data-kind="change" data-changed="2026-11-27T09:48:44Z">
         <header>
           <div class="num">7</div>
           <div class="title"><h3>Paste scrQuickContacts</h3><div class="where">Power Apps Studio, Tree view</div></div>
           <div class="pill" data-pill>&nbsp;</div>
         </header>
-        <div class="changed">Last changed <strong>27/11/2026 09:38 GMT</strong> <span class="age"></span></div>
+        <div class="changed">Last changed <strong>27/11/2026 09:48 GMT</strong> <span class="age"></span></div>
         
         <div class="body">
           <ol class="how">
@@ -367,7 +367,7 @@ Set(varLightboxGroupID, 0)</pre>
         Set(varCustodianView, false);
         If(!varCacheReady &amp;&amp; !varLoading, LoadCache())
     Children:
-      - recHeader:
+      - recHeaderQc:
           Control: Classic/Button@2.2.0
           Properties:
             Text: =""
@@ -384,7 +384,7 @@ Set(varLightboxGroupID, 0)</pre>
             Y: =0
             Width: =1366
             Height: =76
-      - lblHeaderTitle:
+      - lblHeaderTitleQc:
           Control: Label@2.5.1
           Properties:
             Text: ="Branch Contact Groups"
@@ -396,7 +396,7 @@ Set(varLightboxGroupID, 0)</pre>
             Y: =10
             Width: =520
             Height: =32
-      - lblHeaderSub:
+      - lblHeaderSubQc:
           Control: Label@2.5.1
           Properties:
             Text: ="Quick copy contact lists"
@@ -429,7 +429,7 @@ Set(varLightboxGroupID, 0)</pre>
             Y: =18
             Width: =160
             Height: =40
-      - btnManageNav:
+      - btnManageNavQc:
           Control: Classic/Button@2.2.0
           Properties:
             Text: ="Manage Groups"
@@ -500,7 +500,7 @@ Set(varLightboxGroupID, 0)</pre>
             Width: =130
             Height: =36
       - txtQuickSearch:
-          Control: ModernTextInput@1.1.0
+          Control: ModernTextInput@1.1.2
           Properties:
             Placeholder: ="Search contact lists..."
             X: =36
@@ -703,7 +703,7 @@ Set(varLightboxGroupID, 0)</pre>
                   Y: =38
                   Width: =620
                   Height: =20
-            - pilSensitive:
+            - pilSensitiveQc:
                 Control: Classic/Button@2.2.0
                 Properties:
                   Text: ="Official Sensitive Approved"
@@ -747,7 +747,7 @@ Set(varLightboxGroupID, 0)</pre>
                   Y: =62
                   Width: =128
                   Height: =20
-            - pilPrivate:
+            - pilPrivateQc:
                 Control: Classic/Button@2.2.0
                 Properties:
                   Text: ="Private"
@@ -1020,7 +1020,7 @@ Set(varLightboxGroupID, 0)</pre>
                   Y: =28
                   Width: =422
                   Height: =20
-      - galMembers:
+      - galMembersQc:
           Control: Gallery@2.15.0
           Variant: Vertical
           Properties:
@@ -1038,7 +1038,7 @@ Set(varLightboxGroupID, 0)</pre>
             Width: =492
             Height: =If(varCustodianView, 208, 430)
           Children:
-            - lblMemberName:
+            - lblMemberNameQc:
                 Control: Label@2.5.1
                 Properties:
                   Text: =If(IsBlank(Trim(ThisItem.Name)), ThisItem.Email, ThisItem.Name)
@@ -1051,7 +1051,7 @@ Set(varLightboxGroupID, 0)</pre>
                   Y: =6
                   Width: =470
                   Height: =22
-            - lblMemberEmail:
+            - lblMemberEmailQc:
                 Control: Label@2.5.1
                 Properties:
                   Text: =ThisItem.Email &amp; If(!IsBlank(Trim(ThisItem.Email)) &amp;&amp; !IsApprovedAddress(ThisItem.Email), "   (other domain)", "")
@@ -1076,7 +1076,7 @@ Set(varLightboxGroupID, 0)</pre>
           Control: Label@2.5.1
           Properties:
             Text: ="There are no members in this list yet."
-            Visible: =!IsBlank(varQuickPreviewTitle) &amp;&amp; CountRows(galMembers.AllItems) = 0
+            Visible: =!IsBlank(varQuickPreviewTitle) &amp;&amp; CountRows(galMembersQc.AllItems) = 0
             Color: =RGBA(96,105,103,1)
             Size: =13
             Font: =Font.'Open Sans'
@@ -1190,13 +1190,13 @@ Set(varLightboxGroupID, 0)</pre>
         <button class="donebtn" type="button" data-done>I have done this step</button>
       </article>
 
-      <article class="step" id="s_send" data-id="s_send" data-kind="change" data-changed="2026-11-27T09:38:13Z">
+      <article class="step" id="s_send" data-id="s_send" data-kind="change" data-changed="2026-11-27T09:48:44Z">
         <header>
           <div class="num">8</div>
           <div class="title"><h3>Paste scrSendEmail</h3><div class="where">Power Apps Studio, Tree view</div></div>
           <div class="pill" data-pill>&nbsp;</div>
         </header>
-        <div class="changed">Last changed <strong>27/11/2026 09:38 GMT</strong> <span class="age"></span></div>
+        <div class="changed">Last changed <strong>27/11/2026 09:48 GMT</strong> <span class="age"></span></div>
         
         <div class="body">
           <ol class="how">
@@ -1207,7 +1207,7 @@ Set(varLightboxGroupID, 0)</pre>
 
         <div class="code-card">
           <button class="copy-big" data-copy="bcg-send" data-crlf="true" type="button">Copy the code for scrSendEmail</button>
-          <details class="code"><summary>Show the code (1,056 lines). You do not need to open this.</summary>
+          <details class="code"><summary>Show the code (1,055 lines). You do not need to open this.</summary>
 <pre id="bcg-send">Screens:
   scrSendEmail:
     Properties:
@@ -1222,7 +1222,7 @@ Set(varLightboxGroupID, 0)</pre>
         Set(varShowLightbox, false);
         Set(varCustodianView, false)
     Children:
-      - recHeader:
+      - recHeaderEm:
           Control: Classic/Button@2.2.0
           Properties:
             Text: =""
@@ -1239,7 +1239,7 @@ Set(varLightboxGroupID, 0)</pre>
             Y: =0
             Width: =1366
             Height: =72
-      - lblHeaderTitle:
+      - lblHeaderTitleEm:
           Control: Label@2.5.1
           Properties:
             Text: ="Branch Contact Groups"
@@ -1251,7 +1251,7 @@ Set(varLightboxGroupID, 0)</pre>
             Y: =10
             Width: =500
             Height: =32
-      - lblHeaderSub:
+      - lblHeaderSubEm:
           Control: Label@2.5.1
           Properties:
             Text: ="Send email to group members"
@@ -1262,7 +1262,7 @@ Set(varLightboxGroupID, 0)</pre>
             Y: =42
             Width: =500
             Height: =22
-      - btnManageNav:
+      - btnManageNavEm:
           Control: ModernButton@1.0.0
           Properties:
             Text: ="Manage Groups"
@@ -1358,22 +1358,22 @@ Set(varLightboxGroupID, 0)</pre>
             Y: =88
             Width: =300
             Height: =30
-      - txtGroupSearch:
-          Control: ModernTextInput@1.1.0
+      - txtGroupSearchEm:
+          Control: ModernTextInput@1.1.2
           Properties:
             Placeholder: ="Search groups by name..."
             X: =20
             Y: =122
             Width: =700
             Height: =40
-      - icoClearGroupSearch:
+      - icoClearGroupSearchEm:
           Control: Classic/Icon@2.5.0
           Properties:
             Icon: =Icon.Cancel
-            Visible: =!IsBlank(Trim(txtGroupSearch.Text))
+            Visible: =!IsBlank(Trim(txtGroupSearchEm.Text))
             Color: =RGBA(160,160,160,1)
             Tooltip: ="Clear search"
-            OnSelect: =Reset(txtGroupSearch)
+            OnSelect: =Reset(txtGroupSearchEm)
             X: =668
             Y: =131
             Width: =22
@@ -1382,7 +1382,7 @@ Set(varLightboxGroupID, 0)</pre>
           Control: Gallery@2.15.0
           Variant: Vertical
           Properties:
-            Items: =Filter(colGroups, (!Private || varIsMaintainer) &amp;&amp; (IsBlank(Trim(txtGroupSearch.Text)) || txtGroupSearch.Text in Title))
+            Items: =Filter(colGroups, (!Private || varIsMaintainer) &amp;&amp; (IsBlank(Trim(txtGroupSearchEm.Text)) || txtGroupSearchEm.Text in Title))
             TemplateSize: =88
             TemplatePadding: =0
             X: =20
@@ -1448,7 +1448,7 @@ Set(varLightboxGroupID, 0)</pre>
                   Y: =30
                   Width: =130
                   Height: =18
-            - pilPrivate:
+            - pilPrivateEm:
                 Control: Classic/Button@2.2.0
                 Properties:
                   Text: ="Private"
@@ -1470,7 +1470,7 @@ Set(varLightboxGroupID, 0)</pre>
                   Y: =30
                   Width: =70
                   Height: =18
-            - pilSensitive:
+            - pilSensitiveEm:
                 Control: Classic/Button@2.2.0
                 Properties:
                   Text: ="Official Sensitive Approved"
@@ -1492,7 +1492,7 @@ Set(varLightboxGroupID, 0)</pre>
                   Y: =30
                   Width: =180
                   Height: =18
-            - pilOfficialUse:
+            - pilOfficialUseEm:
                 Control: Classic/Button@2.2.0
                 Properties:
                   Text: ="Official Use Only"
@@ -1533,7 +1533,7 @@ Set(varLightboxGroupID, 0)</pre>
                   Y: =52
                   Width: =520
                   Height: =18
-            - recRowClickCatcher:
+            - recRowClickCatcherEm:
                 Control: Classic/Button@2.2.0
                 Properties:
                   Text: =""
@@ -1547,11 +1547,11 @@ Set(varLightboxGroupID, 0)</pre>
                   Width: =700
                   Height: =82
             - recCheckBox:
-                Control: CheckBox@0.0.30
+                Control: ModernCheckbox@1.0.2
                 Properties:
                   BasePaletteColor: =RGBA(156, 220, 79, 1)
                   CheckboxSize: =22
-                  Checked: =ThisItem.Ticked
+                  Default: =ThisItem.Ticked
                   Label: =""
                   OnCheck: |-
                     =Patch(colGroups, ThisItem, {Ticked: true});
@@ -1564,7 +1564,6 @@ Set(varLightboxGroupID, 0)</pre>
                   X: =20
                   Y: =22
                   Width: =38
-                  Height: =38
             - recViewMembersChip:
                 Control: Classic/Button@2.2.0
                 Properties:
@@ -2047,7 +2046,7 @@ Set(varLightboxGroupID, 0)</pre>
             Y: =If(varPreviewGroupID = 0, 648, 708)
             Width: =270
             Height: =56
-      - recLightboxBackdrop:
+      - recLightboxBackdropEm:
           Control: Classic/Button@2.2.0
           Properties:
             Text: =""
@@ -2061,7 +2060,7 @@ Set(varLightboxGroupID, 0)</pre>
             Y: =0
             Width: =1366
             Height: =768
-      - recLightboxPanel:
+      - recLightboxPanelEm:
           Control: Classic/Button@2.2.0
           Properties:
             Text: =""
@@ -2079,7 +2078,7 @@ Set(varLightboxGroupID, 0)</pre>
             Y: =84
             Width: =700
             Height: =600
-      - lblLightboxTitle:
+      - lblLightboxTitleEm:
           Control: Label@2.5.1
           Properties:
             Text: |-
@@ -2099,7 +2098,7 @@ Set(varLightboxGroupID, 0)</pre>
             Y: =110
             Width: =600
             Height: =32
-      - icoLightboxClose:
+      - icoLightboxCloseEm:
           Control: Classic/Icon@2.5.0
           Properties:
             Icon: =Icon.Cancel
@@ -2240,7 +2239,7 @@ Set(varLightboxGroupID, 0)</pre>
                   Y: =28
                   Width: =640
                   Height: =20
-      - galLightboxHistory:
+      - galLightboxHistoryEm:
           Control: Gallery@2.15.0
           Variant: Vertical
           Properties:
@@ -2253,7 +2252,7 @@ Set(varLightboxGroupID, 0)</pre>
             Width: =640
             Height: =480
           Children:
-            - lblLightboxHistoryRow:
+            - lblLightboxHistoryRowEm:
                 Control: Label@2.5.1
                 Properties:
                   Text: =ThisItem.Title &amp; "  ·  " &amp; Text(ThisItem.Created, "d mmm yyyy")
@@ -2270,13 +2269,13 @@ Set(varLightboxGroupID, 0)</pre>
         <button class="donebtn" type="button" data-done>I have done this step</button>
       </article>
 
-      <article class="step" id="s_manage" data-id="s_manage" data-kind="change" data-changed="2026-11-26T13:13:13Z">
+      <article class="step" id="s_manage" data-id="s_manage" data-kind="change" data-changed="2026-11-27T09:48:44Z">
         <header>
           <div class="num">9</div>
           <div class="title"><h3>Paste scrManageGroups</h3><div class="where">Power Apps Studio, Tree view</div></div>
           <div class="pill" data-pill>&nbsp;</div>
         </header>
-        <div class="changed">Last changed <strong>26/11/2026 13:13 GMT</strong> <span class="age"></span></div>
+        <div class="changed">Last changed <strong>27/11/2026 09:48 GMT</strong> <span class="age"></span></div>
         
         <div class="body">
           <ol class="how">
@@ -2284,10 +2283,10 @@ Set(varLightboxGroupID, 0)</pre>
             <li>Rename it exactly <span class="kb">scrManageGroups</span> (three dots, <strong>Rename</strong>).</li>
             <li>Click the big green Copy button below. Click the empty screen, then press <span class="kb">Ctrl</span> + <span class="kb">V</span>.</li>
           </ol>
-
+<p class="warn">If a dropdown shows a red line under <span class="kb">ThisItem.Value1</span>, delete the <span class="kb">1</span>. This is a Studio quirk when it pastes dropdowns. It does not affect your data.</p>
         <div class="code-card">
           <button class="copy-big" data-copy="bcg-manage" data-crlf="true" type="button">Copy the code for scrManageGroups</button>
-          <details class="code"><summary>Show the code (2,889 lines). You do not need to open this.</summary>
+          <details class="code"><summary>Show the code (2,883 lines). You do not need to open this.</summary>
 <pre id="bcg-manage">Screens:
   scrManageGroups:
     Properties:
@@ -2338,7 +2337,7 @@ Set(varLightboxGroupID, 0)</pre>
             Clear(colMaintainerGalSearchResults)
         )
     Children:
-      - recHeader:
+      - recHeaderMg:
           Control: Classic/Button@2.2.0
           Properties:
             Text: =""
@@ -2355,7 +2354,7 @@ Set(varLightboxGroupID, 0)</pre>
             Y: =0
             Width: =1366
             Height: =72
-      - icoBack:
+      - icoBackMg:
           Control: Classic/Icon@2.5.0
           Properties:
             Icon: =Icon.ChevronLeft
@@ -2365,7 +2364,7 @@ Set(varLightboxGroupID, 0)</pre>
             Y: =24
             Width: =24
             Height: =24
-      - lblHeaderTitle:
+      - lblHeaderTitleMg:
           Control: Label@2.5.1
           Properties:
             Text: ="Manage Groups"
@@ -2377,7 +2376,7 @@ Set(varLightboxGroupID, 0)</pre>
             Y: =10
             Width: =600
             Height: =32
-      - lblHeaderSub:
+      - lblHeaderSubMg:
           Control: Label@2.5.1
           Properties:
             Text: ="Create groups, manage membership, and clear out leavers"
@@ -2544,22 +2543,22 @@ Set(varLightboxGroupID, 0)</pre>
             Y: =138
             Width: =200
             Height: =20
-      - txtGroupSearch:
-          Control: ModernTextInput@1.1.0
+      - txtGroupSearchMg:
+          Control: ModernTextInput@1.1.2
           Properties:
             Placeholder: ="Search groups by name..."
             X: =20
             Y: =126
             Width: =620
             Height: =44
-      - icoClearGroupSearch:
+      - icoClearGroupSearchMg:
           Control: Classic/Icon@2.5.0
           Properties:
             Icon: =Icon.Cancel
-            Visible: =!IsBlank(Trim(txtGroupSearch.Text))
+            Visible: =!IsBlank(Trim(txtGroupSearchMg.Text))
             Color: =RGBA(160,160,160,1)
             Tooltip: ="Clear search"
-            OnSelect: =Reset(txtGroupSearch)
+            OnSelect: =Reset(txtGroupSearchMg)
             X: =588
             Y: =137
             Width: =22
@@ -2568,7 +2567,7 @@ Set(varLightboxGroupID, 0)</pre>
           Control: Gallery@2.15.0
           Variant: Vertical
           Properties:
-            Items: =Sort(Filter(colGroups, IsBlank(Trim(txtGroupSearch.Text)) || txtGroupSearch.Text in Title), Title, SortOrder.Ascending)
+            Items: =Sort(Filter(colGroups, IsBlank(Trim(txtGroupSearchMg.Text)) || txtGroupSearchMg.Text in Title), Title, SortOrder.Ascending)
             TemplateSize: =88
             TemplatePadding: =4
             X: =20
@@ -2592,7 +2591,7 @@ Set(varLightboxGroupID, 0)</pre>
                   RadiusBottomRight: =8
                   X: =0
                   Y: =0
-                  Width: =1320
+                  Width: =1312
                   Height: =84
             - lblRowTitle:
                 Control: Label@2.5.1
@@ -2608,7 +2607,7 @@ Set(varLightboxGroupID, 0)</pre>
                   Y: =9
                   Width: =1288
                   Height: =30
-            - pilSensitive:
+            - pilSensitiveMg:
                 Control: Classic/Button@2.2.0
                 Properties:
                   Text: ="Official Sensitive Approved"
@@ -2630,7 +2629,7 @@ Set(varLightboxGroupID, 0)</pre>
                   Y: =50
                   Width: =190
                   Height: =24
-            - pilOfficialUse:
+            - pilOfficialUseMg:
                 Control: Classic/Button@2.2.0
                 Properties:
                   Text: ="Official Use Only"
@@ -2652,7 +2651,7 @@ Set(varLightboxGroupID, 0)</pre>
                   Y: =50
                   Width: =150
                   Height: =24
-            - pilPrivate:
+            - pilPrivateMg:
                 Control: Classic/Button@2.2.0
                 Properties:
                   Text: ="Private"
@@ -2690,7 +2689,7 @@ Set(varLightboxGroupID, 0)</pre>
                   Y: =51
                   Width: =360
                   Height: =22
-            - recRowClickCatcher:
+            - recRowClickCatcherMg:
                 Control: Classic/Button@2.2.0
                 Properties:
                   Text: =""
@@ -2717,7 +2716,7 @@ Set(varLightboxGroupID, 0)</pre>
                     Set(varShowLightbox, true)
                   X: =0
                   Y: =0
-                  Width: =1320
+                  Width: =1312
                   Height: =84
             - recRowManageMembersChip:
                 Control: Classic/Button@2.2.0
@@ -2859,7 +2858,7 @@ Set(varLightboxGroupID, 0)</pre>
                   Y: =30
                   Width: =66
                   Height: =26
-      - recLightboxBackdrop:
+      - recLightboxBackdropMg:
           Control: Classic/Button@2.2.0
           Properties:
             Text: =""
@@ -2883,7 +2882,7 @@ Set(varLightboxGroupID, 0)</pre>
             Y: =0
             Width: =1366
             Height: =768
-      - recLightboxPanel:
+      - recLightboxPanelMg:
           Control: Classic/Button@2.2.0
           Properties:
             Text: =""
@@ -2901,7 +2900,7 @@ Set(varLightboxGroupID, 0)</pre>
             Y: =54
             Width: =1140
             Height: =660
-      - lblLightboxTitle:
+      - lblLightboxTitleMg:
           Control: Label@2.5.1
           Properties:
             Text: |-
@@ -2922,7 +2921,7 @@ Set(varLightboxGroupID, 0)</pre>
             Y: =78
             Width: =1000
             Height: =32
-      - icoLightboxClose:
+      - icoLightboxCloseMg:
           Control: Classic/Icon@2.5.0
           Properties:
             Icon: =Icon.Cancel
@@ -3204,7 +3203,7 @@ Set(varLightboxGroupID, 0)</pre>
             Width: =1000
             Height: =22
       - txtEditTitle:
-          Control: ModernTextInput@1.1.0
+          Control: ModernTextInput@1.1.2
           Properties:
             Default: =If(varManageGroupID = 0, "", LookUp(colGroups, ID = varManageGroupID).Title)
             Placeholder: ="Group name"
@@ -3228,8 +3227,9 @@ Set(varLightboxGroupID, 0)</pre>
             Width: =1000
             Height: =92
       - drpEditThursdayBatch:
-          Control: ModernDropdown@1.0.1
+          Control: ModernDropdown@1.0.3
           Properties:
+            ItemDisplayText: =ThisItem.Value
             Items: =colThursdayBatchOptions
             Default: =LookUp(colThursdayBatchOptions, Lower(Trim(Value)) = Lower(Trim(Coalesce(LookUp(colGroups, ID = varManageGroupID).ThursdayBatch.Value, "None"))))
             Visible: =varShowLightbox &amp;&amp; varLightboxMode = "edit"
@@ -3238,53 +3238,49 @@ Set(varLightboxGroupID, 0)</pre>
             Width: =200
             Height: =42
       - chkEditPrivate:
-          Control: CheckBox@0.0.30
+          Control: ModernCheckbox@1.0.2
           Properties:
             BasePaletteColor: =RGBA(156, 220, 79, 1)
             CheckboxSize: =22
             Label: ="Private (maintainers only)"
-            Checked: =If(varManageGroupID = 0, false, LookUp(colGroups, ID = varManageGroupID).Private)
+            Default: =If(varManageGroupID = 0, false, LookUp(colGroups, ID = varManageGroupID).Private)
             Visible: =varShowLightbox &amp;&amp; varLightboxMode = "edit"
             X: =183
             Y: =332
             Width: =420
-            Height: =32
       - chkEditSensitive:
-          Control: CheckBox@0.0.30
+          Control: ModernCheckbox@1.0.2
           Properties:
             BasePaletteColor: =RGBA(156, 220, 79, 1)
             CheckboxSize: =22
             Label: ="Official Sensitive Approved"
-            Checked: =If(varManageGroupID = 0, false, LookUp(colGroups, ID = varManageGroupID).OfficialSensitiveApproved)
+            Default: =If(varManageGroupID = 0, false, LookUp(colGroups, ID = varManageGroupID).OfficialSensitiveApproved)
             Visible: =varShowLightbox &amp;&amp; varLightboxMode = "edit"
             X: =183
             Y: =372
             Width: =420
-            Height: =32
       - chkEditOfficialUse:
-          Control: CheckBox@0.0.30
+          Control: ModernCheckbox@1.0.2
           Properties:
             BasePaletteColor: =RGBA(156, 220, 79, 1)
             CheckboxSize: =22
             Label: ="Official Use Only"
-            Checked: =If(varManageGroupID = 0, false, LookUp(colGroups, ID = varManageGroupID).OfficialUseOnly)
+            Default: =If(varManageGroupID = 0, false, LookUp(colGroups, ID = varManageGroupID).OfficialUseOnly)
             Visible: =varShowLightbox &amp;&amp; varLightboxMode = "edit"
             X: =183
             Y: =412
             Width: =420
-            Height: =32
       - chkOverrideDate:
-          Control: CheckBox@0.0.30
+          Control: ModernCheckbox@1.0.2
           Properties:
             BasePaletteColor: =RGBA(156, 220, 79, 1)
             CheckboxSize: =22
             Label: ="Override last modified date"
-            Checked: =If(varManageGroupID = 0, false, !IsBlank(LookUp(colGroups, ID = varManageGroupID).ManuallySetModified))
+            Default: =If(varManageGroupID = 0, false, !IsBlank(LookUp(colGroups, ID = varManageGroupID).ManuallySetModified))
             Visible: =varShowLightbox &amp;&amp; varLightboxMode = "edit"
             X: =183
             Y: =452
             Width: =420
-            Height: =32
       - datEditManualDate:
           Control: Classic/DatePicker@2.6.0
           Properties:
@@ -3295,17 +3291,16 @@ Set(varLightboxGroupID, 0)</pre>
             Width: =220
             Height: =40
       - chkEditCustodians:
-          Control: CheckBox@0.0.30
+          Control: ModernCheckbox@1.0.2
           Properties:
             BasePaletteColor: =RGBA(156, 220, 79, 1)
             CheckboxSize: =22
             Label: ="Add custodians"
-            Checked: =If(varManageGroupID = 0, false, Coalesce(LookUp(colGroups, ID = varManageGroupID).HasCustodians, false))
+            Default: =If(varManageGroupID = 0, false, Coalesce(LookUp(colGroups, ID = varManageGroupID).HasCustodians, false))
             Visible: =varShowLightbox &amp;&amp; varLightboxMode = "edit"
             X: =860
             Y: =278
             Width: =360
-            Height: =32
       - lblCustHint:
           Control: Label@2.5.1
           Properties:
@@ -3394,7 +3389,7 @@ Set(varLightboxGroupID, 0)</pre>
                   Width: =84
                   Height: =34
       - txtCustSearch:
-          Control: ModernTextInput@1.1.0
+          Control: ModernTextInput@1.1.2
           Properties:
             Placeholder: ="Search the GAL by surname..."
             Visible: =varShowLightbox &amp;&amp; varLightboxMode = "edit" &amp;&amp; chkEditCustodians.Checked
@@ -3661,7 +3656,7 @@ Set(varLightboxGroupID, 0)</pre>
             Y: =124
             Width: =220
             Height: =36
-      - galLightboxHistory:
+      - galLightboxHistoryMg:
           Control: Gallery@2.15.0
           Variant: Vertical
           Properties:
@@ -3674,7 +3669,7 @@ Set(varLightboxGroupID, 0)</pre>
             Width: =1000
             Height: =520
           Children:
-            - lblLightboxHistoryRow:
+            - lblLightboxHistoryRowMg:
                 Control: Label@2.5.1
                 Properties:
                   Text: =ThisItem.Title &amp; "  ·  " &amp; Text(ThisItem.Created, "d mmm yyyy")
@@ -3790,7 +3785,7 @@ Set(varLightboxGroupID, 0)</pre>
             Width: =420
             Height: =24
       - txtMaintainerSearch:
-          Control: ModernTextInput@1.1.0
+          Control: ModernTextInput@1.1.2
           Properties:
             Placeholder: ="Search GAL by surname..."
             Visible: =varShowLightbox &amp;&amp; varLightboxMode = "adminMaintainers"
@@ -3922,7 +3917,7 @@ Set(varLightboxGroupID, 0)</pre>
             Width: =420
             Height: =24
       - txtMaintainerName:
-          Control: ModernTextInput@1.1.0
+          Control: ModernTextInput@1.1.2
           Properties:
             Placeholder: ="Full name"
             Visible: =varShowLightbox &amp;&amp; varLightboxMode = "adminMaintainers"
@@ -3932,7 +3927,7 @@ Set(varLightboxGroupID, 0)</pre>
             Width: =420
             Height: =42
       - txtMaintainerEmail:
-          Control: ModernTextInput@1.1.0
+          Control: ModernTextInput@1.1.2
           Properties:
             Placeholder: ="Email address"
             Visible: =varShowLightbox &amp;&amp; varLightboxMode = "adminMaintainers"
@@ -3968,7 +3963,7 @@ Set(varLightboxGroupID, 0)</pre>
             Y: =556
             Width: =420
             Height: =44
-      - galMembers:
+      - galMembersMg:
           Control: Gallery@2.15.0
           Variant: Vertical
           Properties:
@@ -4014,7 +4009,7 @@ Set(varLightboxGroupID, 0)</pre>
                   Y: =4 + If(IsBlank(Trim(ThisItem.JMC)), 0, 18)
                   Width: =800
                   Height: =18
-            - lblMemberName:
+            - lblMemberNameMg:
                 Control: Label@2.5.1
                 Properties:
                   Text: =ThisItem.Name
@@ -4026,7 +4021,7 @@ Set(varLightboxGroupID, 0)</pre>
                   Y: =4 + If(IsBlank(Trim(ThisItem.JMC)), 0, 18) + If(IsBlank(Trim(ThisItem.'County/Contingent')), 0, 18)
                   Width: =800
                   Height: =22
-            - lblMemberEmail:
+            - lblMemberEmailMg:
                 Control: Label@2.5.1
                 Properties:
                   Text: =ThisItem.Email
@@ -4187,7 +4182,7 @@ Set(varLightboxGroupID, 0)</pre>
             Width: =1000
             Height: =24
       - txtExistingPeopleSearch:
-          Control: ModernTextInput@1.1.0
+          Control: ModernTextInput@1.1.2
           Properties:
             Placeholder: ="Search existing people by name or email..."
             Visible: =varShowLightbox &amp;&amp; varLightboxMode = "manage" &amp;&amp; varManageSubTab = "existing"
@@ -4254,10 +4249,10 @@ Set(varLightboxGroupID, 0)</pre>
                   Width: =1000
                   Height: =56
             - chkExistingPerson:
-                Control: CheckBox@0.0.30
+                Control: ModernCheckbox@1.0.2
                 Properties:
                   Label: =""
-                  Checked: =ThisItem.Picked
+                  Default: =ThisItem.Picked
                   BasePaletteColor: =RGBA(156,220,79,1)
                   CheckboxSize: =22
                   OnCheck: |-
@@ -4267,7 +4262,6 @@ Set(varLightboxGroupID, 0)</pre>
                   X: =14
                   Y: =14
                   Width: =38
-                  Height: =34
             - lblExistingPersonName:
                 Control: Label@2.5.1
                 Properties:
@@ -4375,7 +4369,7 @@ Set(varLightboxGroupID, 0)</pre>
             Width: =480
             Height: =24
       - txtGalSearch:
-          Control: ModernTextInput@1.1.0
+          Control: ModernTextInput@1.1.2
           Properties:
             Placeholder: ="Search GAL by surname, e.g. Hughes..."
             Visible: =varShowLightbox &amp;&amp; varLightboxMode = "manage" &amp;&amp; varManageSubTab = "add"
@@ -4516,7 +4510,7 @@ Set(varLightboxGroupID, 0)</pre>
             Width: =If(varShowMemberEditDialog, 440, 420)
             Height: =24
       - txtManualName:
-          Control: ModernTextInput@1.1.0
+          Control: ModernTextInput@1.1.2
           Properties:
             Default: =If(!IsBlank(varGalPickEmail), varGalPickName, If(varEditingMemberID = 0, "", LookUp(colMemberships, ID = varEditingMemberID).Name))
             Placeholder: ="Full name"
@@ -4527,7 +4521,7 @@ Set(varLightboxGroupID, 0)</pre>
             Width: =If(varShowMemberEditDialog, 500, 420)
             Height: =42
       - txtManualEmail:
-          Control: ModernTextInput@1.1.0
+          Control: ModernTextInput@1.1.2
           Properties:
             Default: =If(!IsBlank(varGalPickEmail), varGalPickEmail, If(varEditingMemberID = 0, "", LookUp(colMemberships, ID = varEditingMemberID).Email))
             Placeholder: =If(Coalesce(LookUp(colGroups, ID = varManageGroupID).HasCustodians, false), "Email address (optional for this group)", "Email address")
@@ -4538,7 +4532,7 @@ Set(varLightboxGroupID, 0)</pre>
             Width: =If(varShowMemberEditDialog, 500, 420)
             Height: =42
       - txtManualJMC:
-          Control: ModernTextInput@1.1.0
+          Control: ModernTextInput@1.1.2
           Properties:
             Default: =If(varEditingMemberID = 0, "", LookUp(colMemberships, ID = varEditingMemberID).JMC)
             Placeholder: ="JMC (optional)"
@@ -4548,7 +4542,7 @@ Set(varLightboxGroupID, 0)</pre>
             Width: =If(varShowMemberEditDialog, 500, 420)
             Height: =42
       - txtManualCounty:
-          Control: ModernTextInput@1.1.0
+          Control: ModernTextInput@1.1.2
           Properties:
             Default: =If(varEditingMemberID = 0, "", LookUp(colMemberships, ID = varEditingMemberID).'County/Contingent')
             Placeholder: ="County/Contingent (optional)"
@@ -4862,7 +4856,7 @@ Set(varLightboxGroupID, 0)</pre>
             Width: =1000
             Height: =44
       - chkPasteSetDate:
-          Control: CheckBox@0.0.30
+          Control: ModernCheckbox@1.0.2
           Properties:
             BasePaletteColor: =RGBA(156, 220, 79, 1)
             CheckboxSize: =22
@@ -4871,7 +4865,6 @@ Set(varLightboxGroupID, 0)</pre>
             X: =183
             Y: =578
             Width: =470
-            Height: =32
       - datPasteDate:
           Control: Classic/DatePicker@2.6.0
           Properties:
@@ -5183,13 +5176,13 @@ Set(varLightboxGroupID, 0)</pre>
         <button class="donebtn" type="button" data-done>I have done this step</button>
       </article>
 
-      <article class="step" id="s_import" data-id="s_import" data-kind="change" data-changed="2026-11-26T13:13:13Z">
+      <article class="step" id="s_import" data-id="s_import" data-kind="change" data-changed="2026-11-27T09:48:44Z">
         <header>
           <div class="num">10</div>
           <div class="title"><h3>Paste scrImport</h3><div class="where">Power Apps Studio, Tree view</div></div>
           <div class="pill" data-pill>&nbsp;</div>
         </header>
-        <div class="changed">Last changed <strong>26/11/2026 13:13 GMT</strong> <span class="age"></span></div>
+        <div class="changed">Last changed <strong>27/11/2026 09:48 GMT</strong> <span class="age"></span></div>
         
         <div class="body">
           <ol class="how">
@@ -5197,10 +5190,10 @@ Set(varLightboxGroupID, 0)</pre>
             <li>Rename it exactly <span class="kb">scrImport</span> (three dots, <strong>Rename</strong>).</li>
             <li>Click the big green Copy button below. Click the empty screen, then press <span class="kb">Ctrl</span> + <span class="kb">V</span>.</li>
           </ol>
-
+<p class="warn">If a dropdown shows a red line under <span class="kb">ThisItem.Value1</span>, delete the <span class="kb">1</span>. This is a Studio quirk when it pastes dropdowns. It does not affect your data.</p>
         <div class="code-card">
           <button class="copy-big" data-copy="bcg-import" data-crlf="true" type="button">Copy the code for scrImport</button>
-          <details class="code"><summary>Show the code (1,202 lines). You do not need to open this.</summary>
+          <details class="code"><summary>Show the code (1,207 lines). You do not need to open this.</summary>
 <pre id="bcg-import">Screens:
   scrImport:
     Properties:
@@ -5220,7 +5213,7 @@ Set(varLightboxGroupID, 0)</pre>
             ClearCollect(colImpGroupChoices, ForAll(Sort(colGroups, Title, SortOrder.Ascending), Title))
         )
     Children:
-      - recHeader:
+      - recHeaderIm:
           Control: Classic/Button@2.2.0
           Properties:
             Text: =""
@@ -5237,7 +5230,7 @@ Set(varLightboxGroupID, 0)</pre>
             Y: =0
             Width: =1366
             Height: =72
-      - icoBack:
+      - icoBackIm:
           Control: Classic/Icon@2.5.0
           Properties:
             Icon: =Icon.ChevronLeft
@@ -5271,7 +5264,7 @@ Set(varLightboxGroupID, 0)</pre>
             Y: =16
             Width: =160
             Height: =40
-      - lblHeaderTitle:
+      - lblHeaderTitleIm:
           Control: Label@2.5.1
           Properties:
             Text: ="Import from paste"
@@ -5283,7 +5276,7 @@ Set(varLightboxGroupID, 0)</pre>
             Y: =10
             Width: =600
             Height: =32
-      - lblHeaderSub:
+      - lblHeaderSubIm:
           Control: Label@2.5.1
           Properties:
             Text: ="Create or update contact groups from a pasted list of names and email addresses"
@@ -5658,8 +5651,9 @@ Set(varLightboxGroupID, 0)</pre>
             Width: =330
             Height: =34
       - ddImpGroup1:
-          Control: ModernDropdown@1.0.1
+          Control: ModernDropdown@1.0.3
           Properties:
+            ItemDisplayText: =ThisItem.Value
             Items: =colImpGroupChoices
             Visible: =CountRows(colImpTags) &gt;= 1 &amp;&amp; varImpMode &lt;&gt; "add"
             X: =800
@@ -5766,8 +5760,9 @@ Set(varLightboxGroupID, 0)</pre>
             Width: =330
             Height: =34
       - ddImpGroup2:
-          Control: ModernDropdown@1.0.1
+          Control: ModernDropdown@1.0.3
           Properties:
+            ItemDisplayText: =ThisItem.Value
             Items: =colImpGroupChoices
             Visible: =CountRows(colImpTags) &gt;= 2 &amp;&amp; varImpMode &lt;&gt; "add"
             X: =800
@@ -5874,8 +5869,9 @@ Set(varLightboxGroupID, 0)</pre>
             Width: =330
             Height: =34
       - ddImpGroup3:
-          Control: ModernDropdown@1.0.1
+          Control: ModernDropdown@1.0.3
           Properties:
+            ItemDisplayText: =ThisItem.Value
             Items: =colImpGroupChoices
             Visible: =CountRows(colImpTags) &gt;= 3 &amp;&amp; varImpMode &lt;&gt; "add"
             X: =800
@@ -5982,8 +5978,9 @@ Set(varLightboxGroupID, 0)</pre>
             Width: =330
             Height: =34
       - ddImpGroup4:
-          Control: ModernDropdown@1.0.1
+          Control: ModernDropdown@1.0.3
           Properties:
+            ItemDisplayText: =ThisItem.Value
             Items: =colImpGroupChoices
             Visible: =CountRows(colImpTags) &gt;= 4 &amp;&amp; varImpMode &lt;&gt; "add"
             X: =800
@@ -6090,8 +6087,9 @@ Set(varLightboxGroupID, 0)</pre>
             Width: =330
             Height: =34
       - ddImpGroup5:
-          Control: ModernDropdown@1.0.1
+          Control: ModernDropdown@1.0.3
           Properties:
+            ItemDisplayText: =ThisItem.Value
             Items: =colImpGroupChoices
             Visible: =CountRows(colImpTags) &gt;= 5 &amp;&amp; varImpMode &lt;&gt; "add"
             X: =800
@@ -6198,8 +6196,9 @@ Set(varLightboxGroupID, 0)</pre>
             Width: =330
             Height: =34
       - ddImpGroup6:
-          Control: ModernDropdown@1.0.1
+          Control: ModernDropdown@1.0.3
           Properties:
+            ItemDisplayText: =ThisItem.Value
             Items: =colImpGroupChoices
             Visible: =CountRows(colImpTags) &gt;= 6 &amp;&amp; varImpMode &lt;&gt; "add"
             X: =800
@@ -6259,7 +6258,7 @@ Set(varLightboxGroupID, 0)</pre>
             Width: =736
             Height: =22
       - chkImpSetDate:
-          Control: CheckBox@0.0.30
+          Control: ModernCheckbox@1.0.2
           Properties:
             BasePaletteColor: =RGBA(156, 220, 79, 1)
             CheckboxSize: =22
@@ -6267,7 +6266,6 @@ Set(varLightboxGroupID, 0)</pre>
             X: =930
             Y: =654
             Width: =250
-            Height: =32
       - datImpDate:
           Control: Classic/DatePicker@2.6.0
           Properties:
@@ -6409,13 +6407,13 @@ Set(varLightboxGroupID, 0)</pre>
         <button class="donebtn" type="button" data-done>I have done this step</button>
       </article>
 
-      <article class="step" id="s_people" data-id="s_people" data-kind="change" data-changed="2026-11-26T13:13:13Z">
+      <article class="step" id="s_people" data-id="s_people" data-kind="change" data-changed="2026-11-27T09:48:44Z">
         <header>
           <div class="num">11</div>
           <div class="title"><h3>Paste scrManagePeople</h3><div class="where">Power Apps Studio, Tree view</div></div>
           <div class="pill" data-pill>&nbsp;</div>
         </header>
-        <div class="changed">Last changed <strong>26/11/2026 13:13 GMT</strong> <span class="age"></span></div>
+        <div class="changed">Last changed <strong>27/11/2026 09:48 GMT</strong> <span class="age"></span></div>
         
         <div class="body">
           <ol class="how">
@@ -6426,7 +6424,7 @@ Set(varLightboxGroupID, 0)</pre>
 
         <div class="code-card">
           <button class="copy-big" data-copy="bcg-people" data-crlf="true" type="button">Copy the code for scrManagePeople</button>
-          <details class="code"><summary>Show the code (1,042 lines). You do not need to open this.</summary>
+          <details class="code"><summary>Show the code (1,039 lines). You do not need to open this.</summary>
 <pre id="bcg-people">Screens:
   scrManagePeople:
     Properties:
@@ -6449,7 +6447,7 @@ Set(varLightboxGroupID, 0)</pre>
             Clear(colAddPersonGalResults)
         )
     Children:
-      - recHeader:
+      - recHeaderMp:
           Control: Classic/Button@2.2.0
           Properties:
             Text: =""
@@ -6466,7 +6464,7 @@ Set(varLightboxGroupID, 0)</pre>
             Y: =0
             Width: =1366
             Height: =72
-      - icoBack:
+      - icoBackMp:
           Control: Classic/Icon@2.5.0
           Properties:
             Icon: =Icon.ChevronLeft
@@ -6476,7 +6474,7 @@ Set(varLightboxGroupID, 0)</pre>
             Y: =24
             Width: =24
             Height: =24
-      - lblHeaderTitle:
+      - lblHeaderTitleMp:
           Control: Label@2.5.1
           Properties:
             Text: ="Manage People"
@@ -6488,7 +6486,7 @@ Set(varLightboxGroupID, 0)</pre>
             Y: =10
             Width: =600
             Height: =32
-      - lblHeaderSub:
+      - lblHeaderSubMp:
           Control: Label@2.5.1
           Properties:
             Text: ="One record per person - tick the groups they belong to"
@@ -6596,7 +6594,7 @@ Set(varLightboxGroupID, 0)</pre>
             Width: =400
             Height: =26
       - txtPeopleSearch:
-          Control: ModernTextInput@1.1.0
+          Control: ModernTextInput@1.1.2
           Properties:
             Placeholder: ="Search people by name or email..."
             X: =20
@@ -6783,7 +6781,7 @@ Set(varLightboxGroupID, 0)</pre>
                   Y: =0
                   Width: =1320
                   Height: =86
-      - recLightboxBackdrop:
+      - recLightboxBackdropMp:
           Control: Classic/Button@2.2.0
           Properties:
             Text: =""
@@ -6797,7 +6795,7 @@ Set(varLightboxGroupID, 0)</pre>
             Y: =0
             Width: =1366
             Height: =768
-      - recLightboxPanel:
+      - recLightboxPanelMp:
           Control: Classic/Button@2.2.0
           Properties:
             Text: =""
@@ -6815,7 +6813,7 @@ Set(varLightboxGroupID, 0)</pre>
             Y: =54
             Width: =900
             Height: =660
-      - lblLightboxTitle:
+      - lblLightboxTitleMp:
           Control: Label@2.5.1
           Properties:
             Text: =Switch(varPeopleLightboxMode, "addPerson", "Add new person", "editPerson", "Edit person", "purge", "Remove someone from every group", "")
@@ -6828,7 +6826,7 @@ Set(varLightboxGroupID, 0)</pre>
             Y: =78
             Width: =760
             Height: =32
-      - icoLightboxClose:
+      - icoLightboxCloseMp:
           Control: Classic/Icon@2.5.0
           Properties:
             Icon: =Icon.Cancel
@@ -6853,7 +6851,7 @@ Set(varLightboxGroupID, 0)</pre>
             Width: =400
             Height: =22
       - txtAddPersonSearch:
-          Control: ModernTextInput@1.1.0
+          Control: ModernTextInput@1.1.2
           Properties:
             Placeholder: ="Search GAL by surname, e.g. Hughes..."
             Visible: =varShowLightbox &amp;&amp; varPeopleLightboxMode = "addPerson"
@@ -6977,7 +6975,7 @@ Set(varLightboxGroupID, 0)</pre>
             Width: =400
             Height: =22
       - txtAddPersonName:
-          Control: ModernTextInput@1.1.0
+          Control: ModernTextInput@1.1.2
           Properties:
             Default: =varAddPersonNamePrefill
             Placeholder: ="Full name"
@@ -6987,7 +6985,7 @@ Set(varLightboxGroupID, 0)</pre>
             Width: =400
             Height: =42
       - txtAddPersonEmail:
-          Control: ModernTextInput@1.1.0
+          Control: ModernTextInput@1.1.2
           Properties:
             Default: =varAddPersonEmailPrefill
             Placeholder: ="Email address"
@@ -7047,12 +7045,12 @@ Set(varLightboxGroupID, 0)</pre>
             Height: =144
           Children:
             - chkAddPersonGroup:
-                Control: CheckBox@0.0.30
+                Control: ModernCheckbox@1.0.2
                 Properties:
                   BasePaletteColor: =RGBA(156, 220, 79, 1)
                   CheckboxSize: =22
                   Label: =ThisItem.Title &amp; If(ThisItem.Private, " (Private)", "")
-                  Checked: =ThisItem.Picked
+                  Default: =ThisItem.Picked
                   OnCheck: |-
                     =Patch(colAddPersonPicks, ThisItem, {Picked: true})
                   OnUncheck: |-
@@ -7060,7 +7058,6 @@ Set(varLightboxGroupID, 0)</pre>
                   X: =0
                   Y: =2
                   Width: =800
-                  Height: =32
       - btnAddPerson:
           Control: ModernButton@1.0.0
           Properties:
@@ -7124,7 +7121,7 @@ Set(varLightboxGroupID, 0)</pre>
             Width: =300
             Height: =44
       - txtPersonName:
-          Control: ModernTextInput@1.1.0
+          Control: ModernTextInput@1.1.2
           Properties:
             Default: =If(IsBlank(varSelectedPersonEmail), "", LookUp(colPeople, Lower(Email) = Lower(varSelectedPersonEmail)).Name)
             Placeholder: ="Full name"
@@ -7134,7 +7131,7 @@ Set(varLightboxGroupID, 0)</pre>
             Width: =400
             Height: =42
       - txtPersonEmail:
-          Control: ModernTextInput@1.1.0
+          Control: ModernTextInput@1.1.2
           Properties:
             Default: =varSelectedPersonEmail
             Placeholder: ="Email address"
@@ -7194,12 +7191,12 @@ Set(varLightboxGroupID, 0)</pre>
             Height: =320
           Children:
             - chkGroupMember:
-                Control: CheckBox@0.0.30
+                Control: ModernCheckbox@1.0.2
                 Properties:
                   BasePaletteColor: =RGBA(156, 220, 79, 1)
                   CheckboxSize: =22
                   Label: =ThisItem.Title &amp; If(ThisItem.Picked, "  (current member)", "") &amp; If(ThisItem.Private, " (Private)", "")
-                  Checked: =ThisItem.Picked
+                  Default: =ThisItem.Picked
                   OnCheck: |-
                     =Patch(colPersonGroupPicks, ThisItem, {Picked: true})
                   OnUncheck: |-
@@ -7207,7 +7204,6 @@ Set(varLightboxGroupID, 0)</pre>
                   X: =0
                   Y: =2
                   Width: =800
-                  Height: =32
       - btnSavePersonChanges:
           Control: ModernButton@1.0.0
           Properties:
@@ -7272,7 +7268,7 @@ Set(varLightboxGroupID, 0)</pre>
             Width: =820
             Height: =36
       - txtPurgeSearch:
-          Control: ModernTextInput@1.1.0
+          Control: ModernTextInput@1.1.2
           Properties:
             Placeholder: ="Search by name or email..."
             Visible: =varShowLightbox &amp;&amp; varPeopleLightboxMode = "purge"
@@ -7347,10 +7343,10 @@ Set(varLightboxGroupID, 0)</pre>
                   Width: =820
                   Height: =48
             - chkPurgeSelect:
-                Control: CheckBox@0.0.30
+                Control: ModernCheckbox@1.0.2
                 Properties:
                   Label: =""
-                  Checked: =Lower(ThisItem.Email) = Lower(varPurgeSelectedEmail)
+                  Default: =Lower(ThisItem.Email) = Lower(varPurgeSelectedEmail)
                   BasePaletteColor: =RGBA(156,220,79,1)
                   CheckboxSize: =22
                   OnCheck: =Set(varPurgeSelectedEmail, ThisItem.Email); Set(varConfirmPurgeArmed, false)
@@ -7358,7 +7354,6 @@ Set(varLightboxGroupID, 0)</pre>
                   X: =14
                   Y: =10
                   Width: =38
-                  Height: =34
             - lblPurgePersonName:
                 Control: Label@2.5.1
                 Properties:
