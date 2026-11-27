@@ -783,6 +783,10 @@ The `With()` pattern is safe: it evaluates to the correct `{Value: "choice strin
 
 ---
 
+**Update 27/11/2026: a second, different cause.** `Value1` can also appear in a `ModernDropdown`'s `ItemDisplayText` (`ThisItem.Value1`) straight after a paste, even though the YAML never contained it, and copying the control back out of Studio shows no `Value1`. Studio generates `ItemDisplayText` itself when it upgrades the dropdown to 1.0.3 and sometimes picks the wrong name. Delete the `1`. Write `ItemDisplayText: =ThisItem.Value` in the YAML to reduce it. See `reference/control-versions.md`.
+
+---
+
 ## SharePoint Choice Fields Always Use `.Value` — Never `.Value1`
 
 When accessing a SharePoint Choice field in a formula, always use `.Value`:

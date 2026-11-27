@@ -4,6 +4,10 @@ This repo is referred to as **the Power Apps Bible** in every project that uses 
 a user or another session says "consult the Power Apps Bible," this repo is what they
 mean.
 
+## Control versions: check the registry first (added 27/11/2026)
+
+Before writing or editing any `Control: Type@version` line, read `reference/control-versions.md`. Studio upgrades controls on paste, so versions go stale. After every Studio round trip (screens saved back to the Screen YAML Vault) run `python tools/check-control-versions.py --vault <app-slug>` and update the registry if it reports anything superseded or unknown. Microsoft publishes no version table; the Studio export is the evidence.
+
 ## Hosting: Cloudflare Pages, NOT GitHub Pages (read this before touching any guide)
 
 **As of 2026-08-15, every guide site in this app family is hosted on Cloudflare Pages,

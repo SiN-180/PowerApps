@@ -1,5 +1,7 @@
 # Power Apps Control Defaults
 
+> **Version numbers on this page are from 20/06/2026 and are out of date.** Current versions are in `reference/control-versions.md` (for example `ModernTextInput@1.1.2`, `ModernDropdown@1.0.3`, `ModernCheckbox@1.0.2`). Re-run the fresh-control lab to refresh the defaults.
+
 Last checked: 2026-06-20
 
 This reference is generated from fresh controls inserted into the live Power Apps editor without manual edits.

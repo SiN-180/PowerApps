@@ -1,5 +1,8 @@
 # YAML Pre-Output Validation Checklist
 
+> **Control versions: see `reference/control-versions.md`.** It is the single registry of current, superseded and unverified versions (last checked against a real Studio export 27/11/2026) and it wins over any version quoted below.
+
+
 Last checked: 2026-06-23
 
 Run through this checklist mentally before generating or outputting ANY screen YAML. Do not skip items based on "this section won't apply here" — check every item every time. A single missed property causes a PA2108 error that breaks the entire paste.
@@ -43,8 +46,9 @@ Classic/CheckBox@2.1.0
 Classic/Toggle@2.1.0
 Form@2.4.4
 ModernButton@1.0.0
-ModernTextInput@1.1.0
-ModernDropdown@1.0.1
+ModernTextInput@1.1.2
+ModernCheckbox@1.0.2
+ModernDropdown@1.0.3
 ModernCombobox@1.1.0
 Toggle@1.1.5
 ModernDatePicker@1.0.0
@@ -87,12 +91,12 @@ Controls appear in the order listed — later = on top. Verify:
 - [ ] `HintText` — use `InputTextPlaceholder`
 - [ ] `Default` for multi-select preselection — use `DefaultSelectedItems`
 
-**ModernTextInput@1.1.0 — do not generate:**
+**ModernTextInput@1.1.2 (was 1.1.0) — do not generate:**
 - [ ] `HintText` — use `Placeholder`
 
-**ModernDropdown@1.0.1 — verify:**
+**ModernDropdown@1.0.3 (was 1.0.1) — verify:**
 - [ ] `Default` is a record `{Value: "..."}` not a plain string — a plain string causes blank display on load
-- [ ] If `Items` is table-shaped, `ItemDisplayText` is set explicitly
+- [ ] `ItemDisplayText: =ThisItem.Value` is written explicitly (Studio adds it itself on upgrade and sometimes writes `Value1`)
 - [ ] If `Default` is being seeded from a **SharePoint Choice column** (e.g. `ThisItem.ChoiceField`), pass the field directly — it is *already* the `{Value: "..."}` record. Adding `.Value` unwraps it to a plain string, which then fails to match `Items`' `{Value: "..."}` row shape with "invalid formula, expected a value compatible with Items." Confirmed in Branch Contact Groups (`drpEditThursdayBatch`, `ThisItem.ThursdayBatch.Value` → fix: `ThisItem.ThursdayBatch`). 2026-07-23.
 
 ---

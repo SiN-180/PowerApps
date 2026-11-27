@@ -249,7 +249,9 @@ Verified key properties (per docs, not live-confirmed):
 
 Get a live export before using in a full-screen paste — exact enum syntax (typed vs. string literal) unconfirmed, same caveat as everything below not yet used live in this app family.
 
-## Modern Checkbox (`CheckBox@0.0.30` — note the type name has no "Modern" prefix, unlike Button/Dropdown/TextInput)
+## Modern Checkbox (now `ModernCheckbox@1.0.2`; was `CheckBox@0.0.30`)
+
+> **Superseded 27/11/2026.** Studio now exports this control as `ModernCheckbox@1.0.2`. The `Checked` input is now `Default` (`chk.Checked` still works as an output), `Height` is dropped, and Studio adds `FontWeight: =""` and empty `OnCheck`/`OnUncheck`. Everything below describes the old `CheckBox@0.0.30`; see `reference/control-versions.md`.
 
 Same trap as Modern Toggle above:
 

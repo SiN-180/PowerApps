@@ -12,6 +12,7 @@ This is not a copied mirror of Microsoft Learn. It is a practical local referenc
 
 ## Files
 
+- `control-versions.md` - **start here for any `Control: Type@version`**. The registry of current, superseded and unverified control versions, checked against real Studio exports. Kept current with `tools/check-control-versions.py`.
 - `powerapps-bible.md` - entry point for the local Microsoft docs mirror, search index, curated quirks, and audit workflow.
 - `real-build-quirks.md` - live Power Apps editor fixes discovered while building Training Tracker.
 - `verified-control-reference.md` - modern/classic controls currently used by the guide style.
