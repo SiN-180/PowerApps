@@ -107,7 +107,7 @@ table.t th { background: var(--soft); }
   <div class="wrap">
     <h1>Branch Contact Groups: update guide</h1>
     <p>Do the steps in order, top to bottom. Tick each one off when it is done.</p>
-    <p class="built">This page was built on <strong>27/11/2026 09:32 GMT</strong> (v3.0)</p>
+    <p class="built">This page was built on <strong>27/11/2026 09:38 GMT</strong> (v3.0)</p>
     <div class="links"><a href="https://powerapps.pages.dev/">Guide library</a><a href="https://branch-contact-groups.pages.dev/yaml.html">Screen YAML Vault</a></div>
   </div>
 </div>
@@ -320,13 +320,13 @@ Set(varLightboxGroupID, 0)</pre>
         <button class="donebtn" type="button" data-done>I have done this step</button>
       </article>
 
-      <article class="step" id="delete" data-id="delete" data-kind="change" data-changed="2026-11-26T13:13:13Z">
+      <article class="step" id="delete" data-id="delete" data-kind="change" data-changed="2026-11-27T09:38:13Z">
         <header>
           <div class="num">6</div>
           <div class="title"><h3>Delete all five old screens</h3><div class="where">Power Apps Studio, Tree view</div></div>
           <div class="pill" data-pill>&nbsp;</div>
         </header>
-        <div class="changed">Last changed <strong>26/11/2026 13:13 GMT</strong> <span class="age"></span></div>
+        <div class="changed">Last changed <strong>27/11/2026 09:38 GMT</strong> <span class="age"></span></div>
         
         <div class="body">
           <p class="lead">Pasting adds screens, it never replaces them. If the old ones stay you get duplicates.</p>
@@ -339,13 +339,13 @@ Set(varLightboxGroupID, 0)</pre>
         <button class="donebtn" type="button" data-done>I have done this step</button>
       </article>
 
-      <article class="step" id="s_quick" data-id="s_quick" data-kind="change" data-changed="2026-11-26T13:13:13Z">
+      <article class="step" id="s_quick" data-id="s_quick" data-kind="change" data-changed="2026-11-27T09:38:13Z">
         <header>
           <div class="num">7</div>
           <div class="title"><h3>Paste scrQuickContacts</h3><div class="where">Power Apps Studio, Tree view</div></div>
           <div class="pill" data-pill>&nbsp;</div>
         </header>
-        <div class="changed">Last changed <strong>26/11/2026 13:13 GMT</strong> <span class="age"></span></div>
+        <div class="changed">Last changed <strong>27/11/2026 09:38 GMT</strong> <span class="age"></span></div>
         
         <div class="body">
           <ol class="how">
@@ -986,7 +986,7 @@ Set(varLightboxGroupID, 0)</pre>
             - galCustodiansQuickPhoto:
                 Control: Image@2.2.3
                 Properties:
-                  Image: =Office365Users.UserPhotoV2(ThisItem.Email)
+                  Image: =If(IsBlank(Trim(ThisItem.Email)), Blank(), IfError(Office365Users.UserPhotoV2(Trim(ThisItem.Email)), Blank()))
                   RadiusTopLeft: =22
                   RadiusTopRight: =22
                   RadiusBottomLeft: =22
@@ -1190,13 +1190,13 @@ Set(varLightboxGroupID, 0)</pre>
         <button class="donebtn" type="button" data-done>I have done this step</button>
       </article>
 
-      <article class="step" id="s_send" data-id="s_send" data-kind="change" data-changed="2026-11-26T13:13:13Z">
+      <article class="step" id="s_send" data-id="s_send" data-kind="change" data-changed="2026-11-27T09:38:13Z">
         <header>
           <div class="num">8</div>
           <div class="title"><h3>Paste scrSendEmail</h3><div class="where">Power Apps Studio, Tree view</div></div>
           <div class="pill" data-pill>&nbsp;</div>
         </header>
-        <div class="changed">Last changed <strong>26/11/2026 13:13 GMT</strong> <span class="age"></span></div>
+        <div class="changed">Last changed <strong>27/11/2026 09:38 GMT</strong> <span class="age"></span></div>
         
         <div class="body">
           <ol class="how">
@@ -2161,7 +2161,7 @@ Set(varLightboxGroupID, 0)</pre>
             - galCustodiansEmailPhoto:
                 Control: Image@2.2.3
                 Properties:
-                  Image: =Office365Users.UserPhotoV2(ThisItem.Email)
+                  Image: =If(IsBlank(Trim(ThisItem.Email)), Blank(), IfError(Office365Users.UserPhotoV2(Trim(ThisItem.Email)), Blank()))
                   RadiusTopLeft: =22
                   RadiusTopRight: =22
                   RadiusBottomLeft: =22
